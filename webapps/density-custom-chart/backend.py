@@ -22,7 +22,7 @@ def get_geo_data():
         dataset_name = config.get('dataset_name')
         geopoint_column_name = config.get('geopoint_column_name')
         df = dataiku.Dataset(dataset_name).get_dataframe(limit=100000)
-        coordinates = list(df['geopoint_column_name'].values)
+        coordinates = list(df[geopoint_column_name].values)
         lat = [eval(i[6:-1].split(' ')[0]) for i in coordinates]
         long = [eval(i[6:-1].split(' ')[1]) for i in coordinates]
         if df.empty:
