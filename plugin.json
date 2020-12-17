@@ -1,16 +1,16 @@
 {
-    "id": "your-plugin-id",
+    "id": "geospatial-toolkit",
     "version": "0.1.0",
     "meta": {
-        "label": "Your plugin label",
-        "category": "Your category (optional)",
-        "description": "Your description (keep it short and simple)",
-        "author": "Organization (firstName LASTNAME)",
+        "label": "Geospatial toolkit",
+        "category": "Geosptial",
+        "description": "Tools for geospatial data preparation and visualisation",
+        "author": "Dataiku",
         "icon": "icon-font-awesome-3.2.1",
         "licenseInfo": "Apache Software License",
         "url": "https://www.dataiku.com/product/plugins/your-plugin-id/",
         "tags": [
-            "myTag"
+            "Geosptial"
         ],
         "supportLevel": "NOT_SUPPORTED"
     }
