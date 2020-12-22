@@ -1,23 +1,34 @@
 /*
+    Geospatial Density Plot:
     Front-end application logic, using predefined structure for the DSS custom chart.
  */
 
 // Variables specific to the custom web app in DSS
+// TODO: Keep as is
 let webAppDesc = dataiku.getWebAppDesc()['chart']
 var webAppConfig = {};
 var filters = {};
 var plugin_config = {};
 
+var initDisplay = true;
+var heat;
+
 // Mechanism to filter the number of calls during auto-refresh
+// TODO: Keep as is
 var globalCallbackNum = 0;
-var waitingTime;
+var waitingTime = 0.2;
 
 function sleep (time) {
     return new Promise((resolve) => setTimeout(resolve, time));
 }
 
-var mymap = L.map('mapid').setView([51.505, -0.09], 13);
+// Instantiate the map
 
+var mainmap = L.map('mapid')
+
+console.log('Instantiate leaflet map ...')
+
+// TODO: Persisting usage token ? (Should it be parametrised ?)
 L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
     maxZoom: 18,
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
@@ -25,16 +36,19 @@ L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_toke
     id: 'mapbox/streets-v11',
     tileSize: 512,
     zoomOffset: -1
-}).addTo(mymap);
+}).addTo(mainmap);
 
+console.log('Done instantiating leaflet map ...');
 
 window.parent.postMessage("sendConfig", "*");
 
 window.addEventListener('message', function(event) {
+
     if (event.data) {
 
         // Receiving event from user
         event_data = JSON.parse(event.data);
+        console.log("Received event data from user ... ", event_data);
         // Compare new configuration to the stored configuration to avoid recomputing
         var same_filters = isEqual(filters, event_data['filters'])
         var same_webappconfig = isEqual(webAppConfig, event_data['webAppConfig'])
@@ -47,11 +61,22 @@ window.addEventListener('message', function(event) {
             filters = event_data['filters']
         }
 
+        console.log("Received WebApp Config: ", webAppConfig);
+
+        // Fetch parameters for plugin visualisation
         var plugin_config = {
+
             dataset_name: webAppConfig['dataset'],
-            geopoint_column_name: webAppConfig['geopoint']
+            geopoint_column_name: webAppConfig['geopoint'],
+            tooltip_column_name: webAppConfig['tooltip_column'],
+
+            intensity: webAppConfig['intensity'],
+            color_palette: webAppConfig['color_palette'],
+            radius: webAppConfig['radius'],
+
+            sample_advanced_parameters: webAppConfig['sample_advanced_parameters']
         };
-        console.log("debugg: Web Ap Config ", webAppConfig);
+        console.log("Receiving plugin config: ", plugin_config);
 
         document.getElementById("spinner").style.display = "block"
 
@@ -81,11 +106,47 @@ window.addEventListener('message', function(event) {
                             var lat = data['lat'];
                             var long = data['long'];
                             var dataPoints = long.map(function(e, i) {
-                                return [e, lat[i], 0.1];
+                                return [e, lat[i], plugin_config['intensity']/100];
                             });
-                            console.log("debug:: ", lat);
+
+                            var radius = plugin_config['radius'];
+
+                            var gradient;
+                            console.log("Plugin config ", plugin_config);
+                            switch (plugin_config['color_palette']) {
+                                case 1:
+                                    gradient = {
+                                        0.0: 'white',
+                                        0.5: 'pink',
+                                        1.0: 'black' };
+                                    break;
+                                case 2:
+                                    gradient = {
+                                        0.0: 'black',
+                                        0.5: 'yellow',
+                                        1.0: 'red' };
+                                    break;
+                                default:
+                                    console.log("Default gradient color");
+                            }
+
                             // dataPoints is an array of arrays: [[lat, lng, intensity]...]
-                            var heat = L.heatLayer(dataPoints, {radius: 25}).addTo(mymap);
+                            if (!initDisplay){
+                                heat.remove();
+                            }
+
+                            heat = L.heatLayer(dataPoints,
+                                {
+                                    radius: radius,
+                                    gradient: gradient
+                                });
+                            heat.addTo(mainmap);
+
+                            if  (initDisplay){
+                                mainmap.setView([long[1], lat[1]], 13);
+                                initDisplay = false;
+                            }
+                            document.getElementById("spinner").style.display = "none";
                         }
                     ).catch(error => {
                         console.warn("just catched an error")

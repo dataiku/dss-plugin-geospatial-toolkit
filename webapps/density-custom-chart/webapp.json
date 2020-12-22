@@ -13,13 +13,33 @@
         "leftBarLabel": "Chart parameters",
         "leftBarParams": [
             {
-                "name": "max_density",
+                "name": "intensity",
                 "type": "INT",
-                "label": "Max displayed density",
-                "description": "+/- one geopoint",
+                "label": "Alpha of the density chart visualisation",
+                "description": "Transparency of the chart",
                 "mandatory": true,
                 "minI":1,
-                "maxI":3000,
+                "maxI":100,
+                "defaultValue": 50
+            },
+            {
+                "name": "color_palette",
+                "type": "INT",
+                "label": "Choose the color palette of the density chart",
+                "description": "Color palette",
+                "mandatory": true,
+                "minI":1,
+                "maxI":5,
+                "defaultValue": 1
+            },
+            {
+                "name": "radius",
+                "type": "INT",
+                "label": "Radius of a one point density chart",
+                "description": "Radius",
+                "mandatory": true,
+                "minI":1,
+                "maxI":100,
                 "defaultValue": 50
             },
             {
@@ -35,19 +55,10 @@
                 "defaultValue": false
             },
             {
-                "name": "density_color",
-                "type": "DATASET_COLUMN",
-                "datasetParamName": "dataset",
-                "label": "Color of the geospatial density chart",
-                "description": "",
-                "mandatory": false,
-                "visibilityCondition": "model.advanced_parameters"
-            },
-            {
-                "name": "numerical_colors",
-                "type": "BOOLEAN",
-                "label": "Numerical colors",
-                "description": "Use a numerical scale for colors",
+                "name": "sample_advanced_parameters",
+                "type": "INT",
+                "label": "sample_advanced_parameters",
+                "description": "This is a sample parameter",
                 "mandatory": false,
                 "defaultValue": false,
                 "visibilityCondition": "model.advanced_parameters"
@@ -58,10 +69,18 @@
             {
                 "name": "geopoint",
                 "type": "DATASET_COLUMN",
-                "datasetParamName": "dataset",
-                "label": "Source",
-                "description": "",
+                "datasetParamName": "geopoint_column",
+                "label": "geopoint_column",
+                "description": "Column containing the geopoint",
                 "mandatory": true
+            },
+            {
+                "name": "tooltip",
+                "type": "DATASET_COLUMN",
+                "datasetParamName": "tooltip_column",
+                "label": "tooltip_column",
+                "description": "Column containing the tooltip",
+                "mandatory": false
             }
         ],
         "canFilter": true,
