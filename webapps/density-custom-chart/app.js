@@ -10,11 +10,7 @@ var webAppConfig = {};
 var filters = {};
 var plugin_config = {};
 
-var initDisplay = true;
-var heat;
-
 // Mechanism to filter the number of calls during auto-refresh
-// TODO: Keep as is
 var globalCallbackNum = 0;
 var waitingTime = 0.2;
 
@@ -23,7 +19,6 @@ function sleep (time) {
 }
 
 // Instantiate the map
-
 var mainmap = L.map('mapid')
 
 console.log('Instantiate leaflet map ...')
@@ -38,29 +33,70 @@ L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_toke
     zoomOffset: -1
 }).addTo(mainmap);
 
-console.log('Done instantiating leaflet map ...');
+// Initialization of storage variables
+var heat;
+var gradient = {
+    0.0: 'white',
+    0.5: 'pink',
+    1.0: 'black' };
+var radius;
+var geopoints;
+var initial = true;
+var needBackendCompute = true;
+var eventData;
+var intensity;
+var lat;
+var long;
+
+
+// Init range and sliders
+var rangeIntensity = document.getElementById("rangeIntensity");
+// Update the current slider value (each time you drag the slider handle)
+rangeIntensity.oninput = function() {
+    intensity = this.value / 100;
+    updateMapVisualisation(heat, lat, long, gradient, radius, intensity, initial);
+    initial = false;
+}
+
+var rangeRadius = document.getElementById("rangeRadius");
+// Update the current slider value (each time you drag the slider handle)
+rangeRadius.oninput = function() {
+    radius = this.value/10;
+    updateMapVisualisation(heat, lat, long, gradient, radius, intensity, initial);
+    initial = false;
+}
+
+function updateMapVisualisation(targetLayer, lat, long, gradient, radius, intensity, initial){
+    // Feed visualisation with leaflet parameters
+    console.log("updateMapVisualisation");
+    console.log("Updating only the visualisation on the map");
+    if (!initial){
+        targetLayer.remove();
+    }
+    var geopoints = long.map(function(e, i) {
+        return [e, lat[i], intensity];
+    });
+    targetLayer = L.heatLayer(geopoints, {radius: radius, gradient: gradient});
+    // Add layer to global object mainmap (leaflet target map)
+    targetLayer.addTo(mainmap);
+    if (initial){
+        console.log("geopoints=", geopoints);
+        var sampleGeoPoint = geopoints[0];
+        mainmap.setView([sampleGeoPoint[0], sampleGeoPoint[1]], 13);
+    }
+    heat = targetLayer;
+}
 
 window.parent.postMessage("sendConfig", "*");
-
 window.addEventListener('message', function(event) {
 
     if (event.data) {
 
         // Receiving event from user
-        event_data = JSON.parse(event.data);
-        console.log("Received event data from user ... ", event_data);
-        // Compare new configuration to the stored configuration to avoid recomputing
-        var same_filters = isEqual(filters, event_data['filters'])
-        var same_webappconfig = isEqual(webAppConfig, event_data['webAppConfig'])
-
-        if (same_webappconfig && same_filters) {
-            // Ignore any event similar to window resizing
-            return;
-        } else {
-            webAppConfig = event_data['webAppConfig']
-            filters = event_data['filters']
-        }
-
+        eventData = JSON.parse(event.data);
+        console.log("Received event data from user ... ", eventData);
+        webAppConfig = eventData['webAppConfig']
+        filters = eventData['filters']
         console.log("Received WebApp Config: ", webAppConfig);
 
         // Fetch parameters for plugin visualisation
@@ -76,83 +112,44 @@ window.addEventListener('message', function(event) {
 
             sample_advanced_parameters: webAppConfig['sample_advanced_parameters']
         };
+        radius = plugin_config['radius'];
+        gradient = plugin_config['gradient'];
+
         console.log("Receiving plugin config: ", plugin_config);
-
-        document.getElementById("spinner").style.display = "block"
-
-        // Fetch view options
-        var chart_height = document.body.getBoundingClientRect().height;
-        var chart_width = document.body.getBoundingClientRect().width;
-        var scale_ratio = Math.max(Math.min(chart_width/chart_height, 2), 0.5);
+        document.getElementById("spinner").style.display = "block";
 
         // Detect user changes
         globalCallbackNum += 1;
         var thisCallbackNum = globalCallbackNum;
         // Low pass filtering on user callbacks to avoid recomputing
+
         sleep(waitingTime).then(() => {  // waiting before calling backend that no new callback was called during a small time interval
             if (thisCallbackNum !== globalCallbackNum) {  // another callback incremented globalThreadNum during the time interval
                 console.log(`backend not called - overridden by new callback`);
             } else {
                 console.log(`calling backend`);
-                dataiku.webappBackend.get('get_geo_data',
-                    {
+                if (needBackendCompute || initial){
+                    dataiku.webappBackend.get('get_geo_data', {
                         "config": JSON.stringify(plugin_config),
-                        "filters": JSON.stringify(filters),
-                        "scale_ratio": scale_ratio})
-                    .then(
-                        function(data){
+                        "filters": JSON.stringify(filters)
+                    })
+                        .then(function(data){
                             console.log("Got response from backend ...");
                             console.log("debug:: ", data);
-                            var lat = data['lat'];
-                            var long = data['long'];
-                            var dataPoints = long.map(function(e, i) {
-                                return [e, lat[i], plugin_config['intensity']/100];
-                            });
-
-                            var radius = plugin_config['radius'];
-
-                            var gradient;
-                            console.log("Plugin config ", plugin_config);
-                            switch (plugin_config['color_palette']) {
-                                case 1:
-                                    gradient = {
-                                        0.0: 'white',
-                                        0.5: 'pink',
-                                        1.0: 'black' };
-                                    break;
-                                case 2:
-                                    gradient = {
-                                        0.0: 'black',
-                                        0.5: 'yellow',
-                                        1.0: 'red' };
-                                    break;
-                                default:
-                                    console.log("Default gradient color");
-                            }
-
-                            // dataPoints is an array of arrays: [[lat, lng, intensity]...]
-                            if (!initDisplay){
-                                heat.remove();
-                            }
-
-                            heat = L.heatLayer(dataPoints,
-                                {
-                                    radius: radius,
-                                    gradient: gradient
-                                });
-                            heat.addTo(mainmap);
-
-                            if  (initDisplay){
-                                mainmap.setView([long[1], lat[1]], 13);
-                                initDisplay = false;
-                            }
-                            document.getElementById("spinner").style.display = "none";
-                        }
-                    ).catch(error => {
-                        console.warn("just catched an error")
+                            lat = data['lat'];
+                            long = data['long'];
+                            updateMapVisualisation(heat, lat, long, gradient, radius, intensity, initial)
+                            initial = false;
+                        }).catch(error => {
+                        console.error(error);
                         document.getElementById("spinner").style.display = "none";
                         dataiku.webappMessages.displayFatalError(error);
-                });
+                    });
+                } else if (!initial) {
+                    updateMapVisualisation(heat, lat, long, gradient, radius, intensity, initial)
+                    initial = false;
+                }
+                document.getElementById("spinner").style.display = "none";
             }
         });
     }
