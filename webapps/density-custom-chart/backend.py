@@ -27,8 +27,8 @@ def get_geo_data():
         # TODO: Secure call to API
         df = dataiku.Dataset(dataset_name).get_dataframe(limit=100000)
         coordinates = list(df[geopoint_column_name].values)
-        lat = [eval(i[6:-1].split(' ')[0]) for i in coordinates]
-        long = [eval(i[6:-1].split(' ')[1]) for i in coordinates]
+        long = [eval(i[6:-1].split(' ')[0]) for i in coordinates]
+        lat = [eval(i[6:-1].split(' ')[1]) for i in coordinates]
         if df.empty:
             raise Exception("Dataframe is empty")
         return json.dumps({'lat': lat, 'long': long})
