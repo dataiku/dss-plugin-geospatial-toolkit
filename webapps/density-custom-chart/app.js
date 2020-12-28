@@ -212,35 +212,6 @@ function updateMapVisualisation(targetLayer, gradient, radius, intensity, initia
     initial = false;
 }
 
-function getDataFromBackend(plugin_config, filters) {
-    /*
-     * Query backend to load the geospatial data, pass filters or argument if necessary
-     * By default, update the global variable geopoints with the returned data from the backend
-     *
-     */
-    console.log("getDataFromBackend");
-    document.getElementById("spinner").style.display = "block";
-    var tempGeopoints = [];
-    dataiku.webappBackend.get('get_geo_data', {
-        "config": JSON.stringify(plugin_config),
-        "filters": JSON.stringify(filters)
-    })
-    .then(function(data){
-        lat = data['lat'];
-        long = data['long'];
-        for (var i = 0; i < 1000; i++) {
-            tempGeopoints.push([lat[i], long[i]]);
-        }
-        console.log("tempGeopoints=", tempGeopoints);
-    }).catch(error => {
-        console.error(error);
-        dataiku.webappMessages.displayFatalError(error);
-    });
-    document.getElementById("spinner").style.display = "none";
-    geopoints = tempGeopoints;
-    console.log("Updating geopoints ... ", geopoints);
-}
-
 function fullUpdate(plugin_config, filters) {
     /*
      * Query backend to load the geospatial data, pass filters or argument if necessary
@@ -294,7 +265,6 @@ window.addEventListener('message', function(event) {
             dataset_name: webAppConfig['dataset'],
             geopoint_column_name: webAppConfig['geopoint'],
             tooltip_column_name: webAppConfig['tooltip_column'],
-
             intensity: webAppConfig['intensity'],
             color_palette: webAppConfig['color_palette'],
             radius: webAppConfig['radius'],
