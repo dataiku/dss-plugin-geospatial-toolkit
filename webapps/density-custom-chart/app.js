@@ -275,10 +275,6 @@ function fullUpdate(plugin_config, filters) {
 
 
 
-fullUpdate(plugin_config, filters);
-
-
-/*
 // Main rendering loop
 window.parent.postMessage("sendConfig", "*");
 window.addEventListener('message', function(event) {
@@ -305,9 +301,12 @@ window.addEventListener('message', function(event) {
 
             sample_advanced_parameters: webAppConfig['sample_advanced_parameters']
         };
+
         radius = plugin_config['radius'];
+
+        fullUpdate(plugin_config, filters);
 
         console.log("Receiving plugin config: ", plugin_config);
         document.getElementById("spinner").style.display = "block";
     }
-});*/
+});
