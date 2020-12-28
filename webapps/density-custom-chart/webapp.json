@@ -64,6 +64,8 @@
                 "visibilityCondition": "model.advanced_parameters"
             }
         ],
+        "leftBarTemplate": "osm-enrichment-enrich-bounding-box.html",
+        "leftBarModule": "osm.enrichment",
         "topBar": "STD_FORM",
         "topBarParams": [
             {

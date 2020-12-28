@@ -261,14 +261,12 @@ window.addEventListener('message', function(event) {
 
         // Fetch parameters for plugin visualisation
         var plugin_config = {
-
             dataset_name: webAppConfig['dataset'],
             geopoint_column_name: webAppConfig['geopoint'],
             tooltip_column_name: webAppConfig['tooltip_column'],
             intensity: webAppConfig['intensity'],
             color_palette: webAppConfig['color_palette'],
             radius: webAppConfig['radius'],
-
             sample_advanced_parameters: webAppConfig['sample_advanced_parameters']
         };
 
