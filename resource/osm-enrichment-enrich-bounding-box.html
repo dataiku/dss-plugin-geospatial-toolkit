@@ -1,5 +1,11 @@
-<div ng-controller="MyCustomFormController" style="margin: 10px 0px;">
-        Model as range: <input type="range" name="range" ng-model="value" min="0"  max="100">
+<form name="myForm" ng-controller="MyCustomFormController">
+
+        Model as range: <input type="range" name="range" ng-model="config.value" min="{{min}}"  max="{{max}}">
         <hr>
-        Model as number: <input type="number" ng-model="value"><br>
-</div>
+        Model as number: <input type="number" ng-model="config.value"><br>
+        Min: <input type="number" ng-model="config.min"><br>
+        Max: <input type="number" ng-model="config.max"><br>
+        value = <code>{{config.value}}</code><br/>
+        myForm.range.$valid = <code>{{myForm.range.$valid}}</code><br/>
+        myForm.range.$error = <code>{{myForm.range.$error}}</code>
+</form>

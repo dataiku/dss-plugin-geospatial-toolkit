@@ -161,12 +161,15 @@ function update() {
         .attr("cy", function(d){ return mainmap.latLngToLayerPoint([d.lat, d.long]).y })
 }
 
+// TODO: remove
 // If the user change the map (zoom or drag), I update circle position:
 mainmap.on("moveend", update);
 
+// TODO: remove testing
 plugin_config = {dataset_name: "new_york_city_airbnb_prepared", geopoint_column_name: "coordinates", intensity: 53, radius: 1};
 filters = {misc: "true"};
 
+// TODO: remove
 // Slider for the range intensity
 var rangeIntensity = document.getElementById("rangeIntensity");
 rangeIntensity.oninput = function() {
@@ -193,6 +196,7 @@ function updateMapVisualisation(targetLayer, gradient, radius, intensity, initia
     }
     console.log("updateMapVisualisation geopoints=", geopoints);
     quadtree = d3.quadtree()
+        // TODO: Recheck limit
         .extent([[-100, -100], [100, 100]])
         .addAll(geopoints);
     console.log("Done building quadtree.");
@@ -275,6 +279,6 @@ window.addEventListener('message', function(event) {
         fullUpdate(plugin_config, filters);
 
         console.log("Receiving plugin config: ", plugin_config);
-        document.getElementById("spinner").style.display = "block";
+        document.getElementById("spinner").style.display = "none";
     }
 });

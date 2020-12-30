@@ -23,7 +23,7 @@
                 "defaultValue": 50
             },
             {
-                "name": "color_palette",
+                "name": "value",
                 "type": "INT",
                 "label": "Choose the color palette of the density chart",
                 "description": "Color palette",
