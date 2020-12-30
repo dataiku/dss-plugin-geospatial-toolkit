@@ -1,4 +1,4 @@
-var app = angular.module('osm.enrichment', []);
+var app = angular.module('geospatial.density', []);
 
 app.controller('MyCustomFormController', ['$scope', function($scope) {
     console.log("Calling the controller");
