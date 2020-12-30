@@ -23,16 +23,10 @@
                 "label": "geopoint_column",
                 "description": "Column containing the geopoint",
                 "mandatory": true
-            },
-            {
-                "name": "tooltip",
-                "type": "DATASET_COLUMN",
-                "datasetParamName": "tooltip_column",
-                "label": "tooltip_column",
-                "description": "Column containing the tooltip",
-                "mandatory": false
             }
         ],
+        "topBarTemplate": "topBarParamsTemplate.html",
+        "topBarModule": "geospatial.density",
         "canFilter": true,
         "canFacet": false
     }
