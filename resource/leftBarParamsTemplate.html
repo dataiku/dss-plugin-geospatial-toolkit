@@ -9,6 +9,38 @@
         value = <code>{{config.value}}</code><br/>
         myForm.range.$valid = <code>{{myForm.range.$valid}}</code><br/>
         myForm.range.$error = <code>{{myForm.range.$error}}</code>
+        <br>
+        <h2>Color:</h2>
+        <p>Choose the color scale for the density map:</p>
+        <label>
+                <input type="radio" ng-model="config.color" value="red">
+                Red
+        </label>
+        <label>
+                <input type="radio" ng-model="config.color" value="blue">
+                Blue
+        </label>
+        <label>
+                <input type="radio" ng-model="config.color" value="yellow">
+                Yellow
+        </label>
+
+        <h2>MapTile:</h2>
+        <p>Choose the map tile:</p>
+        <label>
+                <input type="radio" ng-model="config.maptile" value="mapbox/v11">
+                MapBox V11
+        </label>
+        <label>
+                <input type="radio" ng-model="config.maptile" value="mapbox/v12">
+                MapBox V12
+        </label>
+        <label>
+                <input type="radio" ng-model="config.maptile" value="mapbox/v13">
+                MapBox V13
+        </label>
+
+
 </form>
 
 
