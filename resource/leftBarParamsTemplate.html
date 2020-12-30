@@ -11,31 +11,47 @@
         myForm.range.$error = <code>{{myForm.range.$error}}</code>
 </form>
 
-<!--TODO: Potentially leave only this -->
+
+<!--
+&lt;!&ndash;TODO: Potentially leave only this &ndash;&gt;
 <div class="mbot20" style="padding-bottom: 5px; margin-bottom: 0; overflow: hidden;">
         <h2 class="foldable-title qa_charts_color-submenu-header" ng-click="optionsFolds.color = !optionsFolds.color"> <i class="icon-caret-right" ng-show="!optionsFolds.color" /><i class="icon-caret-down" ng-show="optionsFolds.color" />
                 Color
         </h2>
-        <div class="options-zone" ng-show="optionsFolds.color">
-                <div ng-if="!chart.def.uaColor.length" include-no-scope="/templates/simple_report/config/single-color-menu.html" />
-
-                <div ng-if="chart.def.uaColor.length && (ChartUADimension.isTrueNumerical(chart.def.uaColor[0]) || ChartUADimension.isDateRange(chart.def.uaColor[0]))"
-                     include-no-scope="/templates/simple_report/config/continuous-color-menu.html" />
-
-                <div ng-if="chart.def.uaColor.length && (ChartUADimension.isAlphanumLike(chart.def.uaColor[0]) || ChartUADimension.isDiscreteDate(chart.def.uaColor[0]))"
-                     include-no-scope="/templates/simple_report/config/discrete-color-menu.html" />
-
+        <div class="options-zone" >
+                <div ng-controller="SingleColorSelectorController">
+                        <form class="dkuform-chart-options">
+                                <div class="control-group chart-single-color-picker">
+                                        <div class="colors-zone">
+                                                <div ng-repeat="color in colors"
+                                                     ng-click="chart.def.colorOptions.singleColor=color"
+                                                     style="background-color:{{color}}"
+                                                     class="color"
+                                                     ng-class="{selected: chart.def.colorOptions.singleColor === color}"
+                                                ></div>
+                                        </div>
+                                        <div>
+                                                Selected: <div class="dibvam selected-color" colorpicker ng-model="chart.def.colorOptions.singleColor" style="background-color:{{chart.def.colorOptions.singleColor}}">{{ tag }}</div>
+                                        </div>
+                                </div>
+                                <div class="control-group">
+                                        <label>
+                                                Opacity: <div dku-slider min="0" max="1" value="chart.def.colorOptions.transparency" class="qa_charts_opacity-slider" nb-decimal-places="1" />
+                                        </label>
+                                </div>
+                        </form>
+                </div>
         </div>
 </div>
 
 <div class="mbot20" style="padding-bottom: 5px; margin-bottom: 0; overflow: hidden;">
-        <h2 class="foldable-title" id="qa_charts_map-background-submenu-header" ng-click="optionsFolds.mapTiles = !optionsFolds.mapTiles"> <i class="icon-caret-right" ng-show="!optionsFolds.mapTiles" /><i class="icon-caret-down" ng-show="optionsFolds.mapTiles" />
+        <h2 class="foldable-title" id="qa_charts_map-background-submenu-header" ng-click="optionsFolds.mapTiles = !optionsFolds.mapTiles">
+                <i class="icon-caret-right" ng-show="!optionsFolds.mapTiles" /><i class="icon-caret-down" ng-show="optionsFolds.mapTiles" />
                 Map background
         </h2>
 
         <div ng-show="optionsFolds.mapTiles" class="options-zone" ng-controller="MapBackgroundPickerController">
                 <form class="dkuform-chart-options">
-
                         <div class="control-group">
                                 <label class="control-label" dku-for="#map-background-picker button">Tiles to use</label>
                                 <div class="controls">
@@ -45,8 +61,6 @@
                                                 </div>
                                         </div>
                                 </div>
-                                <small><a target="_blank" id="qa_charts_custom-map-background-doc-link" rel="noopener noreferrer"
-                                          href="{{$root.versionDocRoot}}visualization/charts-maps.html">Add other map backgrounds with plugins</a></small>
                         </div>
                 </form>
         </div>
@@ -88,4 +102,5 @@
                 </div>
         </div>
 </div>
+-->
 

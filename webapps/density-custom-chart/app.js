@@ -108,7 +108,6 @@ function displayLocal(svg, closestMarker){
      */
     console.log("Call to displayLocal ...");
     // Define the d3 dynamics around the geospatial data points (rendering and events)
-    // We
     svg.selectAll("myCircles")
         .attr("pointer-events", "visible")
         .data([closestMarker])
