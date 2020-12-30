@@ -1,16 +1,15 @@
 <!--TODO: Remove the Angular slider to keep existing style of dku-slider -->
 <!--Understanding the dynamic behind angular for custom charts-->
 <form name="myForm" ng-controller="MyCustomFormController">
-        Model as range: <input type="range" name="range" ng-model="config.value" min="{{min}}"  max="{{max}}">
-        <hr>
-        Model as number: <input type="number" ng-model="config.value"><br>
-        Min: <input type="number" ng-model="config.min"><br>
-        Max: <input type="number" ng-model="config.max"><br>
-        value = <code>{{config.value}}</code><br/>
-        myForm.range.$valid = <code>{{myForm.range.$valid}}</code><br/>
-        myForm.range.$error = <code>{{myForm.range.$error}}</code>
+        <h4>Intensity:</h4>
+        <input type="range" name="range" ng-model="config.intensity" min="0"  max="200">
+        intensity value = <code>{{config.intensity}}</code><br/>
         <br>
-        <h2>Color:</h2>
+        <h4>Radius:</h4>
+        <input type="range" name="range" ng-model="config.radius" min="0"  max="100">
+        Radius value = <code>{{config.radius}}</code><br/>
+        <br>
+        <h4>Color:</h4>
         <p>Choose the color scale for the density map:</p>
         <label>
                 <input type="radio" ng-model="config.color" value="red">
@@ -25,7 +24,7 @@
                 Yellow
         </label>
 
-        <h2>MapTile:</h2>
+        <h4>MapTile:</h4>
         <p>Choose the map tile:</p>
         <label>
                 <input type="radio" ng-model="config.maptile" value="mapbox/v11">
@@ -47,9 +46,9 @@
 <!--
 &lt;!&ndash;TODO: Potentially leave only this &ndash;&gt;
 <div class="mbot20" style="padding-bottom: 5px; margin-bottom: 0; overflow: hidden;">
-        <h2 class="foldable-title qa_charts_color-submenu-header" ng-click="optionsFolds.color = !optionsFolds.color"> <i class="icon-caret-right" ng-show="!optionsFolds.color" /><i class="icon-caret-down" ng-show="optionsFolds.color" />
+        <h4 class="foldable-title qa_charts_color-submenu-header" ng-click="optionsFolds.color = !optionsFolds.color"> <i class="icon-caret-right" ng-show="!optionsFolds.color" /><i class="icon-caret-down" ng-show="optionsFolds.color" />
                 Color
-        </h2>
+        </h4>
         <div class="options-zone" >
                 <div ng-controller="SingleColorSelectorController">
                         <form class="dkuform-chart-options">
@@ -77,10 +76,10 @@
 </div>
 
 <div class="mbot20" style="padding-bottom: 5px; margin-bottom: 0; overflow: hidden;">
-        <h2 class="foldable-title" id="qa_charts_map-background-submenu-header" ng-click="optionsFolds.mapTiles = !optionsFolds.mapTiles">
+        <h4 class="foldable-title" id="qa_charts_map-background-submenu-header" ng-click="optionsFolds.mapTiles = !optionsFolds.mapTiles">
                 <i class="icon-caret-right" ng-show="!optionsFolds.mapTiles" /><i class="icon-caret-down" ng-show="optionsFolds.mapTiles" />
                 Map background
-        </h2>
+        </h4>
 
         <div ng-show="optionsFolds.mapTiles" class="options-zone" ng-controller="MapBackgroundPickerController">
                 <form class="dkuform-chart-options">
@@ -100,14 +99,14 @@
 
 
 <div class="mbot20" ng-if="canHasTooltipMeasures && (!readOnly || chart.def.tooltipMeasures.length > 0)" dku-foldable open="false" open-on-drag-enter>
-        <h2 class="foldable-title" id="qa_charts_tooltip-submenu-header" ng-click="foldableToggle()">
+        <h4 class="foldable-title" id="qa_charts_tooltip-submenu-header" ng-click="foldableToggle()">
                 <div class="pull-right nb-records" ng-if="chart.def.tooltipMeasures.length">
                         {{chart.def.tooltipMeasures.length + ' measure' | plurify: chart.def.tooltipMeasures.length}}
                 </div>
 
                 <i class="{{foldableOpen ? 'icon-caret-down' : 'icon-caret-right'}}" />
                 Tooltip
-        </h2>
+        </h4>
 
         <div ng-show="foldableOpen">
                 <div class="chartdef-dropzone chartdef-dropzone-vertical" ng-class="{'empty':chart.def.tooltipMeasures.length==0, 'notempty': chart.def.tooltipMeasures.length != 0}">
@@ -120,10 +119,10 @@
 </div>
 
 <div class="mbot20" style="padding-bottom: 5px; margin-bottom: 0; overflow: hidden;" dku-foldable open="false" open-on-drag-enter>
-        <h2 class="foldable-title" ng-click="foldableToggle()">
+        <h4 class="foldable-title" ng-click="foldableToggle()">
                 <i class="{{foldableOpen ? 'icon-caret-down' : 'icon-caret-right'}}" />
                 Tooltip
-        </h2>
+        </h4>
 
         <div ng-show="foldableOpen">
                 <div class="chartdef-dropzone chartdef-dropzone-vertical" ng-class="{'empty':chart.def.uaTooltip.length==0, 'notempty': chart.def.uaTooltip.length != 0}">

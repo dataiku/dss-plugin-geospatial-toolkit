@@ -34,7 +34,7 @@ var countUpdateMap = 0;
 
 // Density map parameter
 var gradient = 0;
-var radius = 50;
+var radius = 10;
 var intensity = 0.5;
 var geopoints;
 
@@ -46,7 +46,7 @@ L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_toke
     maxZoom: 18,
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
         'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-    id: 'mapbox/streets-v11',
+    id: 'mapbox/light-v10',
     tileSize: 512,
     zoomOffset: -1
 }).addTo(mainmap).set;
@@ -90,7 +90,7 @@ mainmap.addEventListener('mousemove', (event) => {
         console.warn('Quadtree not able to find closest point');
     }
     console.log('closestMarker:', closestMarker);
-    displayLocal(svg, {lat: closestMarker[0], long: closestMarker[1] });
+    displayLocal(svg, {lat: closestMarker[0], long: closestMarker[1], tooltip: Math.random()});
     console.log("localMarkers=", closestMarker);
 });
 
@@ -115,7 +115,7 @@ function displayLocal(svg, closestMarker){
         .append("circle")
         .attr("cx", function(d) {
             // TODO: The following line should be moved to other location with access to `d`
-            tooltip.html("<ul><b>Latitude</b>: "+d.lat+"</ul>"+"<ul><b>Longitude</b>: "+d.long+"</ul>")
+            tooltip.html("<ul><b>Latitude</b>: "+d.lat+"</ul>"+"<ul><b>Longitude</b>: "+d.long+"</ul>"+"<ul><b>Tooltip</b>: "+d.tooltip+"</ul>")
             return mainmap.latLngToLayerPoint([d.lat, d.long]).x
         })
         .attr("cy", function(d) {
@@ -163,21 +163,6 @@ function update() {
 // TODO: remove
 // If the user change the map (zoom or drag), I update circle position:
 mainmap.on("moveend", update);
-
-// TODO: remove testing
-plugin_config = {dataset_name: "new_york_city_airbnb_prepared", geopoint_column_name: "coordinates", intensity: 53, radius: 1};
-filters = {misc: "true"};
-
-// TODO: remove
-// Slider for the range intensity
-var rangeIntensity = document.getElementById("rangeIntensity");
-rangeIntensity.oninput = function() {
-    intensity = this.value / 100;
-    console.log("rangeIntensity=", intensity);
-    // Update only visualisation when the intensity slider is updated
-    fullUpdate(plugin_config, filters);
-    initial = false;
-}
 
 function updateMapVisualisation(targetLayer, gradient, radius, intensity, initial){
     /*
@@ -230,6 +215,8 @@ function fullUpdate(plugin_config, filters) {
         .then(function(data){
             lat = data['lat'];
             long = data['long'];
+            tooltip_data = data['tooltip'];
+            console.log("Receiving this tooltip: ", tooltip_data);
             for (var i = 0; i < lat.length; i++) {
                 tempGeopoints.push([lat[i], long[i]]);
             }
@@ -266,18 +253,45 @@ window.addEventListener('message', function(event) {
         var plugin_config = {
             dataset_name: webAppConfig['dataset'],
             geopoint_column_name: webAppConfig['geopoint'],
-            tooltip_column_name: webAppConfig['tooltip_column'],
+            tooltip_column_name: webAppConfig['tooltip'],
             intensity: webAppConfig['intensity'],
-            color_palette: webAppConfig['color_palette'],
-            radius: webAppConfig['radius'],
-            sample_advanced_parameters: webAppConfig['sample_advanced_parameters']
+            color: webAppConfig['color'],
+            maptile: webAppConfig['maptile'],
+            radius: webAppConfig['radius']
         };
 
+        intensity = plugin_config['intensity']/100;
+        color = plugin_config['color'];
         radius = plugin_config['radius'];
 
-        fullUpdate(plugin_config, filters);
+        switch(color) {
+            case "yellow":
+                gradient = {
+                    0.0: 'blue',
+                    0.5: 'white',
+                    1.0: 'yellow'
+                }
+                break;
+            case "blue":
+                gradient = {
+                    0.0: 'red',
+                    0.5: 'white',
+                    1.0: 'blue'
+                }
+                break;
+            case "red":
+                gradient = {
+                    0.0: 'blue',
+                    0.5: 'white',
+                    1.0: 'red'
+                }
+                break;
+            default:
+                gradient = 0;
+        }
 
         console.log("Receiving plugin config: ", plugin_config);
+        fullUpdate(plugin_config, filters);
         document.getElementById("spinner").style.display = "none";
     }
 });

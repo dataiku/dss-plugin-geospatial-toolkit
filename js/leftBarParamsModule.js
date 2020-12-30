@@ -2,9 +2,8 @@ var app = angular.module('geospatial.density', []);
 
 app.controller('MyCustomFormController', ['$scope', function($scope) {
     console.log("Calling the controller");
-    $scope.config.value = 75;
-    $scope.config.min = 10;
-    $scope.config.max = 90;
+    $scope.config.intensity = 50;
+    $scope.config.radius = 50;
     $scope.config.color = {
         name: 'blue'
     };
