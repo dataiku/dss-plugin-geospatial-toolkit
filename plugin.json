@@ -10,8 +10,19 @@
         "licenseInfo": "Apache Software License",
         "url": "https://www.dataiku.com/product/plugins/your-plugin-id/",
         "tags": [
-            "Geosptial"
+            "Geospatial"
         ],
         "supportLevel": "NOT_SUPPORTED"
-    }
+    },
+    "javaPreparationProcessors": [
+        {
+            "id": "tradearea",
+            "meta": {
+                "label": "Base conversion",
+                "description": "This processor converts numbers between binary, decimal and hexadecimal bases.",
+                "icon": "icon-superscript"
+            }
+        }
+    ],
+    "entryPoint": "com.dataiku.dip.plugins.tradearea.Plugin"
 }
