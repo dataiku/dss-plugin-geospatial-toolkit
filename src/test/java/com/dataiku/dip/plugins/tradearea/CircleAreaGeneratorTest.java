@@ -6,12 +6,12 @@ import org.junit.jupiter.api.Test;
 class CircleAreaGeneratorTest {
     @Test
     public void testEndPointCreation() {
-        CircleAreaGenerator circleAreaGenerator = new CircleAreaGenerator();
+        double radius = 1000;
+        CircleAreaGenerator circleAreaGenerator = new CircleAreaGenerator(radius);
         MyGeoPoint center = new MyGeoPoint();
         center.longitude = 20.0;
         center.latitude = 40.0;
-        double radius = 1000;
-        String result = circleAreaGenerator.generateCircleArea(center, radius);
+        String result = circleAreaGenerator.generateArea(center);
         System.out.println(result);
     }
 }

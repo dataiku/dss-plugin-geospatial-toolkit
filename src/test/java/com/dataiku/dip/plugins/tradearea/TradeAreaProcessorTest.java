@@ -1,5 +1,4 @@
 package com.dataiku.dip.plugins.tradearea;
-import com.dataiku.dip.plugins.tradearea.TradeAreaProcessor.ProcessingMode;
 
 import static org.junit.jupiter.api.Assertions.*;
 

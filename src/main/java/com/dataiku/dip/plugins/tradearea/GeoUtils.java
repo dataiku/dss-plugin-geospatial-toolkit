@@ -4,11 +4,11 @@ import com.dataiku.dip.shaker.types.GeoPoint;
 
 public class GeoUtils {
 
-    double degreesToRadians = Math.PI/180;
-    double radiansToDegrees = 180/Math.PI;
-    double earthRadius = 6378137;
+    static double degreesToRadians = Math.PI/180;
+    static double radiansToDegrees = 180/Math.PI;
+    static double earthRadius = 6378137;
 
-    public MyGeoPoint computeDestinationPoint(double startLat, double startLong, double bearing, double distance){
+    public static MyGeoPoint computeDestinationPoint(double startLat, double startLong, double bearing, double distance){
         // Expecting latitude, longitude and bearing in degrees here
         // Expecting distance in meters
         startLat *= degreesToRadians;

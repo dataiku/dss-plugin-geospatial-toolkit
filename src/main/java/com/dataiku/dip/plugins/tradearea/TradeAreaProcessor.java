@@ -29,31 +29,12 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
         private static final long serialVersionUID = -1;
         public String inputColumn;
         public String outputColumn;
-        public ProcessingMode processingMode;
 
         @Override
         public void validate() throws IllegalArgumentException {
             // Throw an exception if the processingMode is invalid.
-            TradeAreaProcessor.newGenerator(processingMode);
+            // TODO: Check creating a new generator based on the processing mode
         }
-    }
-
-    public enum ProcessingMode implements Labelled {
-        KILOMETERS {
-            public String getLabel() {
-                return "Kilometers";
-            }
-        },
-        MILES {
-            public String getLabel() {
-                return "Miles";
-            }
-        },
-        METERS {
-            public String getLabel() {
-                return "Meters";
-            }
-        },
     }
 
     public static final ProcessorMeta<TradeAreaProcessor, Parameter> META = new ProcessorMeta<TradeAreaProcessor, Parameter>() {
@@ -100,9 +81,9 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
 
         @Override
         public ProcessorDesc describe() {
+            // TODO: Create the appropriate UI here (inspect the ParamDesc option for the UI to know whats available)
             return ProcessorDesc.withGenericForm(this.getName(), actionVerb("Create") + " trade area zone")
                     .withMNEColParam("inputColumn", "Input column")
-                    .withParam(ParamDesc.advancedSelect("processingMode", "Conversion", "", ProcessingMode.class).withDefaultValue(ProcessingMode.KILOMETERS))
                     .withColParam("outputColumn", "Output column");
         }
 
@@ -117,9 +98,10 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
     }
 
     private Parameter params;
-    private Generator selectedGenerator;
     private Column outputColumn;
     private Column cd;
+    // TODO: Declare a generator here
+    private CircleAreaGenerator generator;
 
     @Override
     public void processRow(Row row) throws Exception {
@@ -129,7 +111,10 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
             return;
         }
 
-        String output = selectedGenerator.generate(str);
+        // TODO: Instantiate here the core processing on an input string
+        MyGeoPoint centerGeoPoint = new MyGeoPoint(str);
+        String output = generator.generateArea(centerGeoPoint);
+
         if (output.length() != 0) {
             row.put(outputColumn, output);
         }
@@ -150,55 +135,12 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
         } else {
             outputColumn = cd;
         }
-        selectedGenerator = newGenerator(params.processingMode);
-    }
 
-    @VisibleForTesting
-    static Generator newGenerator(ProcessingMode processingMode) {
-        switch (processingMode) {
-        case KILOMETERS:
-            return new TradeAreaFromKm();
-        case MILES:
-            return new TradeAreaFromMiles();
-        case METERS:
-            return new TradeAreaFromMeters();
-        default:
-            throw new IllegalArgumentException("Invalid processing mode: " + processingMode);
-        }
-    }
-
-    @VisibleForTesting
-    static abstract class Generator {
-
-        abstract String generate(String toConvert);
-
-        String generate(String str, double radius) {
-            if (str == null) {
-                throw new NullPointerException("str cannot be null");
-            }
-            return str + ": Hello";
-        }
-    }
-
-    private static class TradeAreaFromKm extends Generator {
-        @Override
-        public String generate(String str) {
-            return generate(str, 80);
-        }
-    }
-
-    private static class TradeAreaFromMiles extends Generator {
-        @Override
-        public String generate(String str) {
-            return generate(str, 90);
-        }
-    }
-
-    private static class TradeAreaFromMeters extends Generator {
-        @Override
-        public String generate(String str) {
-            return generate(str, 100);
-        }
+         generator = new CircleAreaGenerator(20);
+        // TODO: Access the parameters here and create the appropriate generator
+        // Circle/Rectangular
+        // Give the parameters to the function new generator to instantiate the right object afterward
+        // TODO: Select the right instance of the abstract class a the used conversion function
     }
 
 

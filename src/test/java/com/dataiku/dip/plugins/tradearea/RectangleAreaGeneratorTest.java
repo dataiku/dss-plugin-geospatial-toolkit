@@ -7,16 +7,16 @@ import java.awt.*;
 import org.junit.jupiter.api.Test;
 import org.w3c.dom.css.Rect;
 
-class RectangularAreaGeneratorTest {
+class RectangleAreaGeneratorTest {
     @Test
     public void testEndPointCreation() {
-        RectangularAreaGenerator rectangularAreaGenerator = new RectangularAreaGenerator();
+        double width = 500;
+        double height = 1000;
+        RectangleAreaGenerator rectangularAreaGenerator = new RectangleAreaGenerator(width, height);
         MyGeoPoint center = new MyGeoPoint();
         center.longitude = 20.0;
         center.latitude = 40.0;
-        double width = 500;
-        double height = 1000;
-        String result = rectangularAreaGenerator.generateRectangularArea(center, width, height);
+        String result = rectangularAreaGenerator.generateArea(center);
         System.out.println(result);
     }
 }
