@@ -1,10 +1,6 @@
 package com.dataiku.dip.plugins.tradearea;
 
-import java.math.BigInteger;
-import java.util.Locale;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -21,6 +17,7 @@ import com.dataiku.dip.shaker.text.Labelled;
 import com.dataiku.dip.util.ParamDesc;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Sets;
+import sun.font.Decoration;
 
 
 public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor implements Processor {
@@ -29,11 +26,37 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
         private static final long serialVersionUID = -1;
         public String inputColumn;
         public String outputColumn;
+        public UnitMode unitMode;
+        public ShapeMode shapeMode;
+        public double radius;
+        public double width;
+        public double height;
 
         @Override
         public void validate() throws IllegalArgumentException {
             // Throw an exception if the processingMode is invalid.
             // TODO: Check creating a new generator based on the processing mode
+        }
+    }
+
+    public enum ShapeMode implements Labelled {
+        RECTANGLE {
+            public String getLabel() { return "Rectangle";}
+        },
+        CIRCLE {
+            public String getLabel() { return "Circle";}
+        }
+    }
+
+    public enum UnitMode implements Labelled {
+        MILES {
+            public String getLabel() { return "Distance metrics in Miles";}
+        },
+        KILOMETERS {
+            public String getLabel() { return "Distance metrics in Kilometers";}
+        },
+        METERS {
+            public String getLabel() { return "Distance metrics in Meters";}
         }
     }
 
@@ -56,7 +79,7 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
 
         @Override
         public Set<ProcessorTag> getTags() {
-            return Sets.newHashSet(ProcessorTag.RESHAPING, ProcessorTag.MATH);
+            return Sets.newHashSet(ProcessorTag.GEOGRAPHIC);
         }
 
         @Override
@@ -84,6 +107,11 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
             // TODO: Create the appropriate UI here (inspect the ParamDesc option for the UI to know whats available)
             return ProcessorDesc.withGenericForm(this.getName(), actionVerb("Create") + " trade area zone")
                     .withMNEColParam("inputColumn", "Input column")
+                    .withParam(ParamDesc.advancedSelect("unitMode", "Distance unit", "", UnitMode.class).withDefaultValue(UnitMode.KILOMETERS))
+                    .withParam(ParamDesc.advancedSelect("shapeMode", "Shape", "", ShapeMode.class).withDefaultValue(ShapeMode.CIRCLE))
+                    .withParam(ParamDesc.doubleP("radius", "Radius"))
+                    .withParam(ParamDesc.doubleP("width", "Width"))
+                    .withParam(ParamDesc.doubleP("height", "Height"))
                     .withColParam("outputColumn", "Output column");
         }
 
@@ -101,7 +129,7 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
     private Column outputColumn;
     private Column cd;
     // TODO: Declare a generator here
-    private CircleAreaGenerator generator;
+    private AreaGenerator generator;
 
     @Override
     public void processRow(Row row) throws Exception {
@@ -135,13 +163,25 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
         } else {
             outputColumn = cd;
         }
-
-         generator = new CircleAreaGenerator(20);
-        // TODO: Access the parameters here and create the appropriate generator
-        // Circle/Rectangular
-        // Give the parameters to the function new generator to instantiate the right object afterward
-        // TODO: Select the right instance of the abstract class a the used conversion function
+        System.out.println("ShapeMode:" + params.shapeMode);
+        generator = newGenerator(params.shapeMode, params.radius, params.height, params.width);
     }
 
+    @VisibleForTesting
+    static AreaGenerator newGenerator(ShapeMode shapeMode, double radius, double height, double width) {
+        switch (shapeMode) {
+        case RECTANGLE:
+            return new RectangleAreaGenerator(width, height);
+        case CIRCLE:
+            return new CircleAreaGenerator(radius);
+        default:
+            throw new IllegalArgumentException("Invalid processing mode: " + shapeMode);
+        }
+    }
+
+    // TODO: Access the parameters here and create the appropriate generator
+    // Circle/Rectangular
+    // Give the parameters to the function new generator to instantiate the right object afterward
+    // TODO: Select the right instance of the abstract class a the used conversion function
 
 }
