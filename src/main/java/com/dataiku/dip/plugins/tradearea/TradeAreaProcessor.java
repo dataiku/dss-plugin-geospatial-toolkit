@@ -17,8 +17,6 @@ import com.dataiku.dip.shaker.text.Labelled;
 import com.dataiku.dip.util.ParamDesc;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Sets;
-import sun.font.Decoration;
-
 
 public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor implements Processor {
 

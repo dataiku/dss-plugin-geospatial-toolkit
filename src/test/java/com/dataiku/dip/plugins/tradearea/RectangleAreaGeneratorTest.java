@@ -10,12 +10,12 @@ import org.w3c.dom.css.Rect;
 class RectangleAreaGeneratorTest {
     @Test
     public void testEndPointCreation() {
-        double width = 500;
-        double height = 1000;
+        double width = 800;
+        double height = 500;
         RectangleAreaGenerator rectangularAreaGenerator = new RectangleAreaGenerator(width, height);
         MyGeoPoint center = new MyGeoPoint();
-        center.longitude = 20.0;
-        center.latitude = 40.0;
+        center.longitude = -73.97237;
+        center.latitude = 40.64749;
         String result = rectangularAreaGenerator.generateArea(center);
         System.out.println(result);
     }

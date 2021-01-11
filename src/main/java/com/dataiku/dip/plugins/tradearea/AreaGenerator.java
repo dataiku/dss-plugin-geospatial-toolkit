@@ -27,19 +27,19 @@ class RectangleAreaGenerator extends AreaGenerator {
         MyGeoPoint initGeoPoint = null;
         MyGeoPoint tmpGeoPoint;
         StringBuilder str = new StringBuilder();
-        str.append("MULTIPOLYGON((");
-        double alpha = Math.atan(this.height/this.width);
+        str.append("POLYGON((");
+        double alpha = Math.atan(this.height/this.width)*180/Math.PI;
         double[] angles = {90-alpha, 90+alpha, 270-alpha, 270+alpha};
         double angle;
         for (int i = 0; i < angles.length; i++){
             angle = angles[i];
             tmpGeoPoint = GeoUtils.computeDestinationPoint(startLat, startLong, angle, this.radius);
-            str.append(tmpGeoPoint.latitude + " " + tmpGeoPoint.longitude + ",");
+            str.append(tmpGeoPoint.longitude + " " + tmpGeoPoint.latitude + ",");
             if (i==0){
                 initGeoPoint = tmpGeoPoint;
             }
-            str.append(initGeoPoint.latitude + " " + initGeoPoint.longitude + ",");
         }
+        str.append(initGeoPoint.longitude + " " + initGeoPoint.latitude);
         str.append("))");
         return str.toString();
     }
@@ -59,15 +59,15 @@ class CircleAreaGenerator extends AreaGenerator {
         MyGeoPoint initGeoPoint = null;
         MyGeoPoint tmpGeoPoint;
         StringBuilder str = new StringBuilder();
-        str.append("MULTIPOLYGON((");
+        str.append("POLYGON((");
         for (int i = 0; i < 12; i++){
             tmpGeoPoint = GeoUtils.computeDestinationPoint(startLat, startLong, 30*i, this.radius);
-            str.append(tmpGeoPoint.latitude + " " + tmpGeoPoint.longitude + ",");
+            str.append(tmpGeoPoint.longitude + " " + tmpGeoPoint.latitude + ",");
             if (i==0){
                 initGeoPoint = tmpGeoPoint;
             }
         }
-        str.append(initGeoPoint.latitude + " " + initGeoPoint.longitude + ",");
+        str.append(initGeoPoint.longitude + " " + initGeoPoint.latitude);
         str.append("))");
         return str.toString();
 

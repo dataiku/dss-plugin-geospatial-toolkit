@@ -9,8 +9,8 @@ class CircleAreaGeneratorTest {
         double radius = 1000;
         CircleAreaGenerator circleAreaGenerator = new CircleAreaGenerator(radius);
         MyGeoPoint center = new MyGeoPoint();
-        center.longitude = 20.0;
-        center.latitude = 40.0;
+        center.longitude = -73.97237;
+        center.latitude = 40.64749;
         String result = circleAreaGenerator.generateArea(center);
         System.out.println(result);
     }
