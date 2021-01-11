@@ -13,8 +13,7 @@ group 'com.dataiku.dip.plugins.tradearea'
 
 sourceCompatibility = 1.7
 
-// def dkuInstallDir = System.getenv("DKUINSTALLDIR")
-def dkuInstallDir = "/Users/thibaultdesfontaines/devenv/DSS8/dip"
+def dkuInstallDir = System.getenv("DKUINSTALLDIR")
 
 repositories {
     flatDir {
