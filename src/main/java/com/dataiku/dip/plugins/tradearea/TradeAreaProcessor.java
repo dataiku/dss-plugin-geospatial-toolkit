@@ -48,13 +48,10 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
 
     public enum UnitMode implements Labelled {
         MILES {
-            public String getLabel() { return "Distance metrics in Miles";}
+            public String getLabel() { return "Miles";}
         },
         KILOMETERS {
-            public String getLabel() { return "Distance metrics in Kilometers";}
-        },
-        METERS {
-            public String getLabel() { return "Distance metrics in Meters";}
+            public String getLabel() { return "Kilometers";}
         }
     }
 
@@ -105,12 +102,12 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
             // TODO: Create the appropriate UI here (inspect the ParamDesc option for the UI to know whats available)
             return ProcessorDesc.withGenericForm(this.getName(), actionVerb("Create") + " trade area zone")
                     .withMNEColParam("inputColumn", "Input column")
+                    .withColParam("outputColumn", "Output column")
                     .withParam(ParamDesc.advancedSelect("unitMode", "Distance unit", "", UnitMode.class).withDefaultValue(UnitMode.KILOMETERS))
                     .withParam(ParamDesc.advancedSelect("shapeMode", "Shape", "", ShapeMode.class).withDefaultValue(ShapeMode.CIRCLE))
                     .withParam(ParamDesc.doubleP("radius", "Radius"))
                     .withParam(ParamDesc.doubleP("width", "Width"))
-                    .withParam(ParamDesc.doubleP("height", "Height"))
-                    .withColParam("outputColumn", "Output column");
+                    .withParam(ParamDesc.doubleP("height", "Height"));
         }
 
         @Override
@@ -126,7 +123,6 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
     private Parameter params;
     private Column outputColumn;
     private Column cd;
-    // TODO: Declare a generator here
     private AreaGenerator generator;
 
     @Override
@@ -137,9 +133,10 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
             return;
         }
 
-        // TODO: Instantiate here the core processing on an input string
         MyGeoPoint centerGeoPoint = new MyGeoPoint(str);
+        System.out.println("[x] "+generator.generateArea(centerGeoPoint));
         String output = generator.generateArea(centerGeoPoint);
+
 
         if (output.length() != 0) {
             row.put(outputColumn, output);
@@ -161,25 +158,28 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
         } else {
             outputColumn = cd;
         }
-        System.out.println("ShapeMode:" + params.shapeMode);
-        generator = newGenerator(params.shapeMode, params.radius, params.height, params.width);
+        generator = newGenerator(params.unitMode, params.shapeMode, params.radius, params.height, params.width);
     }
 
     @VisibleForTesting
-    static AreaGenerator newGenerator(ShapeMode shapeMode, double radius, double height, double width) {
-        switch (shapeMode) {
-        case RECTANGLE:
-            return new RectangleAreaGenerator(width, height);
-        case CIRCLE:
-            return new CircleAreaGenerator(radius);
-        default:
-            throw new IllegalArgumentException("Invalid processing mode: " + shapeMode);
-        }
-    }
+    static AreaGenerator newGenerator(UnitMode unitMode, ShapeMode shapeMode, double radius, double height, double width) {
 
-    // TODO: Access the parameters here and create the appropriate generator
-    // Circle/Rectangular
-    // Give the parameters to the function new generator to instantiate the right object afterward
-    // TODO: Select the right instance of the abstract class a the used conversion function
+        double kmToMiles = 0.621371;
+        // By default consider distances in km
+        // If in miles, multiply by the conversion factor
+        if (unitMode == UnitMode.MILES){
+            radius *= kmToMiles;
+            width *= kmToMiles;
+            height *= kmToMiles;
+        }
+        switch (shapeMode) {
+            case RECTANGLE:
+                return new RectangleAreaGenerator(width, height);
+            case CIRCLE:
+                return new CircleAreaGenerator(radius);
+            default:
+                throw new IllegalArgumentException("Invalid processing mode: " + shapeMode);
+            }
+    }
 
 }

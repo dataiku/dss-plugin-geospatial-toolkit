@@ -8,8 +8,8 @@ public class GeoUtilsTest {
     public void testEndPointCreation() {
         GeoUtils geoUtils = new GeoUtils();
         MyGeoPoint startPoint = new MyGeoPoint();
-        startPoint.latitude = 43.2994;
-        startPoint.longitude = 74.2179;
+        startPoint.latitude = 40.64749;
+        startPoint.longitude = -73.97237;
         double bearing = 90;
         double distance = 1000;
         MyGeoPoint endPoint = new MyGeoPoint();

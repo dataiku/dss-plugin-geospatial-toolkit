@@ -10,8 +10,8 @@ import org.w3c.dom.css.Rect;
 class RectangleAreaGeneratorTest {
     @Test
     public void testEndPointCreation() {
-        double width = 800;
-        double height = 500;
+        double width = 8;
+        double height = 5;
         RectangleAreaGenerator rectangularAreaGenerator = new RectangleAreaGenerator(width, height);
         MyGeoPoint center = new MyGeoPoint();
         center.longitude = -73.97237;

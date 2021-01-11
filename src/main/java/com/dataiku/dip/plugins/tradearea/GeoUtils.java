@@ -6,11 +6,17 @@ public class GeoUtils {
 
     static double degreesToRadians = Math.PI/180;
     static double radiansToDegrees = 180/Math.PI;
-    static double earthRadius = 6378137;
+    // Earth radius in Km
+    static double earthRadius = 6378.137;
 
     public static MyGeoPoint computeDestinationPoint(double startLat, double startLong, double bearing, double distance){
-        // Expecting latitude, longitude and bearing in degrees here
-        // Expecting distance in meters
+        /*
+            Args:
+                startLat: Latitude angle in degrees
+                startLong: Longitude angle in degrees
+                bearing: Bearing angle in degrees (0 is north, 90 is west ... )
+                distance: Distance in kilometers
+         */
         startLat *= degreesToRadians;
         startLong *= degreesToRadians;
         bearing *= degreesToRadians;

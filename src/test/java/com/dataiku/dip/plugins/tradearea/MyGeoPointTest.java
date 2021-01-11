@@ -7,9 +7,9 @@ import org.junit.jupiter.api.Test;
 class MyGeoPointTest {
     @Test
     public void testMyGeoPointConstructor() {
-        String wktGeoPoint = "POINT(-40.393 90.39)";
+        String wktGeoPoint = "POINT(-73.97237 40.64749)";
         MyGeoPoint geoPoint = new MyGeoPoint(wktGeoPoint);
-        assertEquals(-40.393, geoPoint.latitude);
-        assertEquals(90.39, geoPoint.longitude);
+        assertEquals(40.64749, geoPoint.latitude);
+        assertEquals(-73.97237, geoPoint.longitude);
     }
 }

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 class CircleAreaGeneratorTest {
     @Test
     public void testEndPointCreation() {
-        double radius = 1000;
+        double radius = 1;
         CircleAreaGenerator circleAreaGenerator = new CircleAreaGenerator(radius);
         MyGeoPoint center = new MyGeoPoint();
         center.longitude = -73.97237;
