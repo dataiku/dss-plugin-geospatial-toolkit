@@ -163,14 +163,13 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
 
     @VisibleForTesting
     static AreaGenerator newGenerator(UnitMode unitMode, ShapeMode shapeMode, double radius, double height, double width) {
-
-        double kmToMiles = 0.621371;
-        // By default consider distances in km
-        // If in miles, multiply by the conversion factor
+        double milesToKm = 1.6093444978925633;
+        // Expected input distances in the area generators are in km
+        // If in miles, convert to km
         if (unitMode == UnitMode.MILES){
-            radius *= kmToMiles;
-            width *= kmToMiles;
-            height *= kmToMiles;
+            radius *= milesToKm;
+            width *= milesToKm;
+            height *= milesToKm;
         }
         switch (shapeMode) {
             case RECTANGLE:

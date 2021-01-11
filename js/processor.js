@@ -4,28 +4,64 @@
     var injector = angular.element("body").injector();
     var ShakerProcessorsInfo = injector.get("ShakerProcessorsInfo");
 
-    var conversionModes = {
-        "BINARY_TO_DECIMAL": "binary to decimal",
-        "HEXA_TO_DECIMAL": "hexa to decimal",
-        "DECIMAL_TO_BINARY": "decimal to binary",
-        "DECIMAL_TO_HEXA": "decimal to hexa",
-        "HEXA_TO_BINARY": "hexa to binary",
-        "BINARY_TO_HEXA": "binary to hexa"
+    var unitModes = {
+        "KILOMETERS": "kilometers",
+        "MILES": "miles"
     }
 
-    var getDescription = function(params) {
-        if (!params["processingMode"] || params["processingMode"].length == 0) return null;
-        if (params["processingMode"] in conversionModes) {
-            return " from " +  conversionModes[params["processingMode"]]
+    var shapeModes = {
+        "RECTANGLE": "rectangular",
+        "CIRCLE": "circular"
+    }
+
+    var getShapeDescription = function(params){
+        if (!params["shapeMode"] || params["shapeMode"].length === 0) return null;
+        if (params["shapeMode"] in shapeModes) {
+            return " " +  shapeModes[params["shapeMode"]]
         } else {
             return null;
         }
     }
 
+    var getDimensionDescription = function(params){
+        if (!params["shapeMode"] || params["shapeMode"].length === 0) return null;
+        if (!(params["shapeMode"] in shapeModes)) {
+            return null
+        } else {
+            switch (params["shapeMode"]) {
+                case "RECTANGLE":
+                    return " with width=" + sanitize(params["width"]) + ", height=" + sanitize(params["height"]);
+                case "CIRCLE":
+                    return "with radius=" + sanitize(params["radius"]);
+                default:
+                    return null
+            }
+        }
+    }
+
+    var getUnitDescription = function(params){
+        if (!params["unitMode"] || params["unitMode"].length === 0) return null;
+        if (!(params["unitMode"] in unitModes)) {
+            return null
+        } else {
+            switch (params["unitMode"]) {
+                case "KILOMETERS":
+                    return " kilometers";
+                case "MILES":
+                    return " miles";
+                default:
+                    return null
+            }
+        }
+    }
+
+
     ShakerProcessorsInfo.map["TradeAreaProcessor"] = {
         "description": function(type, params) {
-            if (!params["inputColumn"] || params["inputColumn"].length == 0) return null;
-            return "Convert data in column <strong>{0}</strong>".format(sanitize(params["inputColumn"])) + getDescription(params);
+            if (!params["inputColumn"] || params["inputColumn"].length === 0) return null;
+            return "Generating a " + getShapeDescription(params) + " trade area centered on" +
+                " <strong>{0}</strong> ".format(sanitize(params["inputColumn"])) + getDimensionDescription(params) +
+                getUnitDescription(params);
         },
         "icon": "icon-superscript"
     }
