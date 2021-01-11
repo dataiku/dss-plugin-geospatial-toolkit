@@ -17,19 +17,19 @@
         "topBar": "STD_FORM",
         "topBarParams": [
             {
-                "name": "geopoint",
+                "name": "Show",
                 "type": "DATASET_COLUMN",
                 "datasetParamName": "geopoint_column",
-                "label": "geopoint_column",
+                "label": "Show",
                 "description": "Column containing the geopoint",
                 "mandatory": true
             },
             {
-                "name": "tooltip",
+                "name": "details",
                 "type": "DATASET_COLUMN",
-                "datasetParamName": "tooltip_column",
-                "label": "tooltip_column",
-                "description": "Definition of the tooltip",
+                "datasetParamName": "details_column",
+                "label": "Details",
+                "description": "Column containing the intensity detail",
                 "mandatory": true
             }
         ],
