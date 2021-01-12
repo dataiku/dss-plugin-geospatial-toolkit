@@ -16,7 +16,8 @@ class RectangleAreaGeneratorTest {
         MyGeoPoint center = new MyGeoPoint();
         center.longitude = -73.97237;
         center.latitude = 40.64749;
-        String result = rectangularAreaGenerator.generateArea(center);
-        System.out.println(result);
+        String actualResult = rectangularAreaGenerator.generateArea(center);
+        String expectedResult = "POLYGON((-73.87758864980181 40.692367032096044,-73.87771614626718 40.60253557932358,-74.06702385373282 40.60253557932358,-74.0671513501982 40.692367032096044,-73.87758864980181 40.692367032096044))";
+        assertEquals(expectedResult, actualResult);
     }
 }

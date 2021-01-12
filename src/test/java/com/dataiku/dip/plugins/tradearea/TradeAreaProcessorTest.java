@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 public class TradeAreaProcessorTest {
 
+    // TODO: Implement test
     @Test
     public void testHexadecimalToDecimal() {
         assertEquals("qwerty: Hello", "qwerty: Hello");

@@ -24,6 +24,7 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
         private static final long serialVersionUID = -1;
         public String inputColumn;
         public String outputColumn;
+        // Custom parameters declaration of the processor
         public UnitMode unitMode;
         public ShapeMode shapeMode;
         public double radius;
@@ -32,12 +33,12 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
 
         @Override
         public void validate() throws IllegalArgumentException {
-            // Throw an exception if the processingMode is invalid.
-            // TODO: Check creating a new generator based on the processing mode
+            // TODO: Check creation of a generator
         }
     }
 
     public enum ShapeMode implements Labelled {
+        // Options on the shape of polygons
         RECTANGLE {
             public String getLabel() { return "Rectangle";}
         },
@@ -47,6 +48,7 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
     }
 
     public enum UnitMode implements Labelled {
+        // Options on the unit of the distances
         MILES {
             public String getLabel() { return "Miles";}
         },
@@ -83,13 +85,15 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
                     "\n \n" +
                     "# Input column\n" +
                     "Contains the geopoints on which the trade area is centered\n \n" +
-                    "# Trade Area Creation\n" +
-                    "Select the processing mode to / from:\n" +
-                    "* Kilometers\n" +
-                    "* Miles\n" +
-                    "* Meters\n \n" +
                     "# Output column\n" +
-                    "Contains created trade areas";
+                    "Contains created trade areas as Well Known Text polygons (String column)\n\n"+
+                    "# Trade area creation options\n" +
+                    "Select the unit of distances from:\n" +
+                    "* Kilometers\n" +
+                    "* Miles\n\n" +
+                    "Select the shape of trade area from:\n" +
+                    "* Rectangular\n" +
+                    "* Circular\n\n";
         }
 
         @Override
@@ -99,7 +103,7 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
 
         @Override
         public ProcessorDesc describe() {
-            // TODO: Create the appropriate UI here (inspect the ParamDesc option for the UI to know whats available)
+            // UI creation using ParamDesc
             return ProcessorDesc.withGenericForm(this.getName(), actionVerb("Create") + " trade area zone")
                     .withMNEColParam("inputColumn", "Input column")
                     .withColParam("outputColumn", "Output column")
@@ -120,7 +124,7 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
         this.params = params;
     }
 
-    private Parameter params;
+    private final Parameter params;
     private Column outputColumn;
     private Column cd;
     private AreaGenerator generator;
@@ -128,16 +132,17 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
     @Override
     public void processRow(Row row) throws Exception {
         String str = row.get(cd);
+        // Handle null in input
         if (str == null || str.equals("")) {
             getProcessorOutput().emitRow(row);
             return;
         }
 
+        // Actual row to row processing
         MyGeoPoint centerGeoPoint = new MyGeoPoint(str);
-        System.out.println("[x] "+generator.generateArea(centerGeoPoint));
         String output = generator.generateArea(centerGeoPoint);
 
-
+        // Handle null in output
         if (output.length() != 0) {
             row.put(outputColumn, output);
         }
@@ -163,6 +168,7 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
 
     @VisibleForTesting
     static AreaGenerator newGenerator(UnitMode unitMode, ShapeMode shapeMode, double radius, double height, double width) {
+        // Conversion factor from miles to km to enforce km as input
         double milesToKm = 1.6093444978925633;
         // Expected input distances in the area generators are in km
         // If in miles, convert to km
