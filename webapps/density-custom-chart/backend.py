@@ -31,19 +31,16 @@ def get_geo_data():
         tooltip_column_name = config.get('tooltip_column_name', None)
         logger.info("Got following tooltip column: {}".format(tooltip_column_name))
         filters = json.loads(request.args.get('filters', None))
-        # Do filtering on the columns
-
-        #
-        logger.info("Filters {}".format(filters))
         # TODO: Input sanitizer
         dataset_name = config.get('dataset_name')
         geopoint_column_name = config.get('geopoint_column_name')
+        logger.info("geopoint_column_name={}".format(geopoint_column_name))
         # Fetch dataset from name
         # TODO: Secure call to API
         df = dataiku.Dataset(dataset_name).get_dataframe(limit=100000)
-        if len(filters) > 0:  # apply filters to dataframe
-            df = filter_dataframe(df, filters)
-
+        # if len(filters) > 0:  # apply filters to dataframe
+        #     df = filter_dataframe(df, filters)
+        logger.info("df={}".format(df.head()))
         tooltip = ['A sample tooltip' for i in range(len(df))]
         coordinates = list(df[geopoint_column_name].values)
         long = [eval(i[6:-1].split(' ')[0]) for i in coordinates]

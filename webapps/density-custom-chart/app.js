@@ -133,7 +133,7 @@ window.addEventListener('message', function(event) {
         // Fetch parameters for plugin visualisation
         var plugin_config = {
             dataset_name: webAppConfig['dataset'],
-            geopoint_column_name: webAppConfig['geopoint'],
+            geopoint_column_name: webAppConfig['geopoint_column_name'],
             tooltip_column_name: webAppConfig['tooltip'],
             intensity: webAppConfig['intensity'],
             color: webAppConfig['color'],

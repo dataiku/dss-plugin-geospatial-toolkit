@@ -17,9 +17,9 @@
         "topBar": "STD_FORM",
         "topBarParams": [
             {
-                "name": "Show",
+                "name": "geopoint_column_name",
                 "type": "DATASET_COLUMN",
-                "datasetParamName": "geopoint_column",
+                "datasetParamName": "geopoint_column_name",
                 "label": "Show",
                 "description": "Column containing the geopoint",
                 "mandatory": true
