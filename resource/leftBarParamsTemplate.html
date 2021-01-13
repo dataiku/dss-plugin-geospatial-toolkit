@@ -6,7 +6,7 @@
         <div class="mbot20" style="padding-bottom: 5px; margin-bottom: 0; overflow: hidden;">
                 <h4 class="foldable-title" ng-click="config.optionsFolds.intensity = !config.optionsFolds.intensity">
                         <i class="icon-caret-right" ng-show="!config.optionsFolds.intensity" /><i class="icon-caret-down" ng-show="config.optionsFolds.intensity" />
-                        Parameter controls:
+                        Parameter controls
                 </h4>
                 <div ng-show="config.optionsFolds.intensity" class="options-zone">
                         <div class="options-zone" >
@@ -82,12 +82,11 @@
                 </h4>
 
                 <div ng-show="foldableOpen">
-                        <div class="chartdef-dropzone chartdef-dropzone-vertical" ng-class="{'empty':chart.def.uaTooltip.length==0, 'notempty': chart.def.uaTooltip.length != 0}">
+                        <div class="chartdef-dropzone chartdef-dropzone-vertical" ng-class="{'empty':config.uaTooltip.length==0, 'notempty': config.uaTooltip.length != 0}">
                                 <div data-block="dim1-placeholder"  class="empty-placeholder no-icon">
                                         Drop to add tooltip measures
                                 </div>
-                                <div class="chartdef-dropzone-main qa_charts_tooltip-dropzone" multi-ua-zone-no-opts list="chart.def.uaTooltip" accept-callback="acceptUaTooltip"></div>
-                                {{config.uaTooltip=chart.def.uaTooltip}}
+                                <div class="chartdef-dropzone-main qa_charts_tooltip-dropzone" multi-ua-zone-no-opts list="config.uaTooltip" accept-callback="acceptUaTooltip"></div>
                         </div>
                 </div>
         </div>
@@ -126,12 +125,8 @@
 
                         </form>
                 </div>
-
-
         </div>
 
-
         <!-- End of Color Scale Selector -->
-
 
 </form>
