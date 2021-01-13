@@ -46,10 +46,6 @@ function GeoDensityChart(){
         get: function(){ return _mapPointer;}
     });
 
-    this.do = function(val){
-        _foo += val;
-    }
-
     this.initialiseMap = function(){
         _mapPointer = L.map(_mapId).setView([48.8444529, 2.3718228], 5);
     }
@@ -102,15 +98,46 @@ function GeoDensityChart(){
             if (!_quadtree) {
                 throw new Error("Quadtree is undefined")
             }
-            var closestMarker = _quadtree.find(lat, long, 10);
+            var closestMarker = this.getNeighbors(lat, long, 2);
             if (!closestMarker) {
                 console.warn('Quadtree not able to find closest point');
             }
-            console.log('closestMarker:', closestMarker);
-            _closestMarker = {lat: closestMarker[0], long: closestMarker[1], tooltip: Math.random()};
+            _closestMarker = [];
+            closestMarker.forEach(function (item, index) {
+                _closestMarker.push({lat: item[0], long: item[1], tooltip: Math.random()});
+            });
+            console.log("_closestMarker:", _closestMarker);
             this.displayLocal(_tooltip);
             console.log("localMarkers=", closestMarker);
         });
+    }
+
+    this.search = function(quadtree, xmin, ymin, xmax, ymax) {
+        const results = [];
+        quadtree.visit(function(node, x1, y1, x2, y2) {
+            if (!node.length) {
+                do {
+                    var d = node.data;
+                    if (d[0] >= xmin && d[0] < xmax && d[1] >= ymin && d[1] < ymax) {
+                        results.push(d);
+                    }
+                } while (node === node.next);
+            }
+            return x1 >= xmax || y1 >= ymax || x2 < xmin || y2 < ymin;
+        });
+        console.log("Results:", results);
+        return results;
+    }
+
+    this.getNeighbors = function(lat, long, mode=0){
+        if (mode === 1){
+            return _quadtree.find(lat, long, 10)
+        } else if (mode === 2){
+            console.log("Searching for the points with getNeighbors ...");
+            var searchRadius = 0.001;
+            return this.search(_quadtree, lat-searchRadius, long-searchRadius,
+                lat+searchRadius, long+searchRadius)
+        }
     }
 
     this.displayLocal = function(){
@@ -125,10 +152,11 @@ function GeoDensityChart(){
          *          example: [-45.873, 3.894]
          */
         console.log("Call to displayLocal ...");
+        d3.selectAll("circle").remove();
         // Define the d3 dynamics around the geospatial data points (rendering and events)
         _svgPointer.selectAll("myCircles")
             .attr("pointer-events", "visible")
-            .data([_closestMarker])
+            .data(_closestMarker)
             .enter()
             .append("circle")
             .attr("cx", function(d) {
@@ -148,26 +176,19 @@ function GeoDensityChart(){
                     .duration('50')
                     .attr("fill", "red")
                     .attr('r', 10)
-                    .attr("stroke", "black")
-                    .attr("stroke-width", 3)
-                    .attr("fill-opacity", .4)
             })
             .on('mouseout', function() { // handle
                 _tooltip.style("visibility", "hidden")
                 d3.select(this).transition()
                     .duration('150')
                     .attr("r", 5)
-                    .attr("fill", "transparent")
-                    .attr("fill-opacity", 0)
-                    .attr("stroke", 0)
-                    .attr("stroke-width", 0)
             })
             // potentially useless
             .attr("r", 5)
+            .attr("stroke", "black")
+            .attr("stroke-width", 3)
+            .attr("fill-opacity", .4)
             .attr("fill", "transparent")
-            .attr("fill-opacity", 0)
-            .attr("stroke", 0)
-            .attr("stroke-width", 0)
     }
 
     this.addUpdateEvent = function(){

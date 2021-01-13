@@ -74,12 +74,9 @@ var webAppConfig = {};
 var filters = {};
 var plugin_config = {};
 
-
 function sleep (time) {
     return new Promise((resolve) => setTimeout(resolve, time));
 }
-
-
 
 function fullUpdate(plugin_config, filters) {
     /*
@@ -113,10 +110,6 @@ function fullUpdate(plugin_config, filters) {
     console.log("Done fullUpdate.");
 }
 
-// Do the full chart initialisation here
-
-
-
 // Main rendering loop
 window.parent.postMessage("sendConfig", "*");
 window.addEventListener('message', function(event) {
@@ -144,7 +137,6 @@ window.addEventListener('message', function(event) {
         chartHandler.intensity = plugin_config['intensity']/100;
         chartHandler.radius = plugin_config['radius'];
         chartHandler.gradient = colorToGradient(plugin_config['color']);
-
 
         console.log("Receiving plugin config: ", plugin_config);
         fullUpdate(plugin_config, filters);
