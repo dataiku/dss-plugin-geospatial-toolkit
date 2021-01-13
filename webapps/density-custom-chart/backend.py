@@ -44,6 +44,7 @@ def get_geo_data():
         logger.info("df={}".format(df.head()))
         tooltip = ['A sample tooltip' for i in range(len(df))]
         coordinates = list(df[geopoint_column_name].values)
+        # TODO: Use regexp
         long = [eval(i[6:-1].split(' ')[0]) for i in coordinates]
         lat = [eval(i[6:-1].split(' ')[1]) for i in coordinates]
         if df.empty:

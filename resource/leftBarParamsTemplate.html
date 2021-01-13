@@ -1,89 +1,49 @@
 
 <form name="myForm" ng-controller="MyCustomFormController">
 
-        <h4>Intensity:</h4>
-        <input type="range" name="range" ng-model="config.intensity" min="0"  max="200">
-        intensity value = <code>{{config.intensity}}</code><br/>
-        <br>
-        <h4>Radius:</h4>
-        <input type="range" name="range" ng-model="config.radius" min="0"  max="100">
-        Radius value = <code>{{config.radius}}</code><br/>
-        <br>
-        <h4>Color:</h4>
-        <p>Choose the color scale for the density map:</p>
-        <label>
-                <input type="radio" ng-model="config.color" value="red">
-                Red
-        </label>
-        <label>
-                <input type="radio" ng-model="config.color" value="blue">
-                Blue
-        </label>
-        <label>
-                <input type="radio" ng-model="config.color" value="yellow">
-                Yellow
-        </label>
-
-        <h4>MapTile:</h4>
-        <p>Choose the map tile:</p>
-        <label>
-                <input type="radio" ng-model="config.maptile" value="mapbox/v11">
-                MapBox V11
-        </label>
-        <label>
-                <input type="radio" ng-model="config.maptile" value="mapbox/v12">
-                MapBox V12
-        </label>
-        <label>
-                <input type="radio" ng-model="config.maptile" value="mapbox/v13">
-                MapBox V13
-        </label>
-
+        <!-- Parameter controls: Intensity and Radius -->
 
         <div class="mbot20" style="padding-bottom: 5px; margin-bottom: 0; overflow: hidden;">
-                <h4 class="foldable-title qa_charts_color-submenu-header" ng-click="optionsFolds.color = !optionsFolds.color"> <i class="icon-caret-right" ng-show="!optionsFolds.color" /><i class="icon-caret-down" ng-show="optionsFolds.color" />
-                        Color
+                <h4 class="foldable-title" ng-click="config.optionsFolds.intensity = !config.optionsFolds.intensity">
+                        <i class="icon-caret-right" ng-show="!config.optionsFolds.intensity" /><i class="icon-caret-down" ng-show="config.optionsFolds.intensity" />
+                        Parameter controls:
                 </h4>
-                <div class="options-zone" >
-                        <div ng-controller="SingleColorSelectorController">
-                                <form class="dkuform-chart-options">
-                                        <div class="control-group chart-single-color-picker">
-                                                <div class="colors-zone">
-                                                        <div ng-repeat="color in colors"
-                                                             ng-click="chart.def.colorOptions.singleColor=color; config.hack=color"
-                                                             style="background-color:{{color}}"
-                                                             class="color"
-                                                             ng-class="{selected: chart.def.colorOptions.singleColor === color}"
-                                                        ></div>
-                                                </div>
-                                                <div>
-                                                        Selected: <div class="dibvam selected-color" colorpicker ng-model="chart.def.colorOptions.singleColor" style="background-color:{{chart.def.colorOptions.singleColor}}">{{ tag }}</div>
-                                                </div>
-                                        </div>
-                                        <div class="control-group">
-                                                <label>
-                                                        Opacity: <div dku-slider min="0" max="1" value="chart.def.colorOptions.transparency" class="qa_charts_opacity-slider" nb-decimal-places="1" />
-                                                </label>
-                                        </div>
-                                </form>
+                <div ng-show="config.optionsFolds.intensity" class="options-zone">
+                        <div class="options-zone" >
+                                <div class="control-group">
+                                        <label>
+                                                Intensity: <div dku-slider min="0" max="200" value="config.intensity" class="qa_charts_opacity-slider" nb-decimal-places="1" />
+                                        </label>
+                                </div>
+                        </div>
+                        <div class="options-zone" >
+                                <div class="control-group">
+                                        <label>
+                                                Radius: <div dku-slider min="0" max="100" value="config.radius" class="qa_charts_opacity-slider" nb-decimal-places="1" />
+                                        </label>
+                                </div>
                         </div>
                 </div>
         </div>
 
+        <!-- End of Parameter controls: Intensity and Radius -->
+
+        <!-- Map BackGround Selector -->
+
         <div class="mbot20" style="padding-bottom: 5px; margin-bottom: 0; overflow: hidden;">
-                <h4 class="foldable-title" id="qa_charts_map-background-submenu-header" ng-click="optionsFolds.mapTiles = !optionsFolds.mapTiles">
-                        <i class="icon-caret-right" ng-show="!optionsFolds.mapTiles" /><i class="icon-caret-down" ng-show="optionsFolds.mapTiles" />
+                <h4 class="foldable-title" id="qa_charts_map-background-submenu-header" ng-click="config.optionsFolds.mapTiles = !config.optionsFolds.mapTiles">
+                        <i class="icon-caret-right" ng-show="!config.optionsFolds.mapTiles" /><i class="icon-caret-down" ng-show="config.optionsFolds.mapTiles" />
                         Map background
                 </h4>
 
-                <div ng-show="optionsFolds.mapTiles" class="options-zone" ng-controller="MapBackgroundPickerController">
+                <div ng-show="config.optionsFolds.mapTiles" class="options-zone" ng-controller="MapBackgroundPickerController">
                         <form class="dkuform-chart-options">
                                 <div class="control-group">
                                         <label class="control-label" dku-for="#map-background-picker button">Tiles to use</label>
                                         <div class="controls">
                                                 <div class="palette-picker__list-zone" id="map-background-picker">
                                                         <div class="flex oh" id="palette-picker">
-                                                                <select ng-model="chart.def.mapOptions.tilesLayer" id="qa_charts_map-background-select" ng-options="x.id as x.name group by x.category for x in backgrounds" dku-bs-select></select>
+                                                                <select ng-model="config.chart.def.mapOptions.tilesLayer" id="qa_charts_map-background-select" ng-options="x.id as x.name group by x.category for x in backgrounds" dku-bs-select></select>
                                                         </div>
                                                 </div>
                                         </div>
@@ -91,6 +51,8 @@
                         </form>
                 </div>
         </div>
+
+        <!-- End of Map BackGround Selector -->
 
 
         <div class="mbot20" ng-if="canHasTooltipMeasures && (!readOnly || chart.def.tooltipMeasures.length > 0)" dku-foldable open="false" open-on-drag-enter>
@@ -129,5 +91,47 @@
                         </div>
                 </div>
         </div>
+
+        <!-- Color Scale Selector -->
+
+        <div class="mbot20" style="padding-bottom: 5px; margin-bottom: 0; overflow: hidden;">
+                <h4 class="foldable-title" ng-click="config.optionsFolds.colorScaleSelector = !config.optionsFolds.colorScaleSelector">
+                        <i class="icon-caret-right" ng-show="!config.optionsFolds.colorScaleSelector" /><i class="icon-caret-down" ng-show="config.optionsFolds.colorScaleSelector" />
+                        Color
+                </h4>
+                <div ng-show="config.optionsFolds.colorScaleSelector" class="options-zone">
+                        <form class="dkuform-chart-options" palette-picker-logic container="chart.def.colorOptions" type="{{chart.def.colorOptions.paletteType}}">
+
+                                <div class="control-group">
+                                        <label class="control-label" dku-for="#palette-picker button">Palette</label>
+                                        <div class="controls">
+                                                <div class="palette-picker__list-zone">
+                                                        <div class="horizontal-flex">
+                                                                <div class="flex oh" id="palette-picker">
+                                                                        <select dku-bs-select="{width: '220px', customDropdownAttrs: {'no-global-contextual-menu-close': 'true'}}"
+                                                                                ng-model="config.colorPalette" ng-if="categories" class="palette-select qa_charts_palette-select"
+                                                                                data-container="body" watch-model="container.quantizedPalette">
+                                                                                <optgroup ng-repeat="(category, palettes) in categories" label="{{category}}">
+                                                                                        <option ng-repeat="palette in palettes track by palette.id" value="{{palette.id}}"
+                                                                                                data-content='{{getPaletteContent(palette)}}'>{{palette.id}}</option>
+                                                                                </optgroup>
+
+                                                                                <option data-divider="true"></option>
+                                                                        </select>
+                                                                </div>
+                                                        </div>
+                                                </div>
+                                        </div>
+                                </div>
+
+                        </form>
+                </div>
+
+
+        </div>
+
+
+        <!-- End of Color Scale Selector -->
+
 
 </form>
