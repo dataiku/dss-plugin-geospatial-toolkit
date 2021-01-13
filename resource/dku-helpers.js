@@ -6,38 +6,31 @@ v 1.0.1
 function checkMandatoryParameters(param, webAppConfig) {
     if (param.mandatory) {
         let val = webAppConfig[param.name];
-        if (val == undefined || val == "") {
+        if (val === null || val === "") {
             throw new Error("Mandatory column '" + param.name + "' not specified.");
         }
     }
 }
 
 function checkWebAppParameters(webAppConfig, webAppDesc) {
-    if (webAppDesc.topBarParams) {
-        webAppDesc.topBarParams.forEach(p => {checkMandatoryParameters(p, webAppConfig)});
-    }
-    if (webAppDesc.leftBarParams) {
-        webAppDesc.leftBarParams.forEach(p => {checkMandatoryParameters(p, webAppConfig)});
-    }
-};
+    if (webAppDesc.topBarParams) webAppDesc.topBarParams.forEach(p => {checkMandatoryParameters(p, webAppConfig)});
+    if (webAppDesc.leftBarParams) webAppDesc.leftBarParams.forEach(p => {checkMandatoryParameters(p, webAppConfig)});
+}
 
 function checkWebAppConfig(webAppConfig) {
-    if (webAppConfig['source'] == webAppConfig['target']) {
+    if (webAppConfig['source'] === webAppConfig['target']) {
         throw Error("Columns must be different")
     }
 }
 
 function quadraticScalingFunction(min, max, total, value) {
-    if (max === min) {
-        return 0;
-    } else {
-        var scale = 1 / (max - min);
-        return Math.pow(Math.max(0,(value - min)*scale), 2);
-    }
+    if (max === min) return 0;
+    let scale = 1 / (max - min);
+    return Math.pow(Math.max(0,(value - min)*scale), 2);
 }
 
 function isEqual(object1, object2) {
-    return JSON.stringify(object1) == JSON.stringify(object2)
+    return JSON.stringify(object1) === JSON.stringify(object2)
 }
 
 
@@ -47,11 +40,11 @@ dataiku.webappBackend = (function() {
     }
 
     function dkuDisplayError(error) {
-        console.warn("backend error: ", error);
+        console.error("Backend error: ", error);
     }
 
     function get(path, args={}, displayErrors=true) {
-        return fetch(getUrl(path) + '?' + $.param(args), {
+        return fetch(`${getUrl(path)}?${$.param(args)}`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',

@@ -2,6 +2,8 @@ import pandas as pd
 from functools import reduce
 
 
+DKU_NO_VALUE = '___dku_no_value___'
+
 def numerical_filter(df, filter_):
     conditions = []
     if filter_["minValue"]:
@@ -15,7 +17,7 @@ def alphanum_filter(df, filter_):
     conditions = []
     excluded_values = []
     for k, v in filter_['excludedValues'].items():
-        if k != '___dku_no_value___':
+        if k != DKU_NO_VALUE:
             if v:
                 excluded_values += [k]
         else:

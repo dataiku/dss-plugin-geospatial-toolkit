@@ -38,8 +38,9 @@ def get_geo_data():
         # Fetch dataset from name
         # TODO: Secure call to API
         df = dataiku.Dataset(dataset_name).get_dataframe(limit=100000)
-        # if len(filters) > 0:  # apply filters to dataframe
-        #     df = filter_dataframe(df, filters)
+        # Apply filters to dataset
+        if filters:
+            df = filter_dataframe(df, filters)
         logger.info("df={}".format(df.head()))
         tooltip = ['A sample tooltip' for i in range(len(df))]
         coordinates = list(df[geopoint_column_name].values)

@@ -1,7 +1,7 @@
 {
     "meta": {
         "label": "Geospatial density chart",
-        "description": "Custom chart to visualize datasets as graphs. These datasets must have source and target columns.",
+        "description": "Generate a density chart of geospatial data. Takes as input WKT points.",
         "icon": "icon-link"
     },
 
