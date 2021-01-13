@@ -161,7 +161,7 @@ function GeoDensityChart(){
             .append("circle")
             .attr("cx", function(d) {
                 // TODO: The following line should be moved to other location with access to `d`
-                _tooltip.html("<ul><b>Latitude</b>: "+d.lat+"</ul>"+"<ul><b>Longitude</b>: "+d.long+"</ul>"+"<ul><b>Tooltip</b>: "+d.tooltip+"</ul>")
+                _tooltip.html("<div>Lon: <strong>" + d.long + "</strong><br>Lat: <strong>"+d.lat+"</strong><hr>Hello</div>")
                 return _mapPointer.latLngToLayerPoint([d.lat, d.long]).x
             })
             .attr("cy", function(d) {
@@ -170,7 +170,7 @@ function GeoDensityChart(){
             .attr("id", "circleBasicTooltip")
             .on('mouseover', function() { // handle the event user mouse is over the circle data point
                 _tooltip.style("visibility", "visible")
-                    .style("left", (d3.event.pageX + 10) + "px")
+                    .style("left", (d3.event.pageX + 50) + "px")
                     .style("top", (d3.event.pageY - 28) + "px");
                 d3.select(this).transition()
                     .duration('50')
