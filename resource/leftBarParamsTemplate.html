@@ -12,14 +12,14 @@
                         <div class="options-zone" >
                                 <div class="control-group">
                                         <label>
-                                                Intensity: <div dku-slider min="0" max="200" value="config.intensity" class="qa_charts_opacity-slider" nb-decimal-places="1" />
+                                                Intensity: <div dku-slider min="0" max="100" value="config.intensity" class="qa_charts_opacity-slider" nb-decimal-places="1" />
                                         </label>
                                 </div>
                         </div>
                         <div class="options-zone" >
                                 <div class="control-group">
                                         <label>
-                                                Radius: <div dku-slider min="0" max="100" value="config.radius" class="qa_charts_opacity-slider" nb-decimal-places="1" />
+                                                Radius: <div dku-slider min="0" max="20" value="config.radius" class="qa_charts_opacity-slider" nb-decimal-places="1" />
                                         </label>
                                 </div>
                         </div>
@@ -99,31 +99,31 @@
                         Color
                 </h4>
                 <div ng-show="config.optionsFolds.colorScaleSelector" class="options-zone">
-                        <form class="dkuform-chart-options" palette-picker-logic container="chart.def.colorOptions" type="{{chart.def.colorOptions.paletteType}}">
+                        <div>
+                                <form class="dkuform-chart-options" palette-picker-logic container="chart.def.colorOptions" type="{{chart.def.colorOptions.paletteType}}">
+                                        <div class="control-group">
+                                                <label class="control-label" dku-for="#palette-picker button">Palette</label>
+                                                <div class="controls">
+                                                        <div class="palette-picker__list-zone">
+                                                                <div class="horizontal-flex">
+                                                                        <div class="flex oh" id="palette-picker">
+                                                                                <select dku-bs-select="{width: '220px', customDropdownAttrs: {'no-global-contextual-menu-close': 'true'}}"
+                                                                                        ng-model="container.colorPalette" ng-if="categories" class="palette-select qa_charts_palette-select"
+                                                                                        data-container="body" watch-model="container.quantizedPalette">
+                                                                                        <optgroup ng-repeat="(category, palettes) in categories" label="{{category}}">
+                                                                                                <option ng-repeat="palette in palettes track by palette.id" value="{{palette.id}}"
+                                                                                                        data-content='{{getPaletteContent(palette)}}'>{{palette.id}}</option>
+                                                                                        </optgroup>
+                                                                                </select>
+                                                                        </div>
 
-                                <div class="control-group">
-                                        <label class="control-label" dku-for="#palette-picker button">Palette</label>
-                                        <div class="controls">
-                                                <div class="palette-picker__list-zone">
-                                                        <div class="horizontal-flex">
-                                                                <div class="flex oh" id="palette-picker">
-                                                                        <select dku-bs-select="{width: '220px', customDropdownAttrs: {'no-global-contextual-menu-close': 'true'}}"
-                                                                                ng-model="config.colorPalette" ng-if="categories" class="palette-select qa_charts_palette-select"
-                                                                                data-container="body" watch-model="container.quantizedPalette">
-                                                                                <optgroup ng-repeat="(category, palettes) in categories" label="{{category}}">
-                                                                                        <option ng-repeat="palette in palettes track by palette.id" value="{{palette.id}}"
-                                                                                                data-content='{{getPaletteContent(palette)}}'>{{palette.id}}</option>
-                                                                                </optgroup>
-
-                                                                                <option data-divider="true"></option>
-                                                                        </select>
                                                                 </div>
                                                         </div>
                                                 </div>
                                         </div>
-                                </div>
 
-                        </form>
+                                </form>
+                        </div>
                 </div>
         </div>
 
