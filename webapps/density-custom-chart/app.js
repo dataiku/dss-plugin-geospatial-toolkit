@@ -14,7 +14,7 @@ chartHandler.addUpdateEvent();
 
 
 function colorToGradient(color){
-    var gradient;
+    let gradient;
     switch(color) {
         case "yellow":
             gradient = {
@@ -55,7 +55,7 @@ chartHandler.addLeafletLayer();
 chartHandler.addMousePosition();
 chartHandler.addScatterPlotLayer();
 
-var tooltip = d3.select("#tooltip") // tooltip for the information of the point
+let tooltip = d3.select("#tooltip") // tooltip for the information of the point
     .append("div")
     .attr("class", "tooltip")
     .style("position", "absolute")
@@ -70,11 +70,11 @@ chartHandler.tooltip = tooltip;
 chartHandler.addSearchTrigger();
 chartHandler.addUpdateEvent();
 
-// Variables specific to the custom web app in DSS
+// letiables specific to the custom web app in DSS
 let webAppDesc = dataiku.getWebAppDesc()['chart']
-var webAppConfig = {};
-var filters = {};
-var plugin_config = {};
+let webAppConfig = {};
+let filters = {};
+let plugin_config = {};
 
 function sleep (time) {
     return new Promise((resolve) => setTimeout(resolve, time));
@@ -83,11 +83,11 @@ function sleep (time) {
 function fullUpdate(plugin_config, filters) {
     /*
      * Query backend to load the geospatial data, pass filters or argument if necessary
-     * By default, update the global variable geopoints with the returned data from the backend
+     * By default, update the global letiable geopoints with the returned data from the backend
      *
      */
     document.getElementById("spinner").style.display = "block";
-    var tempGeopoints = [];
+    let tempGeopoints = [];
     dataiku.webappBackend.get('get_geo_data', {
         "config": JSON.stringify(plugin_config),
         "filters": JSON.stringify(filters)
@@ -97,11 +97,11 @@ function fullUpdate(plugin_config, filters) {
             long = data['long'];
             tooltip_data = data['tooltip'];
             console.log("Receiving this tooltip: ", tooltip_data);
-            for (var i = 0; i < lat.length; i++) {
+            for (let i = 0; i < lat.length; i++) {
                 tempGeopoints.push([lat[i], long[i]]);
             }
             console.log("fullUpdate tempGeopoints=", tempGeopoints);
-            // Update the global variable geopoints
+            // Update the global letiable geopoints
             chartHandler.updateMapVisualisation(tempGeopoints);
             chartHandler.initialised = true;
         }).catch(error => {
@@ -126,7 +126,7 @@ window.addEventListener('message', function(event) {
         console.log("Received WebApp Config: ", webAppConfig);
 
         // Fetch parameters for plugin visualisation
-        var plugin_config = {
+        let plugin_config = {
             dataset_name: webAppConfig['dataset'],
             geopoint_column_name: webAppConfig['geopoint_column_name'],
             tooltip_column_name: webAppConfig['tooltip'],

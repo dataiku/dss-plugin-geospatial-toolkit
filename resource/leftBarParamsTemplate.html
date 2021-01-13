@@ -1,6 +1,6 @@
-<!--TODO: Remove the Angular slider to keep existing style of dku-slider -->
-<!--Understanding the dynamic behind angular for custom charts-->
+
 <form name="myForm" ng-controller="MyCustomFormController">
+
         <h4>Intensity:</h4>
         <input type="range" name="range" ng-model="config.intensity" min="0"  max="200">
         intensity value = <code>{{config.intensity}}</code><br/>
@@ -40,98 +40,94 @@
         </label>
 
 
-</form>
+        <div class="mbot20" style="padding-bottom: 5px; margin-bottom: 0; overflow: hidden;">
+                <h4 class="foldable-title qa_charts_color-submenu-header" ng-click="optionsFolds.color = !optionsFolds.color"> <i class="icon-caret-right" ng-show="!optionsFolds.color" /><i class="icon-caret-down" ng-show="optionsFolds.color" />
+                        Color
+                </h4>
+                <div class="options-zone" >
+                        <div ng-controller="SingleColorSelectorController">
+                                <form class="dkuform-chart-options">
+                                        <div class="control-group chart-single-color-picker">
+                                                <div class="colors-zone">
+                                                        <div ng-repeat="color in colors"
+                                                             ng-click="chart.def.colorOptions.singleColor=color; config.hack=color"
+                                                             style="background-color:{{color}}"
+                                                             class="color"
+                                                             ng-class="{selected: chart.def.colorOptions.singleColor === color}"
+                                                        ></div>
+                                                </div>
+                                                <div>
+                                                        Selected: <div class="dibvam selected-color" colorpicker ng-model="chart.def.colorOptions.singleColor" style="background-color:{{chart.def.colorOptions.singleColor}}">{{ tag }}</div>
+                                                </div>
+                                        </div>
+                                        <div class="control-group">
+                                                <label>
+                                                        Opacity: <div dku-slider min="0" max="1" value="chart.def.colorOptions.transparency" class="qa_charts_opacity-slider" nb-decimal-places="1" />
+                                                </label>
+                                        </div>
+                                </form>
+                        </div>
+                </div>
+        </div>
 
+        <div class="mbot20" style="padding-bottom: 5px; margin-bottom: 0; overflow: hidden;">
+                <h4 class="foldable-title" id="qa_charts_map-background-submenu-header" ng-click="optionsFolds.mapTiles = !optionsFolds.mapTiles">
+                        <i class="icon-caret-right" ng-show="!optionsFolds.mapTiles" /><i class="icon-caret-down" ng-show="optionsFolds.mapTiles" />
+                        Map background
+                </h4>
 
-<!--
-&lt;!&ndash;TODO: Potentially leave only this &ndash;&gt;
-<div class="mbot20" style="padding-bottom: 5px; margin-bottom: 0; overflow: hidden;">
-        <h4 class="foldable-title qa_charts_color-submenu-header" ng-click="optionsFolds.color = !optionsFolds.color"> <i class="icon-caret-right" ng-show="!optionsFolds.color" /><i class="icon-caret-down" ng-show="optionsFolds.color" />
-                Color
-        </h4>
-        <div class="options-zone" >
-                <div ng-controller="SingleColorSelectorController">
+                <div ng-show="optionsFolds.mapTiles" class="options-zone" ng-controller="MapBackgroundPickerController">
                         <form class="dkuform-chart-options">
-                                <div class="control-group chart-single-color-picker">
-                                        <div class="colors-zone">
-                                                <div ng-repeat="color in colors"
-                                                     ng-click="chart.def.colorOptions.singleColor=color"
-                                                     style="background-color:{{color}}"
-                                                     class="color"
-                                                     ng-class="{selected: chart.def.colorOptions.singleColor === color}"
-                                                ></div>
-                                        </div>
-                                        <div>
-                                                Selected: <div class="dibvam selected-color" colorpicker ng-model="chart.def.colorOptions.singleColor" style="background-color:{{chart.def.colorOptions.singleColor}}">{{ tag }}</div>
-                                        </div>
-                                </div>
                                 <div class="control-group">
-                                        <label>
-                                                Opacity: <div dku-slider min="0" max="1" value="chart.def.colorOptions.transparency" class="qa_charts_opacity-slider" nb-decimal-places="1" />
-                                        </label>
+                                        <label class="control-label" dku-for="#map-background-picker button">Tiles to use</label>
+                                        <div class="controls">
+                                                <div class="palette-picker__list-zone" id="map-background-picker">
+                                                        <div class="flex oh" id="palette-picker">
+                                                                <select ng-model="chart.def.mapOptions.tilesLayer" id="qa_charts_map-background-select" ng-options="x.id as x.name group by x.category for x in backgrounds" dku-bs-select></select>
+                                                        </div>
+                                                </div>
+                                        </div>
                                 </div>
                         </form>
                 </div>
         </div>
-</div>
 
-<div class="mbot20" style="padding-bottom: 5px; margin-bottom: 0; overflow: hidden;">
-        <h4 class="foldable-title" id="qa_charts_map-background-submenu-header" ng-click="optionsFolds.mapTiles = !optionsFolds.mapTiles">
-                <i class="icon-caret-right" ng-show="!optionsFolds.mapTiles" /><i class="icon-caret-down" ng-show="optionsFolds.mapTiles" />
-                Map background
-        </h4>
 
-        <div ng-show="optionsFolds.mapTiles" class="options-zone" ng-controller="MapBackgroundPickerController">
-                <form class="dkuform-chart-options">
-                        <div class="control-group">
-                                <label class="control-label" dku-for="#map-background-picker button">Tiles to use</label>
-                                <div class="controls">
-                                        <div class="palette-picker__list-zone" id="map-background-picker">
-                                                <div class="flex oh" id="palette-picker">
-                                                        <select ng-model="chart.def.mapOptions.tilesLayer" id="qa_charts_map-background-select" ng-options="x.id as x.name group by x.category for x in backgrounds" dku-bs-select></select>
-                                                </div>
-                                        </div>
+        <div class="mbot20" ng-if="canHasTooltipMeasures && (!readOnly || chart.def.tooltipMeasures.length > 0)" dku-foldable open="false" open-on-drag-enter>
+                <h4 class="foldable-title" id="qa_charts_tooltip-submenu-header" ng-click="foldableToggle()">
+                        <div class="pull-right nb-records" ng-if="chart.def.tooltipMeasures.length">
+                                {{chart.def.tooltipMeasures.length + ' measure' | plurify: chart.def.tooltipMeasures.length}}
+                        </div>
+
+                        <i class="{{foldableOpen ? 'icon-caret-down' : 'icon-caret-right'}}" />
+                        Tooltip
+                </h4>
+
+                <div ng-show="foldableOpen">
+                        <div class="chartdef-dropzone chartdef-dropzone-vertical" ng-class="{'empty':chart.def.tooltipMeasures.length==0, 'notempty': chart.def.tooltipMeasures.length != 0}">
+                                <div data-block="dim1-placeholder"  class="empty-placeholder no-icon">
+                                        Drop to add tooltip measures
                                 </div>
+                                <div class="chartdef-dropzone-main qa_charts_tooltip-dropzone" multivalued-std-aggr-measure-zone list="chart.def.tooltipMeasures" accept-callback="acceptStdAggrTooltipMeasure" ng-init="isTooltipMeasure = true"></div>
                         </div>
-                </form>
-        </div>
-</div>
-
-
-<div class="mbot20" ng-if="canHasTooltipMeasures && (!readOnly || chart.def.tooltipMeasures.length > 0)" dku-foldable open="false" open-on-drag-enter>
-        <h4 class="foldable-title" id="qa_charts_tooltip-submenu-header" ng-click="foldableToggle()">
-                <div class="pull-right nb-records" ng-if="chart.def.tooltipMeasures.length">
-                        {{chart.def.tooltipMeasures.length + ' measure' | plurify: chart.def.tooltipMeasures.length}}
-                </div>
-
-                <i class="{{foldableOpen ? 'icon-caret-down' : 'icon-caret-right'}}" />
-                Tooltip
-        </h4>
-
-        <div ng-show="foldableOpen">
-                <div class="chartdef-dropzone chartdef-dropzone-vertical" ng-class="{'empty':chart.def.tooltipMeasures.length==0, 'notempty': chart.def.tooltipMeasures.length != 0}">
-                        <div data-block="dim1-placeholder"  class="empty-placeholder no-icon">
-                                Drop to add tooltip measures
-                        </div>
-                        <div class="chartdef-dropzone-main qa_charts_tooltip-dropzone" multivalued-std-aggr-measure-zone list="chart.def.tooltipMeasures" accept-callback="acceptStdAggrTooltipMeasure" ng-init="isTooltipMeasure = true"></div>
                 </div>
         </div>
-</div>
 
-<div class="mbot20" style="padding-bottom: 5px; margin-bottom: 0; overflow: hidden;" dku-foldable open="false" open-on-drag-enter>
-        <h4 class="foldable-title" ng-click="foldableToggle()">
-                <i class="{{foldableOpen ? 'icon-caret-down' : 'icon-caret-right'}}" />
-                Tooltip
-        </h4>
+        <div class="mbot20" style="padding-bottom: 5px; margin-bottom: 0; overflow: hidden;" dku-foldable open="false" open-on-drag-enter>
+                <h4 class="foldable-title" ng-click="foldableToggle()">
+                        <i class="{{foldableOpen ? 'icon-caret-down' : 'icon-caret-right'}}" />
+                        Tooltip
+                </h4>
 
-        <div ng-show="foldableOpen">
-                <div class="chartdef-dropzone chartdef-dropzone-vertical" ng-class="{'empty':chart.def.uaTooltip.length==0, 'notempty': chart.def.uaTooltip.length != 0}">
-                        <div data-block="dim1-placeholder"  class="empty-placeholder no-icon">
-                                Drop to add tooltip measures
+                <div ng-show="foldableOpen">
+                        <div class="chartdef-dropzone chartdef-dropzone-vertical" ng-class="{'empty':chart.def.uaTooltip.length==0, 'notempty': chart.def.uaTooltip.length != 0}">
+                                <div data-block="dim1-placeholder"  class="empty-placeholder no-icon">
+                                        Drop to add tooltip measures
+                                </div>
+                                <div class="chartdef-dropzone-main qa_charts_tooltip-dropzone" multi-ua-zone-no-opts list="chart.def.uaTooltip" accept-callback="acceptUaTooltip"></div>
+                                {{config.uaTooltip=chart.def.uaTooltip}}
                         </div>
-                        <div class="chartdef-dropzone-main qa_charts_tooltip-dropzone" multi-ua-zone-no-opts list="chart.def.uaTooltip" accept-callback="acceptUaTooltip"></div>
                 </div>
         </div>
-</div>
--->
 
+</form>

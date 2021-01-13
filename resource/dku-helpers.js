@@ -5,7 +5,7 @@ v 1.0.1
 
 function checkMandatoryParameters(param, webAppConfig) {
     if (param.mandatory) {
-        var val = webAppConfig[param.name];
+        let val = webAppConfig[param.name];
         if (val == undefined || val == "") {
             throw new Error("Mandatory column '" + param.name + "' not specified.");
         }

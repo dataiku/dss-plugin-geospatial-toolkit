@@ -2,19 +2,19 @@
 
 function GeoDensityChart(){
 
-    var _initialised = false;
-    var _mapId = 'mapid';
-    var _mapPointer;
-    var _svgPointer;
-    var _quadtree;
-    var _closestMarker;
-    var _heatMapLayer;
-    var _position;
-    var _tooltip;
+    let _initialised = false;
+    let _mapId = 'mapid';
+    let _mapPointer;
+    let _svgPointer;
+    let _quadtree;
+    let _closestMarker;
+    let _heatMapLayer;
+    let _position;
+    let _tooltip;
 
-    var _intensity;
-    var _radius;
-    var _gradient;
+    let _intensity;
+    let _radius;
+    let _gradient;
 
 
     Object.defineProperty(this, 'initialised', {
@@ -69,13 +69,13 @@ function GeoDensityChart(){
             },
 
             onAdd: function (map) {
-                var latlng = L.DomUtil.create('div', 'mouseposition');
+                let latlng = L.DomUtil.create('div', 'mouseposition');
                 this._latlng = latlng;
                 return latlng;
             },
 
             updateHTML: function(lat, lng) {
-                var latlng = lat + " " + lng;
+                let latlng = lat + " " + lng;
                 this._latlng.innerHTML = "LatLng: " + latlng;
             }
         });
@@ -98,7 +98,7 @@ function GeoDensityChart(){
             if (!_quadtree) {
                 throw new Error("Quadtree is undefined")
             }
-            var closestMarker = this.getNeighbors(lat, long, 2);
+            let closestMarker = this.getNeighbors(lat, long, 2);
             if (!closestMarker) {
                 console.warn('Quadtree not able to find closest point');
             }
@@ -117,7 +117,7 @@ function GeoDensityChart(){
         quadtree.visit(function(node, x1, y1, x2, y2) {
             if (!node.length) {
                 do {
-                    var d = node.data;
+                    let d = node.data;
                     if (d[0] >= xmin && d[0] < xmax && d[1] >= ymin && d[1] < ymax) {
                         results.push(d);
                     }
@@ -134,7 +134,7 @@ function GeoDensityChart(){
             return _quadtree.find(lat, long, 10)
         } else if (mode === 2){
             console.log("Searching for the points with getNeighbors ...");
-            var searchRadius = 0.001;
+            let searchRadius = 0.001;
             return this.search(_quadtree, lat-searchRadius, long-searchRadius,
                 lat+searchRadius, long+searchRadius)
         }
@@ -219,8 +219,8 @@ function GeoDensityChart(){
             .addAll(geopoints);
         console.log("Done building quadtree.");
         // Compute the weighted geopoints array of shape ( , 3)
-        var wgeopoints = [];
-        for (var i = 0; i < geopoints.length; i++) {
+        let wgeopoints = [];
+        for (let i = 0; i < geopoints.length; i++) {
             wgeopoints.push([geopoints[i][0], geopoints[i][1], _intensity]);
         }
         _heatMapLayer = L.heatLayer(wgeopoints, {radius: _radius, gradient: _gradient});

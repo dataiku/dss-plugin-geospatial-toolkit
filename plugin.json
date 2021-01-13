@@ -3,7 +3,7 @@
     "version": "0.1.0",
     "meta": {
         "label": "Geospatial toolkit",
-        "category": "Geosptial",
+        "category": "Geospatial",
         "description": "Tools for geospatial data preparation and visualisation",
         "author": "Dataiku",
         "icon": "icon-font-awesome-3.2.1",
