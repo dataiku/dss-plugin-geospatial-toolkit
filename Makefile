@@ -7,3 +7,9 @@ plugin:
 	rm -rf dist
 	mkdir dist
 	zip -r dist/dss-plugin-${PLUGIN_ID}-${PLUGIN_VERSION}.zip plugin.json lib js
+
+unit-tests:
+	./gradlew test
+
+dist-clean:
+	rm -rf dist
