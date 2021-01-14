@@ -86,16 +86,16 @@ task copyDependencies(type: Copy) {
 sourceSets {
     main {
         java {
-            srcDirs = ['src/main/java']
+            srcDirs = ['java-processors/src/main/java']
         }
     }
 
     test {
         java {
-            srcDirs = ['src/test/java']
+            srcDirs = ['java-processors/src/test/java']
         }
         resources {
-            srcDirs = ['src/test/resources']
+            srcDirs = ['java-processors/src/test/resources']
         }
     }
 }
