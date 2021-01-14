@@ -3,7 +3,7 @@
     "version": "0.1.0",
     "meta": {
         "label": "Geospatial toolkit",
-        "category": "Geosptial",
+        "category": "Geospatial",
         "description": "Tools for geospatial data preparation and visualisation",
         "author": "Dataiku",
         "icon": "icon-font-awesome-3.2.1",
@@ -18,8 +18,8 @@
         {
             "id": "tradearea",
             "meta": {
-                "label": "Base conversion",
-                "description": "This processor converts numbers between binary, decimal and hexadecimal bases.",
+                "label": "Trade area processor",
+                "description": "This processor generates parametrized polygonal zones around geospatial points.",
                 "icon": "icon-superscript"
             }
         }
