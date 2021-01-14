@@ -1,5 +1,7 @@
 package com.dataiku.dip.plugins.tradearea;
 
+import com.dataiku.dip.utils.DKULogger;
+
 public class MyGeoPoint {
     /*
     A helper class for abstraction and parsing of geospatial points. Might be redundant or already implemented in the DSS.
@@ -31,4 +33,5 @@ public class MyGeoPoint {
         latitude = Double.parseDouble(parsedLat);
         longitude = Double.parseDouble(parsedLong);
     }
+
 }

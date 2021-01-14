@@ -15,6 +15,7 @@ import com.dataiku.dip.shaker.processors.ProcessorTag;
 import com.dataiku.dip.shaker.server.ProcessorDesc;
 import com.dataiku.dip.shaker.text.Labelled;
 import com.dataiku.dip.util.ParamDesc;
+import com.dataiku.dip.utils.DKULogger;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Sets;
 
@@ -172,6 +173,7 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
         double milesToKm = 1.6093444978925633;
         // Expected input distances in the area generators are in km
         // If in miles, convert to km
+        logger.info("Using Miles as standard unit for distances");
         if (unitMode == UnitMode.MILES){
             radius *= milesToKm;
             width *= milesToKm;
@@ -186,5 +188,5 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
                 throw new IllegalArgumentException("Invalid processing mode: " + shapeMode);
             }
     }
-
+    private static DKULogger logger = DKULogger.getLogger("dku");
 }
