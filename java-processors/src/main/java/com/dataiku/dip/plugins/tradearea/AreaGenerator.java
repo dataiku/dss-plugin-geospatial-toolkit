@@ -21,7 +21,8 @@ class RectangleAreaGenerator extends AreaGenerator {
     public RectangleAreaGenerator(double width, double height){
         this.width = width;
         this.height = height;
-        this.radius = Math.sqrt(Math.pow(width, 2)+Math.pow(height, 2));
+        // Compute the radius based on the
+        this.radius = Math.sqrt(Math.pow(width/2, 2)+Math.pow(height/2, 2));
     }
 
     public String generateArea(MyGeoPoint center) {
@@ -34,22 +35,20 @@ class RectangleAreaGenerator extends AreaGenerator {
             The rectangular trade area expressed as a Well Known Text POLYGON (Java String)
             example: POLYGON((long1 lat1,long2 lat2, ...))
          */
-        double startLat = center.latitude;
-        double startLong = center.longitude;
         // Must initialize variable
         MyGeoPoint initGeoPoint = null;
-        MyGeoPoint tmpGeoPoint;
         // Declaration of the final result
         StringBuilder str = new StringBuilder();
         str.append("POLYGON((");
         // Computation of the diagonal angle of the rectangle (Must be in degree and Math.atan is radian)
-        double alpha = Math.atan(this.height/this.width)*180/Math.PI;
-        double[] angles = {90-alpha, 90+alpha, 270-alpha, 270+alpha};
-        double angle;
+        double diagonalAngle = Math.atan(this.height/this.width)*180/Math.PI;
+        double[] angles = {90-diagonalAngle, 90+diagonalAngle, 270-diagonalAngle, 270+diagonalAngle};
         // Compute the latitude longitude of the four corners and fill the polygon String
         for (int i = 0; i < angles.length; i++){
+            double angle;
             angle = angles[i];
-            tmpGeoPoint = GeoUtils.computeDestinationPoint(startLat, startLong, angle, this.radius);
+            MyGeoPoint tmpGeoPoint;
+            tmpGeoPoint = GeoUtils.computeDestinationPoint(center.latitude, center.longitude, angle, this.radius);
             str.append(tmpGeoPoint.longitude + " " + tmpGeoPoint.latitude + ",");
             if (i==0){
                 initGeoPoint = tmpGeoPoint;
@@ -78,15 +77,13 @@ class CircleAreaGenerator extends AreaGenerator {
             The circular trade area expressed as a Well Known Text POLYGON (Java String)
             example: POLYGON((long1 lat1,long2 lat2, ...))
          */
-        double startLat = center.latitude;
-        double startLong = center.longitude;
         MyGeoPoint initGeoPoint = null;
-        MyGeoPoint tmpGeoPoint;
         StringBuilder str = new StringBuilder();
         str.append("POLYGON((");
         // Compute the points on circle, angle step is set to 30 degrees as there are 12 points
         for (int i = 0; i < 12; i++){
-            tmpGeoPoint = GeoUtils.computeDestinationPoint(startLat, startLong, 30*i, this.radius);
+            MyGeoPoint tmpGeoPoint;
+            tmpGeoPoint = GeoUtils.computeDestinationPoint(center.latitude, center.longitude, 30*i, this.radius);
             str.append(tmpGeoPoint.longitude + " " + tmpGeoPoint.latitude + ",");
             if (i==0){
                 initGeoPoint = tmpGeoPoint;
