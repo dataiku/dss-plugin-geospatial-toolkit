@@ -34,7 +34,7 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
 
         @Override
         public void validate() throws IllegalArgumentException {
-            // TODO: Check creation of a generator
+            TradeAreaProcessor.newGenerator(unitMode, shapeMode, radius, height, width);
         }
     }
 
