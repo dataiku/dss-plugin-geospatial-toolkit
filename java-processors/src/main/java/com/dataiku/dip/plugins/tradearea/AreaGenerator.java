@@ -1,9 +1,9 @@
 package com.dataiku.dip.plugins.tradearea;
 
-import com.dataiku.dip.pivot.backend.common.datebinner.MonthOfYearGroupedBinner;
-import com.vividsolutions.jts.geom.util.GeometryTransformer;
-
 abstract class AreaGenerator {
+    /*
+    An abstract class expected by the TradeAreaProcessor to generate the polygons
+     */
 
     public abstract String generateArea(MyGeoPoint geopoint);
 
@@ -11,9 +11,11 @@ abstract class AreaGenerator {
 
 class RectangleAreaGenerator extends AreaGenerator {
     /*
-    All values width, height, radius are expected in kilometers
-    If using miles, must convert distances before those operations
+    A rectangular area generator that generate a rectangular area centered on a geopoint.
+    The parameters width, height, radius are expected to be in kilometers.
+    If using miles in the processor, those distances must be converted distances before.
      */
+
     double width;
     double height;
     double radius;
@@ -21,21 +23,20 @@ class RectangleAreaGenerator extends AreaGenerator {
     public RectangleAreaGenerator(double width, double height){
         this.width = width;
         this.height = height;
-        // Compute the radius based on the
+        // Compute the radius based on half the width and height
         this.radius = Math.sqrt(Math.pow(width/2, 2)+Math.pow(height/2, 2));
     }
 
     public String generateArea(MyGeoPoint center) {
         /*
-        Generate a rectangular trade area from a MyGeoPoint object
+        Generate a rectangular trade area centered on an input geopoint `center`.
 
         Input:
             MyGeoPoint center : The center of the trade area as a GeoPoint instance
         Output:
             The rectangular trade area expressed as a Well Known Text POLYGON (Java String)
-            example: POLYGON((long1 lat1,long2 lat2, ...))
+            example: `POLYGON((long1 lat1,long2 lat2, ...))`
          */
-        // Must initialize variable
         MyGeoPoint initGeoPoint = null;
         // Declaration of the final result
         StringBuilder str = new StringBuilder();
@@ -62,6 +63,12 @@ class RectangleAreaGenerator extends AreaGenerator {
 }
 
 class CircleAreaGenerator extends AreaGenerator {
+    /*
+    A rectangular area generator that generate a circular area centered on a geopoint.
+    The parameter `radius` is expected to be in kilometers.
+    If using miles in the processor, those distances must be converted distances before.
+     */
+
     double radius;
 
     public CircleAreaGenerator(double radius){
@@ -71,11 +78,12 @@ class CircleAreaGenerator extends AreaGenerator {
     public String generateArea(MyGeoPoint center) {
         /*
         Generate an almost circular area approximated with 12 points
+
         Input:
             MyGeoPoint center : The center of the trade area as a GeoPoint instance
         Output:
             The circular trade area expressed as a Well Known Text POLYGON (Java String)
-            example: POLYGON((long1 lat1,long2 lat2, ...))
+            example: `POLYGON((long1 lat1,long2 lat2, ...))`
          */
         MyGeoPoint initGeoPoint = null;
         StringBuilder str = new StringBuilder();

@@ -7,7 +7,7 @@ public class GeoUtils {
     // earth radius in km
     static double earthRadius = 6378.137;
 
-    public static MyGeoPoint computeDestinationPoint(double startLat, double startLong, double bearing, double distance){
+    public static MyGeoPoint computeDestinationPoint(double latitude, double longitude, double bearing, double distance){
         /*
         Given a starting point latitude and longitude, compute latitude and longitude of the unique final point defined as the
         projection of the starting point on a circle of radius equal to `distance` (km) and with an angle equal to `bearing` (degrees).
@@ -15,8 +15,8 @@ public class GeoUtils {
         A bearing angle of 90 will result to output point being at West of starting point ...
 
         Input:
-            startLat: Latitude angle of the starting point in degrees
-            startLong: Longitude angle of the starting point in degrees
+            latitude: Latitude angle of the starting point in degrees
+            longitude: Longitude angle of the starting point in degrees
             bearing: Bearing angle in degrees (0 is north, 90 is west ... ), angle can be any real number
             distance: Distance in kilometers
 
@@ -24,16 +24,16 @@ public class GeoUtils {
             endPoint: The resulting geopoint
 
          */
-        startLat *= degreesToRadians;
-        startLong *= degreesToRadians;
+        latitude *= degreesToRadians;
+        longitude *= degreesToRadians;
         bearing *= degreesToRadians;
         double endLat = Math.asin(
-                Math.sin(startLat)*Math.cos(distance/earthRadius) +
-                Math.cos(startLat)*Math.sin(distance/earthRadius)*Math.cos(bearing)
+                Math.sin(latitude)*Math.cos(distance/earthRadius) +
+                Math.cos(latitude)*Math.sin(distance/earthRadius)*Math.cos(bearing)
                 );
-        double endLong = startLong + Math.atan2(
-                Math.sin(bearing)*Math.sin(distance/earthRadius)*Math.cos(startLat),
-                Math.cos(distance/earthRadius)-Math.sin(startLat)*Math.sin(endLat)
+        double endLong = longitude + Math.atan2(
+                Math.sin(bearing)*Math.sin(distance/earthRadius)*Math.cos(latitude),
+                Math.cos(distance/earthRadius)-Math.sin(latitude)*Math.sin(endLat)
                 );
         MyGeoPoint endPoint = new MyGeoPoint();
         endPoint.latitude = radiansToDegrees*endLat;
