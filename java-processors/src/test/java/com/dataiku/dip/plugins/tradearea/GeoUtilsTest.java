@@ -3,16 +3,15 @@ package com.dataiku.dip.plugins.tradearea;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
+import com.dataiku.dip.shaker.types.GeoPoint;
+
 public class GeoUtilsTest {
     @Test
     public void testEndPointCreation() {
-        MyGeoPoint startPoint = new MyGeoPoint();
-        startPoint.latitude = 40.64749;
-        startPoint.longitude = -73.97237;
+        GeoPoint.Coords coords = new GeoPoint.Coords(40.64749, -73.97237);
         double bearing = 90;
         double distance = 1000;
-        MyGeoPoint endPoint = new MyGeoPoint();
-        endPoint = GeoUtils.computeDestinationPoint(startPoint.latitude, startPoint.longitude, bearing, distance);
+        GeoPoint.Coords endPoint = GeoUtils.computeDestinationPoint(coords.latitude, coords.longitude, bearing, distance);
         assertEquals(40.04682164884027, endPoint.latitude);
         assertEquals(-62.20307170738441, endPoint.longitude);
     }

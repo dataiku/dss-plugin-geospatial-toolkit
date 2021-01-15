@@ -63,7 +63,7 @@
                 " <strong>{0}</strong> ".format(sanitize(params["inputColumn"])) + getDimensionDescription(params) +
                 getUnitDescription(params);
         },
-        "icon": "icon-superscript"
+        "icon": "icon-globe"
     }
 
 })();

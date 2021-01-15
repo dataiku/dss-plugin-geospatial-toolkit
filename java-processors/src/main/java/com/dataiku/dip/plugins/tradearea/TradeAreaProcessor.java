@@ -14,6 +14,7 @@ import com.dataiku.dip.shaker.processors.ProcessorMeta;
 import com.dataiku.dip.shaker.processors.ProcessorTag;
 import com.dataiku.dip.shaker.server.ProcessorDesc;
 import com.dataiku.dip.shaker.text.Labelled;
+import com.dataiku.dip.shaker.types.GeoPoint;
 import com.dataiku.dip.util.ParamDesc;
 import com.dataiku.dip.utils.DKULogger;
 import com.google.common.annotations.VisibleForTesting;
@@ -87,7 +88,7 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
                     "# Input column\n" +
                     "Contains the geopoints on which the trade area is centered\n \n" +
                     "# Output column\n" +
-                    "Contains created trade areas as Well Known Text polygons (String column)\n\n"+
+                    "Contains created trade areas as WKT polygons (String column)\n\n"+
                     "# Trade area creation options\n" +
                     "Select the unit of distances from:\n" +
                     "* Kilometers\n" +
@@ -139,9 +140,14 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
             return;
         }
 
+        String output = "";
         // Actual row to row processing
-        MyGeoPoint centerGeoPoint = new MyGeoPoint(str);
-        String output = generator.generateArea(centerGeoPoint);
+        // str should be a WKT description of the input geospatial point
+        // example: POINT(-73.9723 40.64749) where -73.9723 is a longitude, 40.64749 is a latitude
+        GeoPoint.Coords coords = GeoPoint.convert(str);
+        if (coords != null){
+            output = generator.generateArea(coords);
+        }
 
         // Handle null in output
         if (output.length() != 0) {

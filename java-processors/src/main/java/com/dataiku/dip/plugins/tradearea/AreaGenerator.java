@@ -1,11 +1,13 @@
 package com.dataiku.dip.plugins.tradearea;
 
+import com.dataiku.dip.shaker.types.GeoPoint;
+
 abstract class AreaGenerator {
     /*
     An abstract class expected by the TradeAreaProcessor to generate the polygons
      */
 
-    public abstract String generateArea(MyGeoPoint geopoint);
+    public abstract String generateArea(GeoPoint.Coords coords);
 
 }
 
@@ -27,7 +29,7 @@ class RectangleAreaGenerator extends AreaGenerator {
         this.radius = Math.sqrt(Math.pow(width/2, 2)+Math.pow(height/2, 2));
     }
 
-    public String generateArea(MyGeoPoint center) {
+    public String generateArea(GeoPoint.Coords center) {
         /*
         Generate a rectangular trade area centered on an input geopoint `center`.
 
@@ -37,7 +39,10 @@ class RectangleAreaGenerator extends AreaGenerator {
             The rectangular trade area expressed as a Well Known Text POLYGON (Java String)
             example: `POLYGON((long1 lat1,long2 lat2, ...))`
          */
-        MyGeoPoint initGeoPoint = null;
+        if (this.radius==0 || this.width==0 || this.height==0){
+            return null;
+        }
+        GeoPoint.Coords initCoords = null;
         // Declaration of the final result
         StringBuilder str = new StringBuilder();
         str.append("POLYGON((");
@@ -48,15 +53,15 @@ class RectangleAreaGenerator extends AreaGenerator {
         for (int i = 0; i < angles.length; i++){
             double angle;
             angle = angles[i];
-            MyGeoPoint tmpGeoPoint;
-            tmpGeoPoint = GeoUtils.computeDestinationPoint(center.latitude, center.longitude, angle, this.radius);
-            str.append(tmpGeoPoint.longitude + " " + tmpGeoPoint.latitude + ",");
+            GeoPoint.Coords tmpCoords;
+            tmpCoords = GeoUtils.computeDestinationPoint(center.latitude, center.longitude, angle, this.radius);
+            str.append(tmpCoords.longitude + " " + tmpCoords.latitude + ",");
             if (i==0){
-                initGeoPoint = tmpGeoPoint;
+                initCoords = tmpCoords;
             }
         }
         // Close the polygon by adding initial geopoint
-        str.append(initGeoPoint.longitude + " " + initGeoPoint.latitude);
+        str.append(initCoords.longitude + " " + initCoords.latitude);
         str.append("))");
         return str.toString();
     }
@@ -75,7 +80,7 @@ class CircleAreaGenerator extends AreaGenerator {
         this.radius = radius;
     }
 
-    public String generateArea(MyGeoPoint center) {
+    public String generateArea(GeoPoint.Coords center) {
         /*
         Generate an almost circular area approximated with 12 points
 
@@ -85,20 +90,23 @@ class CircleAreaGenerator extends AreaGenerator {
             The circular trade area expressed as a Well Known Text POLYGON (Java String)
             example: `POLYGON((long1 lat1,long2 lat2, ...))`
          */
-        MyGeoPoint initGeoPoint = null;
+        if (this.radius==0){
+            return null;
+        }
+        GeoPoint.Coords initCoords = null;
         StringBuilder str = new StringBuilder();
         str.append("POLYGON((");
         // Compute the points on circle, angle step is set to 30 degrees as there are 12 points
         for (int i = 0; i < 12; i++){
-            MyGeoPoint tmpGeoPoint;
-            tmpGeoPoint = GeoUtils.computeDestinationPoint(center.latitude, center.longitude, 30*i, this.radius);
-            str.append(tmpGeoPoint.longitude + " " + tmpGeoPoint.latitude + ",");
+            GeoPoint.Coords tmpCoords;
+            tmpCoords = GeoUtils.computeDestinationPoint(center.latitude, center.longitude, 30*i, this.radius);
+            str.append(tmpCoords.longitude + " " + tmpCoords.latitude + ",");
             if (i==0){
-                initGeoPoint = tmpGeoPoint;
+                initCoords = tmpCoords;
             }
         }
         // Close the polygon using the initial point
-        str.append(initGeoPoint.longitude + " " + initGeoPoint.latitude);
+        str.append(initCoords.longitude + " " + initCoords.latitude);
         str.append("))");
         return str.toString();
     }

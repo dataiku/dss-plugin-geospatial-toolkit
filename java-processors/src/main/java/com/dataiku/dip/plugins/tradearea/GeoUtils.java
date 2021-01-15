@@ -1,5 +1,7 @@
 package com.dataiku.dip.plugins.tradearea;
 
+import com.dataiku.dip.shaker.types.GeoPoint;
+
 public class GeoUtils {
 
     static double degreesToRadians = Math.PI/180;
@@ -7,7 +9,7 @@ public class GeoUtils {
     // earth radius in km
     static double earthRadius = 6378.137;
 
-    public static MyGeoPoint computeDestinationPoint(double latitude, double longitude, double bearing, double distance){
+    public static GeoPoint.Coords computeDestinationPoint(double latitude, double longitude, double bearing, double distance){
         /*
         Given a starting point latitude and longitude, compute latitude and longitude of the unique final point defined as the
         projection of the starting point on a circle of radius equal to `distance` (km) and with an angle equal to `bearing` (degrees).
@@ -35,9 +37,7 @@ public class GeoUtils {
                 Math.sin(bearing)*Math.sin(distance/earthRadius)*Math.cos(latitude),
                 Math.cos(distance/earthRadius)-Math.sin(latitude)*Math.sin(endLat)
                 );
-        MyGeoPoint endPoint = new MyGeoPoint();
-        endPoint.latitude = radiansToDegrees*endLat;
-        endPoint.longitude = radiansToDegrees*endLong;
-        return endPoint;
+        GeoPoint.Coords endCoords = new GeoPoint.Coords(radiansToDegrees*endLat, radiansToDegrees*endLong);
+        return endCoords;
     }
 }
