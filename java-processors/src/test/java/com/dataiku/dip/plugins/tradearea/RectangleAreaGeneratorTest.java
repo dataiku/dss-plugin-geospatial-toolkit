@@ -29,11 +29,39 @@ class RectangleAreaGeneratorTest {
         RectangleAreaGenerator generator = new RectangleAreaGenerator(width, height);
         String str = "Bad input";
         GeoPoint.Coords coords = GeoPoint.convert(str);
-        // TODO: Check null
-        if (coords == null){
+        if (coords != null){
             actualResult = generator.generateArea(coords);
         }
-        String expectedResult = "POLYGON((-73.92499527158498 40.66993820380617,-73.92502714572096 40.62502244905512,-74.01971285427905 40.62502244905512,-74.01974472841503 40.66993820380617,-73.92499527158498 40.66993820380617))";
-        assertEquals(expectedResult, actualResult);
+        assertNull(actualResult);
+    }
+
+    @Test
+    public void testInvalidFormat() {
+        double width = 8;
+        double height = 5;
+        String actualResult = null;
+        RectangleAreaGenerator generator = new RectangleAreaGenerator(width, height);
+        String str = "POINT(-100, 100)";
+        GeoPoint.Coords coords = GeoPoint.convert(str);
+        System.out.println(coords);
+        if (coords != null){
+            actualResult = generator.generateArea(coords);
+        }
+        assertNull(actualResult);
+    }
+
+    @Test
+    public void testInvalidRange() {
+        double width = 8;
+        double height = 5;
+        String actualResult = null;
+        RectangleAreaGenerator generator = new RectangleAreaGenerator(width, height);
+        String str = "POINT(-100 100)";
+        GeoPoint.Coords coords = GeoPoint.convert(str);
+        System.out.println(coords);
+        if (coords != null){
+            actualResult = generator.generateArea(coords);
+        }
+        assertNotNull(actualResult);
     }
 }
