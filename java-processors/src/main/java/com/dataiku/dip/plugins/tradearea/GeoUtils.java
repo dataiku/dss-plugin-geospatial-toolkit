@@ -4,6 +4,7 @@ import com.dataiku.dip.shaker.types.GeoPoint;
 
 public class GeoUtils {
 
+    // radians/degrees conversion
     static double degreesToRadians = Math.PI/180;
     static double radiansToDegrees = 180/Math.PI;
     // earth radius in km
@@ -23,7 +24,7 @@ public class GeoUtils {
             distance: Distance in kilometers
 
         Output:
-            endPoint: The resulting geopoint
+            Coordinates of the resulting point
 
          */
         latitude *= degreesToRadians;
@@ -37,7 +38,6 @@ public class GeoUtils {
                 Math.sin(bearing)*Math.sin(distance/earthRadius)*Math.cos(latitude),
                 Math.cos(distance/earthRadius)-Math.sin(latitude)*Math.sin(endLat)
                 );
-        GeoPoint.Coords endCoords = new GeoPoint.Coords(radiansToDegrees*endLat, radiansToDegrees*endLong);
-        return endCoords;
+        return new GeoPoint.Coords(radiansToDegrees*endLat, radiansToDegrees*endLong);
     }
 }

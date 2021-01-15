@@ -175,12 +175,12 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
 
     @VisibleForTesting
     static AreaGenerator newGenerator(UnitMode unitMode, ShapeMode shapeMode, double radius, double height, double width) {
-        logger.info("newGenerator with argument: width="+width+" height="+height);
+        logger.info("Instantiated new generator with argument: width="+width+" height="+height);
         // Conversion factor from miles to km to enforce km as input
         double milesToKm = 1.6093444978925633;
         // Expected input distances in the area generators are in km
         // If in miles, convert to km
-        logger.info("Using Miles as standard unit for distances");
+        logger.info("Using miles as standard unit for distances");
         if (unitMode == UnitMode.MILES){
             radius *= milesToKm;
             width *= milesToKm;

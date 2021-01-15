@@ -1,6 +1,7 @@
 package com.dataiku.dip.plugins.tradearea;
 
 import com.dataiku.dip.shaker.types.GeoPoint;
+import com.dataiku.dip.utils.DKULogger;
 
 abstract class AreaGenerator {
     /*
@@ -13,33 +14,41 @@ abstract class AreaGenerator {
 
 class RectangleAreaGenerator extends AreaGenerator {
     /*
-    A rectangular area generator that generate a rectangular area centered on a geopoint.
+    Generates a rectangular area centered on an input geopoint coordinates.
     The parameters width, height, radius are expected to be in kilometers.
-    If using miles in the processor, those distances must be converted distances before.
+    If using miles in the processor, those distances must be converted to miles before.
      */
 
     double width;
     double height;
     double radius;
 
+    private static DKULogger logger = DKULogger.getLogger("dku");
+
     public RectangleAreaGenerator(double width, double height){
-        this.width = width;
-        this.height = height;
-        // Compute the radius based on half the width and height
-        this.radius = Math.sqrt(Math.pow(width/2, 2)+Math.pow(height/2, 2));
+        if (width < 0 || height < 0){
+            logger.info("Received invalid parameters as input for RectangleAreaGenerator."+" width="+width+" height="+height);
+            // Skip variable assignation if bad input
+        } else {
+            this.width = width;
+            this.height = height;
+            // Compute the radius based on half the width and height
+            this.radius = Math.sqrt(Math.pow(width/2, 2)+Math.pow(height/2, 2));
+        }
     }
 
     public String generateArea(GeoPoint.Coords center) {
         /*
-        Generate a rectangular trade area centered on an input geopoint `center`.
+        Generate a rectangular trade area centered on an input geopoint coordonates.
 
         Input:
-            MyGeoPoint center : The center of the trade area as a GeoPoint instance
+            GeoPoint.Coords center : Coordinates of the center geopoint
         Output:
-            The rectangular trade area expressed as a Well Known Text POLYGON (Java String)
+            The rectangular trade area expressed as a WKT polygon (string)
             example: `POLYGON((long1 lat1,long2 lat2, ...))`
          */
-        if (this.radius==0 || this.width==0 || this.height==0){
+        if (this.radius<=0 || this.width<=0 || this.height<=0){
+            logger.info("Detected invalid input parameter. Distance input parameters should be greater than zero.");
             return null;
         }
         GeoPoint.Coords initCoords = null;
@@ -69,9 +78,9 @@ class RectangleAreaGenerator extends AreaGenerator {
 
 class CircleAreaGenerator extends AreaGenerator {
     /*
-    A rectangular area generator that generate a circular area centered on a geopoint.
-    The parameter `radius` is expected to be in kilometers.
-    If using miles in the processor, those distances must be converted distances before.
+    Generates a circular area centered on an input geopoint coordinates.
+    The parameter radius are expected to be in kilometers.
+    If using miles in the processor, those distances must be converted to miles before.
      */
 
     double radius;
@@ -85,12 +94,13 @@ class CircleAreaGenerator extends AreaGenerator {
         Generate an almost circular area approximated with 12 points
 
         Input:
-            MyGeoPoint center : The center of the trade area as a GeoPoint instance
+            GeoPoint.Coords center: The center of the trade area as a geospatial instance coordinates
         Output:
-            The circular trade area expressed as a Well Known Text POLYGON (Java String)
+            The circular trade area expressed as a WKT POLYGON (String)
             example: `POLYGON((long1 lat1,long2 lat2, ...))`
          */
-        if (this.radius==0){
+        if (this.radius<=0){
+            logger.info("Detected invalid radius as input. Radius parameter should be greater than zero.");
             return null;
         }
         GeoPoint.Coords initCoords = null;
@@ -110,4 +120,7 @@ class CircleAreaGenerator extends AreaGenerator {
         str.append("))");
         return str.toString();
     }
+
+    private static DKULogger logger = DKULogger.getLogger("dku");
+
 }

@@ -6,7 +6,7 @@
         "category": "Geospatial",
         "description": "Tools for geospatial data preparation and visualisation",
         "author": "Dataiku",
-        "icon": "icon-font-awesome-3.2.1",
+        "icon": "icon-globe",
         "licenseInfo": "Apache Software License",
         "url": "https://www.dataiku.com/product/plugins/your-plugin-id/",
         "tags": [
@@ -20,7 +20,7 @@
             "meta": {
                 "label": "Trade area processor",
                 "description": "This processor generates parametrized polygonal zones around geospatial points.",
-                "icon": "icon-superscript"
+                "icon": "icon-globe"
             }
         }
     ],
