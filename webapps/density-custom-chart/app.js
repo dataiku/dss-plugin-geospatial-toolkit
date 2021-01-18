@@ -113,12 +113,8 @@ function fullUpdate(plugin_config, filters) {
         "filters": JSON.stringify(filters)
     })
         .then(function(data){
-            lat = data['lat'];
-            long = data['long'];
-            tooltip_data = data['tooltip'];
-            console.log("Receiving this tooltip: ", tooltip_data);
-            for (let i = 0; i < lat.length; i++) {
-                tempGeopoints.push([lat[i], long[i]]);
+            for (let i = 0; i < data.length; i++) {
+                tempGeopoints.push([data[i]['lat'], data[i]['long'], data[i]['detail'], data[i]['tooltip']]);
             }
             console.log("fullUpdate tempGeopoints=", tempGeopoints);
             // Update the global letiable geopoints
@@ -144,6 +140,7 @@ window.addEventListener('message', function(event) {
         webAppConfig = eventData['webAppConfig']
         filters = eventData['filters']
         colorOptions = eventData['colorOptions']
+        tooltips = eventData['uaTooltip']
         console.log("Received WebApp Config: ", webAppConfig);
 
         console.log("colorOptions: ", colorOptions);
@@ -152,11 +149,12 @@ window.addEventListener('message', function(event) {
         let plugin_config = {
             dataset_name: webAppConfig['dataset'],
             geopoint_column_name: webAppConfig['geopoint_column_name'],
-            tooltip_column_name: webAppConfig['tooltip'],
+            details_column_name: webAppConfig['details_column_name'],
+            tooltip_column_name: tooltips,
             intensity: webAppConfig['intensity'],
+            radius: webAppConfig['radius'],
             color: webAppConfig['color'],
             maptile: webAppConfig['maptile'],
-            radius: webAppConfig['radius'],
             palette: colorOptions['colorPalette']
         };
 

@@ -103,8 +103,9 @@ function GeoDensityChart(){
                 console.warn('Quadtree not able to find closest point');
             }
             _closestMarker = [];
+            console.log("Closest marker:", closestMarker);
             closestMarker.forEach(function (item, index) {
-                _closestMarker.push({lat: item[0], long: item[1], tooltip: Math.random()});
+                _closestMarker.push({lat: item[0], long: item[1], tooltip: item[3]});
             });
             console.log("_closestMarker:", _closestMarker);
             this.displayLocal(_tooltip);
@@ -161,7 +162,7 @@ function GeoDensityChart(){
             .append("circle")
             .attr("cx", function(d) {
                 // TODO: The following line should be moved to other location with access to `d`
-                _tooltip.html("<div>Lon: <strong>" + d.long + "</strong><br>Lat: <strong>"+d.lat+"</strong><hr>Hello</div>")
+                _tooltip.html("<div>Lon: <strong>" + d.long + "</strong><br>Lat: <strong>"+d.lat+"</strong><hr>"+ d.tooltip + "</div>")
                 return _mapPointer.latLngToLayerPoint([d.lat, d.long]).x
             })
             .attr("cy", function(d) {

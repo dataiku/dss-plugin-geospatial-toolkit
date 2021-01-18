@@ -4,7 +4,7 @@ import simplejson as json
 import traceback
 import logging
 import numpy as np
-
+from geodata import format_geodata
 from dku_filtering.filtering import filter_dataframe
 
 logger = logging.getLogger(__name__)
@@ -25,31 +25,38 @@ def get_geo_data():
     """
     logger.info("Calling backend - get_geo_data... ")
     try:
+
+        # Configuration
         config = json.loads(request.args.get('config', None))
         logger.info("Configuration {}".format(config))
-        # TODO: Investigate the filters in the display
         tooltip_column_name = config.get('tooltip_column_name', None)
         logger.info("Got following tooltip column: {}".format(tooltip_column_name))
         filters = json.loads(request.args.get('filters', None))
-        # TODO: Input sanitizer
         dataset_name = config.get('dataset_name')
         geopoint_column_name = config.get('geopoint_column_name')
         logger.info("geopoint_column_name={}".format(geopoint_column_name))
+
         # Fetch dataset from name
-        # TODO: Secure call to API
         df = dataiku.Dataset(dataset_name).get_dataframe(limit=100000)
-        # Apply filters to dataset
+
+        # Filtering
         if filters:
             df = filter_dataframe(df, filters)
         logger.info("df={}".format(df.head()))
-        tooltip = ['A sample tooltip' for i in range(len(df))]
-        coordinates = list(df[geopoint_column_name].values)
-        # TODO: Use regexp
-        long = [eval(i[6:-1].split(' ')[0]) for i in coordinates]
-        lat = [eval(i[6:-1].split(' ')[1]) for i in coordinates]
+
+        # Visualisation needs the following: coordinates, tooltip, intensity
+        geopoint_column_name = config.get('geopoint_column_name', None)
+        details_column_name = config.get('details_column_name', None)
+        tooltip_column_names = config.get('tooltip_column_name', None)
+
+        # Format rows
+        geodata = format_geodata(df, geopoint_column_name, details_column_name, tooltip_column_names)
+
         if df.empty:
             raise Exception("Dataframe is empty")
-        return json.dumps({'lat': lat, 'long': long, 'tooltip': tooltip}, ignore_nan=True, default=convert_numpy_int64_to_int)
+
+        logger.info("get_geo_data: Sending data from front end: {}".format(geodata))
+        return json.dumps(geodata, ignore_nan=True, default=convert_numpy_int64_to_int)
     except Exception as e:
         logging.error(traceback.format_exc())
         return str(e), 500

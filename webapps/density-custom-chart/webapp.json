@@ -25,9 +25,9 @@
                 "mandatory": true
             },
             {
-                "name": "details",
+                "name": "details_column_name",
                 "type": "DATASET_COLUMN",
-                "datasetParamName": "details_column",
+                "datasetParamName": "details_column_name",
                 "label": "Details",
                 "description": "Column containing the intensity detail",
                 "mandatory": true
