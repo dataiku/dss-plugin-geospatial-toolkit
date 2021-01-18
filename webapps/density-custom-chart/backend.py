@@ -55,7 +55,6 @@ def get_geo_data():
         if df.empty:
             raise Exception("Dataframe is empty")
 
-        logger.info("get_geo_data: Sending data from front end: {}".format(geodata))
         return json.dumps(geodata, ignore_nan=True, default=convert_numpy_int64_to_int)
     except Exception as e:
         logging.error(traceback.format_exc())

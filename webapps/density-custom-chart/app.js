@@ -100,6 +100,10 @@ function sleep (time) {
     return new Promise((resolve) => setTimeout(resolve, time));
 }
 
+function format_tooltip(tooltip){
+    return JSON.stringify(tooltip)
+}
+
 function fullUpdate(plugin_config, filters) {
     /*
      * Query backend to load the geospatial data, pass filters or argument if necessary
@@ -113,13 +117,18 @@ function fullUpdate(plugin_config, filters) {
         "filters": JSON.stringify(filters)
     })
         .then(function(data){
-            for (let i = 0; i < data.length; i++) {
-                tempGeopoints.push([data[i]['lat'], data[i]['long'], data[i]['detail'], data[i]['tooltip']]);
+            console.log("Incoming data:", data);
+            if (data.length == 0){
+                console.log('Detected no data');
+            } else {
+                for (let i = 0; i < data.length; i++) {
+                    tempGeopoints.push([data[i]['lat'], data[i]['long'], data[i]['detail'], format_tooltip(data[i]['tooltip'])]);
+                }
+                // Update the global letiable geopoints
+                chartHandler.updateMapVisualisation(tempGeopoints);
+                chartHandler.initialised = true;
             }
-            console.log("fullUpdate tempGeopoints=", tempGeopoints);
-            // Update the global letiable geopoints
-            chartHandler.updateMapVisualisation(tempGeopoints);
-            chartHandler.initialised = true;
+
         }).catch(error => {
         console.error(error);
         dataiku.webappMessages.displayFatalError(error);

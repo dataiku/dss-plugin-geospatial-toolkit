@@ -222,8 +222,9 @@ function GeoDensityChart(){
         // Compute the weighted geopoints array of shape ( , 3)
         let wgeopoints = [];
         for (let i = 0; i < geopoints.length; i++) {
-            wgeopoints.push([geopoints[i][0], geopoints[i][1], _intensity]);
+            wgeopoints.push([geopoints[i][0], geopoints[i][1], geopoints[i][2]*_intensity]);
         }
+        console.log("Display geopoints and intensity: ", wgeopoints);
         _heatMapLayer = L.heatLayer(wgeopoints, {radius: _radius, gradient: _gradient});
         // Add layer to global object main map (leaflet target map)
         _heatMapLayer.addTo(_mapPointer);
