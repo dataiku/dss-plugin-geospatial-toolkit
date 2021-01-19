@@ -55,7 +55,6 @@ def test_format_geodata():
                 {'column': 'longitude', 'type': 'NUMERICAL', 'treatAsAlphanum': False, 'isA': 'ua', 'adminLevel': 0}]
     details = 'price'
     geodata = format_geodata(df=df, geopoint='coordinates', detail_column_name=details, tooltip=tooltips)
-    pdb.set_trace()
     assert len(geodata) == 3
     assert 'lat' in geodata[0].keys()
     assert 'long' in geodata[0].keys()

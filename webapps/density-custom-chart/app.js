@@ -24,7 +24,7 @@ function convertColorBrewerPaletteToGradient(colorPalette) {
     let colorScale = d3.scaleQuantize()
         .range(colorbrewer[colorPalette][9])
         .domain([1,10]);
-    gradient = {}
+    gradient = {};
     for (let i=0; i <= 9; i++) {
         gradient[i/10] = colorScale(i);
     }
@@ -41,6 +41,7 @@ dkuColorPaletteContinuous = {"palettes": [
         {"id": "magma","name": "Magma","colors": ["#000004", "#010005", "#010106", "#010108", "#020109", "#02020b", "#02020d", "#03030f", "#030312", "#040414", "#050416", "#060518", "#06051a", "#07061c", "#08071e", "#090720", "#0a0822", "#0b0924", "#0c0926", "#0d0a29", "#0e0b2b", "#100b2d", "#110c2f", "#120d31", "#130d34", "#140e36", "#150e38", "#160f3b", "#180f3d", "#19103f", "#1a1042", "#1c1044", "#1d1147", "#1e1149", "#20114b", "#21114e", "#221150", "#241253", "#251255", "#271258", "#29115a", "#2a115c", "#2c115f", "#2d1161", "#2f1163", "#311165", "#331067", "#341069", "#36106b", "#38106c", "#390f6e", "#3b0f70", "#3d0f71", "#3f0f72", "#400f74", "#420f75", "#440f76", "#451077", "#471078", "#491078", "#4a1079", "#4c117a", "#4e117b", "#4f127b", "#51127c", "#52137c", "#54137d", "#56147d", "#57157e", "#59157e", "#5a167e", "#5c167f", "#5d177f", "#5f187f", "#601880", "#621980", "#641a80", "#651a80", "#671b80", "#681c81", "#6a1c81", "#6b1d81", "#6d1d81", "#6e1e81", "#701f81", "#721f81", "#732081", "#752181", "#762181", "#782281", "#792282", "#7b2382", "#7c2382", "#7e2482", "#802582", "#812581", "#832681", "#842681", "#862781", "#882781", "#892881", "#8b2981", "#8c2981", "#8e2a81", "#902a81", "#912b81", "#932b80", "#942c80", "#962c80", "#982d80", "#992d80", "#9b2e7f", "#9c2e7f", "#9e2f7f", "#a02f7f", "#a1307e", "#a3307e", "#a5317e", "#a6317d", "#a8327d", "#aa337d", "#ab337c", "#ad347c", "#ae347b", "#b0357b", "#b2357b", "#b3367a", "#b5367a", "#b73779", "#b83779", "#ba3878", "#bc3978", "#bd3977", "#bf3a77", "#c03a76", "#c23b75", "#c43c75", "#c53c74", "#c73d73", "#c83e73", "#ca3e72", "#cc3f71", "#cd4071", "#cf4070", "#d0416f", "#d2426f", "#d3436e", "#d5446d", "#d6456c", "#d8456c", "#d9466b", "#db476a", "#dc4869", "#de4968", "#df4a68", "#e04c67", "#e24d66", "#e34e65", "#e44f64", "#e55064", "#e75263", "#e85362", "#e95462", "#ea5661", "#eb5760", "#ec5860", "#ed5a5f", "#ee5b5e", "#ef5d5e", "#f05f5e", "#f1605d", "#f2625d", "#f2645c", "#f3655c", "#f4675c", "#f4695c", "#f56b5c", "#f66c5c", "#f66e5c", "#f7705c", "#f7725c", "#f8745c", "#f8765c", "#f9785d", "#f9795d", "#f97b5d", "#fa7d5e", "#fa7f5e", "#fa815f", "#fb835f", "#fb8560", "#fb8761", "#fc8961", "#fc8a62", "#fc8c63", "#fc8e64", "#fc9065", "#fd9266", "#fd9467", "#fd9668", "#fd9869", "#fd9a6a", "#fd9b6b", "#fe9d6c", "#fe9f6d", "#fea16e", "#fea36f", "#fea571", "#fea772", "#fea973", "#feaa74", "#feac76", "#feae77", "#feb078", "#feb27a", "#feb47b", "#feb67c", "#feb77e", "#feb97f", "#febb81", "#febd82", "#febf84", "#fec185", "#fec287", "#fec488", "#fec68a", "#fec88c", "#feca8d", "#fecc8f", "#fecd90", "#fecf92", "#fed194", "#fed395", "#fed597", "#fed799", "#fed89a", "#fdda9c", "#fddc9e", "#fddea0", "#fde0a1", "#fde2a3", "#fde3a5", "#fde5a7", "#fde7a9", "#fde9aa", "#fdebac", "#fcecae", "#fceeb0", "#fcf0b2", "#fcf2b4", "#fcf4b6", "#fcf6b8", "#fcf7b9", "#fcf9bb", "#fcfbbd", "#fcfdbf"], "category": "Built-in palettes" },
         {"id": "magma_rev","name": "Magma (rev)","colors": ["#fcfdbf", "#fcfbbd", "#fcf9bb", "#fcf7b9", "#fcf6b8", "#fcf4b6", "#fcf2b4", "#fcf0b2", "#fceeb0", "#fcecae", "#fdebac", "#fde9aa", "#fde7a9", "#fde5a7", "#fde3a5", "#fde2a3", "#fde0a1", "#fddea0", "#fddc9e", "#fdda9c", "#fed89a", "#fed799", "#fed597", "#fed395", "#fed194", "#fecf92", "#fecd90", "#fecc8f", "#feca8d", "#fec88c", "#fec68a", "#fec488", "#fec287", "#fec185", "#febf84", "#febd82", "#febb81", "#feb97f", "#feb77e", "#feb67c", "#feb47b", "#feb27a", "#feb078", "#feae77", "#feac76", "#feaa74", "#fea973", "#fea772", "#fea571", "#fea36f", "#fea16e", "#fe9f6d", "#fe9d6c", "#fd9b6b", "#fd9a6a", "#fd9869", "#fd9668", "#fd9467", "#fd9266", "#fc9065", "#fc8e64", "#fc8c63", "#fc8a62", "#fc8961", "#fb8761", "#fb8560", "#fb835f", "#fa815f", "#fa7f5e", "#fa7d5e", "#f97b5d", "#f9795d", "#f9785d", "#f8765c", "#f8745c", "#f7725c", "#f7705c", "#f66e5c", "#f66c5c", "#f56b5c", "#f4695c", "#f4675c", "#f3655c", "#f2645c", "#f2625d", "#f1605d", "#f05f5e", "#ef5d5e", "#ee5b5e", "#ed5a5f", "#ec5860", "#eb5760", "#ea5661", "#e95462", "#e85362", "#e75263", "#e55064", "#e44f64", "#e34e65", "#e24d66", "#e04c67", "#df4a68", "#de4968", "#dc4869", "#db476a", "#d9466b", "#d8456c", "#d6456c", "#d5446d", "#d3436e", "#d2426f", "#d0416f", "#cf4070", "#cd4071", "#cc3f71", "#ca3e72", "#c83e73", "#c73d73", "#c53c74", "#c43c75", "#c23b75", "#c03a76", "#bf3a77", "#bd3977", "#bc3978", "#ba3878", "#b83779", "#b73779", "#b5367a", "#b3367a", "#b2357b", "#b0357b", "#ae347b", "#ad347c", "#ab337c", "#aa337d", "#a8327d", "#a6317d", "#a5317e", "#a3307e", "#a1307e", "#a02f7f", "#9e2f7f", "#9c2e7f", "#9b2e7f", "#992d80", "#982d80", "#962c80", "#942c80", "#932b80", "#912b81", "#902a81", "#8e2a81", "#8c2981", "#8b2981", "#892881", "#882781", "#862781", "#842681", "#832681", "#812581", "#802582", "#7e2482", "#7c2382", "#7b2382", "#792282", "#782281", "#762181", "#752181", "#732081", "#721f81", "#701f81", "#6e1e81", "#6d1d81", "#6b1d81", "#6a1c81", "#681c81", "#671b80", "#651a80", "#641a80", "#621980", "#601880", "#5f187f", "#5d177f", "#5c167f", "#5a167e", "#59157e", "#57157e", "#56147d", "#54137d", "#52137c", "#51127c", "#4f127b", "#4e117b", "#4c117a", "#4a1079", "#491078", "#471078", "#451077", "#440f76", "#420f75", "#400f74", "#3f0f72", "#3d0f71", "#3b0f70", "#390f6e", "#38106c", "#36106b", "#341069", "#331067", "#311165", "#2f1163", "#2d1161", "#2c115f", "#2a115c", "#29115a", "#271258", "#251255", "#241253", "#221150", "#21114e", "#20114b", "#1e1149", "#1d1147", "#1c1044", "#1a1042", "#19103f", "#180f3d", "#160f3b", "#150e38", "#140e36", "#130d34", "#120d31", "#110c2f", "#100b2d", "#0e0b2b", "#0d0a29", "#0c0926", "#0b0924", "#0a0822", "#090720", "#08071e", "#07061c", "#06051a", "#060518", "#050416", "#040414", "#030312", "#03030f", "#02020d", "#02020b", "#020109", "#010108", "#010106", "#010005", "#000004"], "category": "Built-in palettes" }]}
 
+
 function findId(data, idToLookFor) {
     var categoryArray = data.palettes;
     for (var i = 0; i < categoryArray.length; i++) {
@@ -50,17 +51,19 @@ function findId(data, idToLookFor) {
     }
 }
 
+
 function convertBuiltInPaletteToGradient(colorPalette){
     let sample = findId(dkuColorPaletteContinuous, colorPalette);
     let myColor = d3.scaleQuantize()
         .range(sample)
         .domain([0, 10]);
-    gradient = {}
+    gradient = {};
     for (let i=0; i <= 9; i++) {
         gradient[i/10] = myColor(i);
     }
     return gradient
 }
+
 
 function convertPaletteToGradient(colorPalette){
     var isFirstLetterUppercase = /^[A-Z]/.test(colorPalette);
@@ -94,50 +97,51 @@ chartHandler.addUpdateEvent();
 let webAppDesc = dataiku.getWebAppDesc()['chart']
 let webAppConfig = {};
 let filters = {};
-let plugin_config = {};
 
-function sleep (time) {
-    return new Promise((resolve) => setTimeout(resolve, time));
-}
 
 function format_tooltip(tooltip){
     return JSON.stringify(tooltip)
 }
 
-function fullUpdate(plugin_config, filters) {
-    /*
-     * Query backend to load the geospatial data, pass filters or argument if necessary
-     * By default, update the global letiable geopoints with the returned data from the backend
-     *
-     */
-    document.getElementById("spinner").style.display = "block";
+/**
+ *
+ * @param configEvent
+ * @param chartHandler
+ */
+function fullUpdate(configEvent, chartHandler) {
     let tempGeopoints = [];
     dataiku.webappBackend.get('get_geo_data', {
-        "config": JSON.stringify(plugin_config),
-        "filters": JSON.stringify(filters)
+        "config": JSON.stringify(configEvent.getConfigAsJson())
     })
         .then(function(data){
             console.log("Incoming data:", data);
-            if (data.length == 0){
-                console.log('Detected no data');
+            if (data.length === 0){
+                console.log('Received no data');
+                chartHandler.coreData = tempGeopoints;
+                chartHandler.render();
             } else {
                 for (let i = 0; i < data.length; i++) {
                     tempGeopoints.push([data[i]['lat'], data[i]['long'], data[i]['detail'], format_tooltip(data[i]['tooltip'])]);
                 }
-                // Update the global letiable geopoints
-                chartHandler.updateMapVisualisation(tempGeopoints);
+                // Save data as object properties
+                chartHandler.coreData = tempGeopoints;
+                chartHandler.render();
+                chartHandler.centerMap();
                 chartHandler.initialised = true;
             }
-
         }).catch(error => {
-        console.error(error);
-        dataiku.webappMessages.displayFatalError(error);
+            console.error(error);
+            dataiku.webappMessages.displayFatalError(error);
+            document.getElementById("spinner").style.display = "block";
     });
     document.getElementById("spinner").style.display = "none";
     console.log("Done fullUpdate.");
 }
 
+configEvent = new ConfigEvent();
+
 // Main rendering loop
+let eventData;
 window.parent.postMessage("sendConfig", "*");
 window.addEventListener('message', function(event) {
 
@@ -145,35 +149,37 @@ window.addEventListener('message', function(event) {
 
         // Receiving event from user
         eventData = JSON.parse(event.data);
-        console.log("Received event data from user ... ", eventData);
-        webAppConfig = eventData['webAppConfig']
-        filters = eventData['filters']
-        colorOptions = eventData['colorOptions']
-        tooltips = eventData['uaTooltip']
-        console.log("Received WebApp Config: ", webAppConfig);
+        webAppConfig = eventData['webAppConfig'];
+        filters = eventData['filters'];
 
-        console.log("colorOptions: ", colorOptions);
+        configEvent.maptile = webAppConfig['maptile'];
+        configEvent.intensity = webAppConfig['intensity'];
+        configEvent.radius = webAppConfig['radius'];
+        configEvent.colorPalette = eventData['colorOptions']['colorPalette'];
 
-        // Fetch parameters for plugin visualisation
-        let plugin_config = {
-            dataset_name: webAppConfig['dataset'],
-            geopoint_column_name: webAppConfig['geopoint_column_name'],
-            details_column_name: webAppConfig['details_column_name'],
-            tooltip_column_name: tooltips,
-            intensity: webAppConfig['intensity'],
-            radius: webAppConfig['radius'],
-            color: webAppConfig['color'],
-            maptile: webAppConfig['maptile'],
-            palette: colorOptions['colorPalette']
-        };
+        configEvent.datasetName = webAppConfig['dataset'];
+        configEvent.detailsColumnName = webAppConfig['details_column_name'];
+        configEvent.geopointColumnName = webAppConfig['geopoint_column_name'];
+        configEvent.tooltipColumnName = eventData['uaTooltip'];
+        configEvent.filters = filters;
 
-        chartHandler.intensity = plugin_config['intensity']/100;
-        chartHandler.radius = plugin_config['radius'];
-        console.log("Receiving palette: ", plugin_config['palette'])
-        chartHandler.gradient = convertPaletteToGradient(plugin_config['palette']);
+        let colorPalette = configEvent.colorPalette;
+        chartHandler.colorPalette = colorPalette;
+        chartHandler.intensity = configEvent.intensity;
+        chartHandler.radius = configEvent.radius;
+        chartHandler.gradient = convertPaletteToGradient(colorPalette);
 
-        console.log("Receiving plugin config: ", plugin_config);
-        fullUpdate(plugin_config, filters);
+        console.log("WebAppConfig:", webAppConfig);
+        console.log("Specific Geospatial Chart config:", configEvent.getConfigAsJson());
+
+        if (configEvent.needBackendRecompute){
+            console.log("Request of a full backend recompute of the data");
+            fullUpdate(configEvent, chartHandler);
+            configEvent.needBackendRecompute = false;
+        } else {
+            chartHandler.render();
+            console.log("Request an update of the visualisation only ");
+        }
         document.getElementById("spinner").style.display = "none";
     }
 });

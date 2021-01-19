@@ -28,34 +28,30 @@ def get_geo_data():
 
         # Configuration
         config = json.loads(request.args.get('config', None))
-        logger.info("Configuration {}".format(config))
-        tooltip_column_name = config.get('tooltip_column_name', None)
-        logger.info("Got following tooltip column: {}".format(tooltip_column_name))
-        filters = json.loads(request.args.get('filters', None))
-        dataset_name = config.get('dataset_name')
-        geopoint_column_name = config.get('geopoint_column_name')
-        logger.info("geopoint_column_name={}".format(geopoint_column_name))
+        logger.info("Backend received configuration: {}".format(config))
 
-        # Fetch dataset from name
+        dataset_name = config.get('datasetName', None)
+        details_column_name = config.get('detailsColumnName', None)
+        geopoint_column_name = config.get('geopointColumnName', None)
+        tooltip_columns_names = config.get('tooltipColumnName', None)
+        filters = config.get('filters', None)
+
+        # Handle null dataset
+        if geopoint_column_name is None:
+            return json.dumps({}, ignore_nan=True, default=convert_numpy_int64_to_int)
+
         df = dataiku.Dataset(dataset_name).get_dataframe(limit=100000)
 
-        # Filtering
+        # Apply filtering
         if filters:
+            logger.info("Computing filtering on dataframe ...")
             df = filter_dataframe(df, filters)
-        logger.info("df={}".format(df.head()))
-
-        # Visualisation needs the following: coordinates, tooltip, intensity
-        geopoint_column_name = config.get('geopoint_column_name', None)
-        details_column_name = config.get('details_column_name', None)
-        tooltip_column_names = config.get('tooltip_column_name', None)
 
         # Format rows
-        geodata = format_geodata(df, geopoint_column_name, details_column_name, tooltip_column_names)
-
-        if df.empty:
-            raise Exception("Dataframe is empty")
+        geodata = format_geodata(df, geopoint_column_name, details_column_name, tooltip_columns_names)
 
         return json.dumps(geodata, ignore_nan=True, default=convert_numpy_int64_to_int)
+
     except Exception as e:
         logging.error(traceback.format_exc())
         return str(e), 500

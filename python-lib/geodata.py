@@ -41,7 +41,7 @@ def format_geodata(df, geopoint, detail_column_name, tooltip):
 
     :param df: The input DataFrame
     :param geopoint: Name of the geopoint column
-    :param detail_column_name: Name of the column containing the numeric detail feature (intensity)
+    :param detail_column_name: Name of the column containing the numeric detail feature (intensity), can be equal to None
     :param tooltip: Names of the columns that needs to appear on the tooltip
     :return:
     """
@@ -51,10 +51,9 @@ def format_geodata(df, geopoint, detail_column_name, tooltip):
     copy_df = pd.DataFrame()
     copy_df['longitude'], copy_df['latitude'] = extract_lat_long(coordinates)
 
-    # Extract details
-    col_type_detail = df.dtypes[detail_column_name]
-    if col_type_detail not in ['int64', 'float64']:
-        logger.warning("Numeric column required, got {}".format(col_type_detail))
+    # If no detail column is provided, return 1 for the intensity by default
+    # if detail column is not specified or not numeric
+    if detail_column_name is None or df.dtypes[detail_column_name] not in ['int64', 'float64']:
         copy_df['detail_'] = [1 for i in range(len(df))]
     else:
         # Store detail of columns
