@@ -37,6 +37,11 @@ class RectangleAreaGenerator extends AreaGenerator {
         }
     }
 
+    /**
+     *
+     * @param center
+     * @return
+     */
     public String generateArea(GeoPoint.Coords center) {
         /*
         Generate a rectangular trade area centered on an input geopoint coordonates.
@@ -48,6 +53,7 @@ class RectangleAreaGenerator extends AreaGenerator {
             example: `POLYGON((long1 lat1,long2 lat2, ...))`
          */
         if (this.radius<=0 || this.width<=0 || this.height<=0){
+            // TODO: Display the Rectangle or Circular to know which one it is
             logger.info("Detected invalid input parameter. Distance input parameters should be greater than zero.");
             return null;
         }

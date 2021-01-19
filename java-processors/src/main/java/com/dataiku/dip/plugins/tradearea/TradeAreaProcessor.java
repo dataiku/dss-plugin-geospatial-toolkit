@@ -150,7 +150,7 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
         }
 
         // Handle null in output
-        if (output.length() != 0) {
+        if (output != null) {
             row.put(outputColumn, output);
         }
 
