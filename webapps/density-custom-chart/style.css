@@ -30,3 +30,27 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+.user-message-style {
+    background-color: #28a9dd;
+    position: absolute;
+    top: 0px;
+    left: -1px;
+    margin-top: 10px;
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    font-family: 'SourceSansPro';
+    font-weight: 500;
+    font-size: 14px;
+    color: #ffffff;
+    box-sizing: border-box;
+}
+
+.warning-view-style {
+    display: none;
+}
+
+.geo-chart-style {
+    display: block;
+}

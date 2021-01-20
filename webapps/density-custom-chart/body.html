@@ -13,7 +13,14 @@
 <script src="/plugins/geospatial-toolkit/resource/libjs/leaflet-heat.js"></script>
 
 <div style="text-align: center">
+
     <div id="tooltip"></div>
-    <div id="geo-chart"><div id="mapid" style="width: 100%; height: 100%;"></div></div>
     <div id="spinner"></div>
+
+    <div id="geo-chart" class="geo-chart-style"><div id="mapid" style="width: 100%; height: 100%;"></div></div>
+
+    <div id="warning-view" class="warning-view-style">
+        <div id="user-message" class="user-message-style">Please select the geo data to show</div>
+        <img src="/plugins/geospatial-toolkit/resource/media/density_map.png" style="height: 100%; margin-top: 15px;">
+    </div>
 </div>
