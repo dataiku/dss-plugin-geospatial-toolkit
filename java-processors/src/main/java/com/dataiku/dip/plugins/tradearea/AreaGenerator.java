@@ -113,9 +113,9 @@ class CircleAreaGenerator extends AreaGenerator {
         StringBuilder str = new StringBuilder();
         str.append("POLYGON((");
         // Compute the points on circle, angle step is set to 30 degrees as there are 12 points
-        for (int i = 0; i < 12; i++){
+        for (int i = 0; i < 360; i++){
             GeoPoint.Coords tmpCoords;
-            tmpCoords = GeoUtils.computeDestinationPoint(center.latitude, center.longitude, 30*i, this.radius);
+            tmpCoords = GeoUtils.computeDestinationPoint(center.latitude, center.longitude, i, this.radius);
             str.append(tmpCoords.longitude + " " + tmpCoords.latitude + ",");
             if (i==0){
                 initCoords = tmpCoords;
