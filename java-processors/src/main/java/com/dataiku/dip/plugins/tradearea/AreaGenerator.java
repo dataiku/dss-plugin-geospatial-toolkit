@@ -22,6 +22,7 @@ class RectangleAreaGenerator extends AreaGenerator {
     double width;
     double height;
     double radius;
+    double diagonalAngle;
 
     private static DKULogger logger = DKULogger.getLogger("dku");
 
@@ -34,6 +35,7 @@ class RectangleAreaGenerator extends AreaGenerator {
             this.height = height;
             // Compute the radius based on half the width and height
             this.radius = Math.sqrt(Math.pow(width/2, 2)+Math.pow(height/2, 2));
+            this.diagonalAngle = Math.atan(this.height/this.width)*180/Math.PI;
         }
     }
 
@@ -62,22 +64,20 @@ class RectangleAreaGenerator extends AreaGenerator {
         StringBuilder str = new StringBuilder();
         str.append("POLYGON((");
         // Computation of the diagonal angle of the rectangle (Must be in degree and Math.atan is radian)
-        double diagonalAngle = Math.atan(this.height/this.width)*180/Math.PI;
-        double[] angles = {90-diagonalAngle, 90+diagonalAngle, 270-diagonalAngle, 270+diagonalAngle};
+        double[] angles = {90-this.diagonalAngle, 90+this.diagonalAngle, 270-this.diagonalAngle, 270+this.diagonalAngle};
         // Compute the latitude longitude of the four corners and fill the polygon String
         for (int i = 0; i < angles.length; i++){
             double angle;
             angle = angles[i];
             GeoPoint.Coords tmpCoords;
             tmpCoords = GeoUtils.computeDestinationPoint(center.latitude, center.longitude, angle, this.radius);
-            str.append(tmpCoords.longitude + " " + tmpCoords.latitude + ",");
+            str.append(tmpCoords.longitude).append(" ").append(tmpCoords.latitude).append(",");
             if (i==0){
                 initCoords = tmpCoords;
             }
         }
         // Close the polygon by adding initial geopoint
-        str.append(initCoords.longitude + " " + initCoords.latitude);
-        str.append("))");
+        str.append(initCoords.longitude).append(" ").append(initCoords.latitude).append("))");
         return str.toString();
     }
 }
@@ -116,13 +116,13 @@ class CircleAreaGenerator extends AreaGenerator {
         for (int i = 0; i < 12; i++){
             GeoPoint.Coords tmpCoords;
             tmpCoords = GeoUtils.computeDestinationPoint(center.latitude, center.longitude, 30*i, this.radius);
-            str.append(tmpCoords.longitude + " " + tmpCoords.latitude + ",");
+            str.append(tmpCoords.longitude).append(" ").append(tmpCoords.latitude).append(",");
             if (i==0){
                 initCoords = tmpCoords;
             }
         }
         // Close the polygon using the initial point
-        str.append(initCoords.longitude + " " + initCoords.latitude);
+        str.append(initCoords.longitude).append(" ").append(initCoords.latitude);
         str.append("))");
         return str.toString();
     }

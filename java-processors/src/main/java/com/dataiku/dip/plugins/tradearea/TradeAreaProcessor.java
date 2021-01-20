@@ -83,7 +83,9 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
 
         @Override
         public String getHelp() {
-            return "This processor performs trade area creation." +
+            return "This processor performs trade area creation. For each input geospatial point, a spatial polygon is" +
+                    " created around it, delimiting the zone covered by the point. " +
+                    "The shape area of the polygon can be either rectangular or circular (Using an approximate)." +
                     "\n \n" +
                     "# Input column\n" +
                     "Contains the geopoints on which the trade area is centered\n \n" +
