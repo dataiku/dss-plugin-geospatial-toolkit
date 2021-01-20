@@ -11,10 +11,12 @@ function GeoDensityChart(){
     let _heatMapLayer;
     let _position;
     let _tooltip;
+    let _coreData;
 
     let _intensity;
     let _radius;
     let _gradient;
+    let _colorPalette;
 
 
     Object.defineProperty(this, 'initialised', {
@@ -22,7 +24,12 @@ function GeoDensityChart(){
         set: function(val){ _initialised = val;}
     });
 
-        Object.defineProperty(this, 'tooltip', {
+    Object.defineProperty(this, 'coreData', {
+        get: function(){ return _coreData;},
+        set: function(val){ _coreData = val;}
+    });
+
+    Object.defineProperty(this, 'tooltip', {
         get: function(){ return _tooltip;},
         set: function(val){ _tooltip = val;}
     });
@@ -42,13 +49,22 @@ function GeoDensityChart(){
         set: function(val){ _gradient = val;}
     });
 
+    Object.defineProperty(this, 'colorPalette', {
+        get: function(){ return _colorPalette;},
+        set: function(val){ _colorPalette = val;}
+    });
+
     Object.defineProperty(this, 'mapPointer', {
         get: function(){ return _mapPointer;}
     });
 
     this.initialiseMap = function(){
-        _mapPointer = L.map(_mapId).setView([48.8444529, 2.3718228], 5);
-    }
+        _mapPointer = L.map(_mapId).setView([42, -17], 1);
+    };
+
+    this.centerMap = function(){
+        _mapPointer.setView([_coreData[0][0], _coreData[0][1]], 10);
+    };
 
     this.addLeafletLayer = function(){
         L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
@@ -59,7 +75,7 @@ function GeoDensityChart(){
             tileSize: 512,
             zoomOffset: -1
         }).addTo(_mapPointer).set;
-    }
+    };
 
     this.addMousePosition = function(){
         let Position = L.Control.extend({
@@ -81,13 +97,13 @@ function GeoDensityChart(){
         });
         _position = new Position();
         _mapPointer.addControl(_position);
-    }
+    };
 
     this.addScatterPlotLayer = function(){
         L.svg({clickable:true}).addTo(_mapPointer);
         const overlay = d3.select(_mapPointer.getPanes().overlayPane);
         _svgPointer = overlay.select('svg').attr("pointer-events", "auto");
-    }
+    };
 
     this.addSearchTrigger = function(){
         _mapPointer.addEventListener('mousemove', (event) => {
@@ -103,14 +119,15 @@ function GeoDensityChart(){
                 console.warn('Quadtree not able to find closest point');
             }
             _closestMarker = [];
+            console.log("Closest marker:", closestMarker);
             closestMarker.forEach(function (item, index) {
-                _closestMarker.push({lat: item[0], long: item[1], tooltip: Math.random()});
+                _closestMarker.push({lat: item[0], long: item[1], tooltip: item[3]});
             });
             console.log("_closestMarker:", _closestMarker);
             this.displayLocal(_tooltip);
             console.log("localMarkers=", closestMarker);
         });
-    }
+    };
 
     this.search = function(quadtree, xmin, ymin, xmax, ymax) {
         const results = [];
@@ -127,7 +144,7 @@ function GeoDensityChart(){
         });
         console.log("Results:", results);
         return results;
-    }
+    };
 
     this.getNeighbors = function(lat, long, mode=0){
         if (mode === 1){
@@ -138,7 +155,7 @@ function GeoDensityChart(){
             return this.search(_quadtree, lat-searchRadius, long-searchRadius,
                 lat+searchRadius, long+searchRadius)
         }
-    }
+    };
 
     this.displayLocal = function(){
         /*
@@ -161,7 +178,7 @@ function GeoDensityChart(){
             .append("circle")
             .attr("cx", function(d) {
                 // TODO: The following line should be moved to other location with access to `d`
-                _tooltip.html("<div>Lon: <strong>" + d.long + "</strong><br>Lat: <strong>"+d.lat+"</strong><hr>Hello</div>")
+                _tooltip.html("<div>Lon: <strong>" + d.long + "</strong><br>Lat: <strong>"+d.lat+"</strong><hr>"+ d.tooltip + "</div>")
                 return _mapPointer.latLngToLayerPoint([d.lat, d.long]).x
             })
             .attr("cy", function(d) {
@@ -189,7 +206,7 @@ function GeoDensityChart(){
             .attr("stroke-width", 3)
             .attr("fill-opacity", .4)
             .attr("fill", "transparent")
-    }
+    };
 
     this.addUpdateEvent = function(){
         _mapPointer.on('moveend', function(){
@@ -197,35 +214,24 @@ function GeoDensityChart(){
                 .attr("cx", function(d){ return _mapPointer.latLngToLayerPoint([d.lat, d.long]).x })
                 .attr("cy", function(d){ return _mapPointer.latLngToLayerPoint([d.lat, d.long]).y })
         })
-    }
+    };
 
-    this.updateMapVisualisation = function(geopoints){
-        /*
-         * Do an update of the map visualisation
-         * Global variables:
-         *      geopoints
-         *      quadtree
-         *      initial
-         */
-        console.log("Call to updateMapVisualisation ...");
+    this.render = function(){
+        _quadtree = d3.quadtree()
+            .extent([[-100, -100], [100, 100]])
+            .addAll(_coreData);
         if (_initialised){
             console.log("updateMapVisualisation: Remove existing layer");
             _heatMapLayer.remove();
         }
-        console.log("updateMapVisualisation geopoints=", geopoints);
-        _quadtree = d3.quadtree()
-            // TODO: Recheck limit
-            .extent([[-100, -100], [100, 100]])
-            .addAll(geopoints);
-        console.log("Done building quadtree.");
-        // Compute the weighted geopoints array of shape ( , 3)
-        let wgeopoints = [];
-        for (let i = 0; i < geopoints.length; i++) {
-            wgeopoints.push([geopoints[i][0], geopoints[i][1], _intensity]);
+        let weightedGeopoints = [];
+        for (let i = 0; i < _coreData.length; i++) {
+            weightedGeopoints.push([_coreData[i][0], _coreData[i][1], _coreData[i][2]*_intensity]);
         }
-        _heatMapLayer = L.heatLayer(wgeopoints, {radius: _radius, gradient: _gradient});
+        _heatMapLayer = L.heatLayer(weightedGeopoints, {radius: _radius, gradient: _gradient});
         // Add layer to global object main map (leaflet target map)
         _heatMapLayer.addTo(_mapPointer);
         _initialised = true;
-    }
+    };
+
 }
