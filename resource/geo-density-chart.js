@@ -61,6 +61,9 @@ function GeoDensityChart(){
     };
 
     this.centerMap = function(){
+        if (!_coreData || _coreData.length < 1){
+            return
+        }
         _mapPointer.setView([_coreData[0][0], _coreData[0][1]], 10);
     };
 
