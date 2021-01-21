@@ -160,15 +160,6 @@ window.addEventListener('message', function(event) {
         configEvent.tooltipColumnName = eventData['uaTooltip'];
         configEvent.filters = filters;
 
-        // TODO: Fix bug on this logic
-        if (!configEvent.geopointColumnName){
-            document.getElementById("warning-view").style.display = "block";
-            document.getElementById("geo-chart").style.display = "none";
-        } else {
-            document.getElementById("warning-view").style.display = "none";
-            document.getElementById("geo-chart").style.display = "block";
-        }
-
         let colorPalette = configEvent.colorPalette;
         chartHandler.colorPalette = colorPalette;
         chartHandler.intensity = configEvent.intensity;
@@ -188,5 +179,14 @@ window.addEventListener('message', function(event) {
             }
         }
         document.getElementById("spinner").style.display = "none";
+
+        if (!configEvent.geopointColumnName){
+            console.log("Display warning");
+            document.getElementById("warning-view").style.display = "block";
+        } else {
+            console.log("Hide warning");
+            document.getElementById("warning-view").style.display = "none";
+        }
+
     }
 });

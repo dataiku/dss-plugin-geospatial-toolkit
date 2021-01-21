@@ -16,6 +16,9 @@ function GeoDensityChart(){
     let _gradient;
     let _colorPalette;
 
+    Object.defineProperty(this, 'emptyDisplay', {
+        get: function(){ return (!_coreData || _coreData.length === 0);}
+    });
 
     Object.defineProperty(this, 'initialised', {
         get: function(){ return _initialised;},
