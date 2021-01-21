@@ -90,7 +90,7 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
                     "# Input column\n" +
                     "Contains the geopoints on which the trade area is centered\n \n" +
                     "# Output column\n" +
-                    "Contains created trade areas as WKT polygons (String column)\n\n"+
+                    "Contains created trade areas in the WKT format\n\n" +
                     "# Trade area creation options\n" +
                     "Select the unit of distances from:\n" +
                     "* Kilometers\n" +

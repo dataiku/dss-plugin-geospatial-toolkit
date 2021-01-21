@@ -3,21 +3,21 @@ package com.dataiku.dip.plugins.tradearea;
 import com.dataiku.dip.shaker.types.GeoPoint;
 import com.dataiku.dip.utils.DKULogger;
 
+/**
+ * Abstract class expected by TradeAreaProcessor to generate the polygons
+ */
 abstract class AreaGenerator {
-    /*
-    An abstract class expected by the TradeAreaProcessor to generate the polygons
-     */
 
     public abstract String generateArea(GeoPoint.Coords coords);
 
 }
 
+/**
+ * Generates a rectangular area centered on an input geopoint coordinates.
+ * The parameters width, height, radius are expected to be in kilometers.
+ * If using miles in the processor, those distances must be converted to miles before.
+ */
 class RectangleAreaGenerator extends AreaGenerator {
-    /*
-    Generates a rectangular area centered on an input geopoint coordinates.
-    The parameters width, height, radius are expected to be in kilometers.
-    If using miles in the processor, those distances must be converted to miles before.
-     */
 
     double width;
     double height;
@@ -27,8 +27,8 @@ class RectangleAreaGenerator extends AreaGenerator {
     private static DKULogger logger = DKULogger.getLogger("dku");
 
     public RectangleAreaGenerator(double width, double height){
-        if (width < 0 || height < 0){
-            logger.info("Received invalid parameters as input for RectangleAreaGenerator."+" width="+width+" height="+height);
+        if (width <= 0 || height <= 0){
+            logger.info("Rectangle Area Generator: Received invalid parameters as input."+" width="+width+" height="+height);
             // Skip variable assignation if bad input
         } else {
             this.width = width;
@@ -40,23 +40,16 @@ class RectangleAreaGenerator extends AreaGenerator {
     }
 
     /**
-     *
-     * @param center
-     * @return
+     * Generate a rectangular trade area centered on an input geopoint coordonates.
+     * @param center: Coordinates of the center geopoint
+     * @return The rectangular trade area expressed as a WKT polygon (string)
      */
     public String generateArea(GeoPoint.Coords center) {
-        /*
-        Generate a rectangular trade area centered on an input geopoint coordonates.
-
-        Input:
-            GeoPoint.Coords center : Coordinates of the center geopoint
-        Output:
-            The rectangular trade area expressed as a WKT polygon (string)
-            example: `POLYGON((long1 lat1,long2 lat2, ...))`
-         */
         if (this.radius<=0 || this.width<=0 || this.height<=0){
-            // TODO: Display the Rectangle or Circular to know which one it is
-            logger.info("Detected invalid input parameter. Distance input parameters should be greater than zero.");
+            logger.info("Rectangle Area Generator: Detected invalid input parameter. Distance input parameters should be greater than zero.");
+            logger.info("radius="+this.radius);
+            logger.info("width="+this.width);
+            logger.info("height="+this.height);
             return null;
         }
         GeoPoint.Coords initCoords = null;
@@ -67,8 +60,7 @@ class RectangleAreaGenerator extends AreaGenerator {
         double[] angles = {90-this.diagonalAngle, 90+this.diagonalAngle, 270-this.diagonalAngle, 270+this.diagonalAngle};
         // Compute the latitude longitude of the four corners and fill the polygon String
         for (int i = 0; i < angles.length; i++){
-            double angle;
-            angle = angles[i];
+            double angle = angles[i];
             GeoPoint.Coords tmpCoords;
             tmpCoords = GeoUtils.computeDestinationPoint(center.latitude, center.longitude, angle, this.radius);
             str.append(tmpCoords.longitude).append(" ").append(tmpCoords.latitude).append(",");
@@ -82,12 +74,13 @@ class RectangleAreaGenerator extends AreaGenerator {
     }
 }
 
+/**
+ * Generates a circular area centered on an input geopoint coordinates.
+ * The parameter radius are expected to be in kilometers.
+ * If using miles in the processor, those distances must be converted to miles before.
+ */
 class CircleAreaGenerator extends AreaGenerator {
-    /*
-    Generates a circular area centered on an input geopoint coordinates.
-    The parameter radius are expected to be in kilometers.
-    If using miles in the processor, those distances must be converted to miles before.
-     */
+    static final int NB_OF_EDGES = 12;
 
     double radius;
 
@@ -95,27 +88,22 @@ class CircleAreaGenerator extends AreaGenerator {
         this.radius = radius;
     }
 
+    /**
+     * Generate an almost circular area approximated with 12 points
+     * @param center: The center of the trade area as a geospatial instance coordinates
+     * @return The circular trade area expressed as a WKT POLYGON (String `POLYGON((long1 lat1,long2 lat2, ...))`)
+     */
     public String generateArea(GeoPoint.Coords center) {
-        /*
-        Generate an almost circular area approximated with 12 points
-
-        Input:
-            GeoPoint.Coords center: The center of the trade area as a geospatial instance coordinates
-        Output:
-            The circular trade area expressed as a WKT POLYGON (String)
-            example: `POLYGON((long1 lat1,long2 lat2, ...))`
-         */
         if (this.radius<=0){
-            logger.info("Detected invalid radius as input. Radius parameter should be greater than zero.");
+            logger.info("Circular Area Generator: Detected invalid radius as input. Radius parameter should be greater than zero. Got radius=" + this.radius);
             return null;
         }
         GeoPoint.Coords initCoords = null;
         StringBuilder str = new StringBuilder();
         str.append("POLYGON((");
         // Compute the points on circle, angle step is set to 30 degrees as there are 12 points
-        for (int i = 0; i < 12; i++){
-            GeoPoint.Coords tmpCoords;
-            tmpCoords = GeoUtils.computeDestinationPoint(center.latitude, center.longitude, 30*i, this.radius);
+        for (int i = 0; i < NB_OF_EDGES; i++){
+            GeoPoint.Coords tmpCoords = GeoUtils.computeDestinationPoint(center.latitude, center.longitude, 30*i, this.radius);
             str.append(tmpCoords.longitude).append(" ").append(tmpCoords.latitude).append(",");
             if (i==0){
                 initCoords = tmpCoords;
