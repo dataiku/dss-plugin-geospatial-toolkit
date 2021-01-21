@@ -13,21 +13,19 @@ def convert_numpy_int64_to_int(o):
 def test_wkt_parser():
     wkt_point = "POINT(-45 59)"
     result = wkt_parser(wkt_point)
-    pdb.set_trace()
+    
     assert False
 
 
 def test_extract_lat_long():
     coordinates = ['POINT(-73.97237 40.64749)', 'POINT(-73.98377 40.75362)', 'POINT(-73.9419 40.80902)']
     lat, long_ = extract_lat_long(coordinates)
-    pdb.set_trace()
     assert False
 
 
 def test_extract_lat_long_invalid():
     coordinates = [None, 'POINT(-73.98377 40.75362)', 'POINT(-73.9419 40.80902)']
     lat, long_ = extract_lat_long(coordinates)
-    pdb.set_trace()
     assert False
 
 
@@ -86,7 +84,7 @@ def test_format_geodata_invalid_detail():
                 {'column': 'longitude'}]
     details = 'room_type'
     geodata = format_geodata(df=df, geopoint='coordinates', detail_column_name=details, tooltip=tooltips)
-    pdb.set_trace()
+    
     assert len(geodata) == 3
     assert 'lat' in geodata[0].keys()
     assert 'long' in geodata[0].keys()

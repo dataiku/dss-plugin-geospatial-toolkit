@@ -1,4 +1,3 @@
-import pdb
 import numpy as np
 import logging
 import re
@@ -9,7 +8,10 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s Custom Chart Geospat
 
 
 def normalize(x):
-    x_scaled = (x - np.percentile(x, 25)) / (np.percentile(x, 75) - np.percentile(x, 25))
+    """
+    Will normalize data to have 75% of the values between 0 and 1
+    """
+    x_scaled = (x - np.percentile(x, 12.5)) / (np.percentile(x, 87.5) - np.percentile(x, 12.5))
     return x_scaled
 
 
@@ -46,6 +48,7 @@ def format_geodata(df, geopoint, detail_column_name, tooltip):
     :return:
     """
     logger.info("Call format_geodata: {}".format(detail_column_name))
+    # TODO: Utiliser apply pour la regexp
     coordinates = list(df[geopoint].values)
     # Initialise empty dataframe for temporary storage
     copy_df = pd.DataFrame()
@@ -63,6 +66,7 @@ def format_geodata(df, geopoint, detail_column_name, tooltip):
         copy_df[tooltip_['column']] = list(df[tooltip_['column']].values)
 
     series = copy_df.to_dict(orient='records')
+
     datapoints = []
     for i in range(len(copy_df)):
         datapoints.append({

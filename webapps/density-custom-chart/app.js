@@ -108,22 +108,21 @@ function format_tooltip(tooltip){
  * @param configEvent
  * @param chartHandler
  */
-function fullUpdate(configEvent, chartHandler) {
-    let tempGeopoints = [];
+function updateCoreData(configEvent, chartHandler) {
+
+    console.log("Starting query of server to fetch core data ....");
     dataiku.webappBackend.get('get_geo_data', {
         "config": JSON.stringify(configEvent.getConfigAsJson())
     })
         .then(function(data){
-            console.log("Incoming data:", data);
-            if (data.length === 0){
-                console.log('Received no data');
-                chartHandler.coreData = tempGeopoints;
-                chartHandler.render();
-            } else {
+            console.log("Finished query of server to fetch core data");
+            chartHandler.clear();
+            console.log("Received data:", data);
+            if (data.length !== 0){
+                let tempGeopoints = [];
                 for (let i = 0; i < data.length; i++) {
                     tempGeopoints.push([data[i]['lat'], data[i]['long'], data[i]['detail'], format_tooltip(data[i]['tooltip'])]);
                 }
-                // Save data as object properties
                 chartHandler.coreData = tempGeopoints;
                 chartHandler.render();
                 chartHandler.centerMap();
@@ -134,8 +133,6 @@ function fullUpdate(configEvent, chartHandler) {
             dataiku.webappMessages.displayFatalError(error);
             document.getElementById("spinner").style.display = "block";
     });
-    document.getElementById("spinner").style.display = "none";
-    console.log("Done fullUpdate.");
 }
 
 configEvent = new ConfigEvent();
@@ -181,13 +178,14 @@ window.addEventListener('message', function(event) {
         console.log("WebAppConfig:", webAppConfig);
         console.log("Specific Geospatial Chart config:", configEvent.getConfigAsJson());
 
-        if (configEvent.needBackendRecompute){
+        if (configEvent.needCoreDataUpdate){
             console.log("Request of a full backend recompute of the data");
-            fullUpdate(configEvent, chartHandler);
-            configEvent.needBackendRecompute = false;
+            updateCoreData(configEvent, chartHandler);
+            configEvent.needCoreDataUpdate = false;
         } else {
-            chartHandler.render();
-            console.log("Request an update of the visualisation only ");
+            if (chartHandler.coreData.length !== 0){
+                chartHandler.render();
+            }
         }
         document.getElementById("spinner").style.display = "none";
     }
