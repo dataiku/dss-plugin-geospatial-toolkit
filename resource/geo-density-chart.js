@@ -109,7 +109,7 @@ function GeoDensityChart(){
             let long = Math.round(event.latlng.lng * 100000) / 100000;
             _position.updateHTML(lat, long);
             console.log('Reading lat long for quadtree search:', lat, long);
-            let closestMarker = this.getNeighbors(lat, long, 2);
+            let closestMarker = this.getNeighbors(lat, long, 1);
             if (!closestMarker) {
                 console.warn('Quadtree not able to find closest point');
             }
@@ -143,11 +143,12 @@ function GeoDensityChart(){
 
     this.getNeighbors = function(lat, long, mode=0){
         // If no quadtree defined or quadtree is empty return no neighbors
-        if (!_quadtree || _quadtree.size() == 0){
+        if (!_quadtree || _quadtree.size() === 0){
             return [];
         }
         if (mode === 1){
-            return _quadtree.find(lat, long, 10)
+            console.log('Quadtree results', _quadtree.find(lat, long, 10));
+            return [_quadtree.find(lat, long, 10)]
         } else if (mode === 2){
             console.log("Searching for the points with getNeighbors ...");
             let searchRadius = 0.001;
