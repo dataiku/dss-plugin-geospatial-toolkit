@@ -4,6 +4,7 @@ from functools import reduce
 
 DKU_NO_VALUE = '___dku_no_value___'
 
+
 def numerical_filter(df, filter_):
     conditions = []
     if filter_["minValue"]:

@@ -1,5 +1,3 @@
-
-
 function GeoDensityChart(){
 
     let _initialised = false;
@@ -11,7 +9,7 @@ function GeoDensityChart(){
     let _heatMapLayer;
     let _position;
     let _tooltip;
-    let _coreData;
+    let _coreData = [];
 
     let _intensity;
     let _radius;
@@ -111,9 +109,6 @@ function GeoDensityChart(){
             let long = Math.round(event.latlng.lng * 100000) / 100000;
             _position.updateHTML(lat, long);
             console.log('Reading lat long for quadtree search:', lat, long);
-            if (!_quadtree) {
-                throw new Error("Quadtree is undefined")
-            }
             let closestMarker = this.getNeighbors(lat, long, 2);
             if (!closestMarker) {
                 console.warn('Quadtree not able to find closest point');
@@ -147,6 +142,10 @@ function GeoDensityChart(){
     };
 
     this.getNeighbors = function(lat, long, mode=0){
+        // If no quadtree defined or quadtree is empty return no neighbors
+        if (!_quadtree || _quadtree.size() == 0){
+            return [];
+        }
         if (mode === 1){
             return _quadtree.find(lat, long, 10)
         } else if (mode === 2){
@@ -234,4 +233,12 @@ function GeoDensityChart(){
         _initialised = true;
     };
 
+    this.clear = function(){
+        _coreData = [];
+        _quadtree = null;
+        // Clear a leaflet layer if it has been initialised
+        if (_initialised){
+            _heatMapLayer.remove();
+        }
+    }
 }

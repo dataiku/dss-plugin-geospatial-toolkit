@@ -23,20 +23,20 @@ function ConfigEvent(){
 
     // Variables
     let _datasetName;
-    let _detailsColumnName;
-    let _filters;
     let _geopointColumnName;
-    let _tooltipColumnName;
+    let _detailsColumnName;
+    let _filters = [];
+    let _tooltipColumnName = [];
 
     // At start need backend compute since there is no data available
-    let _needBackendRecompute = false;
+    let _needCoreDataUpdate = false;
 
-    Object.defineProperty(this, 'needBackendRecompute', {
+    Object.defineProperty(this, 'needCoreDataUpdate', {
         get: function(){
-            return _needBackendRecompute;
+            return _needCoreDataUpdate;
         },
         set: function(val){
-            _needBackendRecompute = val;
+            _needCoreDataUpdate = val;
         }
     });
 
@@ -78,7 +78,6 @@ function ConfigEvent(){
             if (_datasetName !== val){
                 console.log("Detected changes for parameter datasetName, old value:", _datasetName, " - new value:", val);
                 _datasetName = val;
-                _needBackendRecompute = true;
                 if (!val){
                     console.log("Detected empty datasetName");
                 }
@@ -94,7 +93,7 @@ function ConfigEvent(){
             if (_detailsColumnName !== val){
                 console.log("Detected changes for parameter detailsColumnName, old value:", _detailsColumnName, " - new value:", val);
                 _detailsColumnName = val;
-                _needBackendRecompute = true;
+                _needCoreDataUpdate = true;
                 if (!val){
                     console.log("Detected empty detailsColumnName");
                 }
@@ -110,7 +109,7 @@ function ConfigEvent(){
             if (_geopointColumnName !== val){
                 console.log("Detected changes for parameter geopointColumnName, old value:", _geopointColumnName, " - new value:", val);
                 _geopointColumnName = val;
-                _needBackendRecompute = true;
+                _needCoreDataUpdate = true;
                 if (!val){
                     console.log("Detected empty geopointColumnName");
                 }
@@ -126,7 +125,7 @@ function ConfigEvent(){
             if (!isEqual(_tooltipColumnName, val)){
                 console.log("Detected changes for parameter tooltipColumnName, old value:", _tooltipColumnName, " - new value:", val);
                 _tooltipColumnName = val;
-                _needBackendRecompute = true;
+                _needCoreDataUpdate = true;
                 if (!val){
                     console.log("Detected empty tooltipColumnName");
                 }
@@ -142,7 +141,7 @@ function ConfigEvent(){
             if (!isEqual(_filters, val)){
                 console.log("Detected changes for parameter filters, old value:", _filters, " - new value:", val);
                 _filters = val;
-                _needBackendRecompute = true;
+                _needCoreDataUpdate = true;
                 if (!val){
                     console.log("Detected empty filters");
                 }
@@ -155,6 +154,6 @@ function ConfigEvent(){
             "color": _color, "intensity": _intensity, "colorPalette": _colorPalette,
             "maptile": _maptile, "radius": _radius, "datasetName": _datasetName,
             "detailsColumnName": _detailsColumnName, "filters": _filters, "geopointColumnName": _geopointColumnName,
-            "tooltipColumnName": _tooltipColumnName, "needBackendRecompute": _needBackendRecompute}
+            "tooltipColumnName": _tooltipColumnName, "needCoreDataUpdate": _needCoreDataUpdate}
     }
 }
