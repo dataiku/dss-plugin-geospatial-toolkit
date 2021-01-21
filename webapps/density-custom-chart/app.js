@@ -127,11 +127,16 @@ function updateCoreData(configEvent, chartHandler) {
                 chartHandler.render();
                 chartHandler.centerMap();
                 chartHandler.initialised = true;
+                document.getElementById("error-message").text = "";
+                document.getElementById("error-warning-view").style.display = "none";
+            } else {
+                document.getElementById("error-message").text = "No geodata";
+                document.getElementById("error-warning-view").style.display = "block";
             }
         }).catch(error => {
             console.error(error);
             dataiku.webappMessages.displayFatalError(error);
-            document.getElementById("spinner").style.display = "block";
+            document.getElementById("spinner").style.display = "none";
     });
 }
 

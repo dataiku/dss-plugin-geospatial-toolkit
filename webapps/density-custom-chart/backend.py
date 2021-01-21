@@ -36,9 +36,7 @@ def get_geo_data():
         geopoint_column_name = config.get('geopointColumnName', None)
         tooltip_columns_names = config.get('tooltipColumnName', None)
         filters = config.get('filters', None)
-
         geodata = fetch_geo_data(dataiku.Dataset(dataset_name), geopoint_column_name, details_column_name, tooltip_columns_names, filters)
-
         return json.dumps(geodata, ignore_nan=True, default=convert_numpy_int64_to_int)
 
     except Exception as e:
