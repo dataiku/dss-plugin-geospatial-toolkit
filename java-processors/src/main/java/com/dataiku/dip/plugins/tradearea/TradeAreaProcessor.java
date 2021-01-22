@@ -23,6 +23,8 @@ import com.google.common.collect.Sets;
 
 public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor implements Processor {
 
+    public static final double MILES_TO_KM = 1.6093444978925633;
+
     public static class Parameter implements StepParams {
         private static final long serialVersionUID = -1;
         public String inputColumn;
@@ -185,20 +187,21 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
         logger.info("Instantiated new generator.");
         logger.infoV("Got width=", width);
         logger.infoV("Got height=", height);
-        // Conversion factor from miles to km to enforce km as input
-        double milesToKm = 1.6093444978925633;
-        // Expected input distances in the area generators are in km
-        // If in miles, convert to km
-        logger.info("Using miles as standard unit for distances");
+
         if (unitMode == UnitMode.MILES){
-            radius *= milesToKm;
-            width *= milesToKm;
-            height *= milesToKm;
+            logger.info("Distances are expressed in miles.");
+            radius *= MILES_TO_KM;
+            width *= MILES_TO_KM;
+            height *= MILES_TO_KM;
+        } else {
+            logger.info("Distances are expressed in kilometers.");
         }
         switch (shapeMode) {
             case RECTANGLE:
+                logger.info("Instantiating a Rectangular Area Generator.");
                 return new RectangleAreaGenerator(width, height);
             case CIRCLE:
+                logger.info("Instantiating a Circular Area Generator.");
                 return new CircleAreaGenerator(radius);
             default:
                 throw new IllegalArgumentException("Invalid processing mode: " + shapeMode);
