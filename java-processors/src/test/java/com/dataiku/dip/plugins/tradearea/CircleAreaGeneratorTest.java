@@ -7,12 +7,67 @@ import com.dataiku.dip.shaker.types.GeoPoint;
 
 class CircleAreaGeneratorTest {
     @Test
-    public void testEndPointCreation() {
-        double radius = 1;
+    public void testStandardGenerator() {
+        double radius = 2;
         CircleAreaGenerator circleAreaGenerator = new CircleAreaGenerator(radius);
-        GeoPoint.Coords coords = GeoPoint.convert("POINT(-73.9723 40.64749)");
-        String actualOutput = circleAreaGenerator.generateArea(coords);
-        String expectedOutput = "POLYGON((-73.9723 40.656473152841194,-73.96637946127979 40.65526948739145,-73.96204583147922 40.65198112292776,-73.96046030303773 40.64748939540198,-73.96204721167005 40.6429979701752,-73.96638084147067 40.639710210309524,-73.9723 40.638506847158794,-73.97821915852934 40.639710210309524,-73.98255278832995 40.6429979701752,-73.98413969696227 40.64748939540198,-73.98255416852079 40.65198112292776,-73.97822053872022 40.65526948739145,-73.9723 40.656473152841194))";
-        assertEquals(expectedOutput, actualOutput);
+        GeoPoint.Coords coords = new GeoPoint.Coords(40.64749, -73.97237);
+        String actualResult = circleAreaGenerator.generateArea(coords);
+        String expectedResult = "POLYGON((-73.97237 40.66545630568238,-73.96052754172119 40.66304867233032,-73.95186028264165 40.656471338692555,-73.9486906065045 40.64748758160799,-73.95186580340483 40.638505033719284,-73.96053306248504 40.63193011847352,-73.97237 40.629523694317605,-73.98420693751495 40.63193011847352,-73.99287419659517 40.638505033719284,-73.9960493934955 40.64748758160799,-73.99287971735835 40.656471338692555,-73.98421245827882 40.66304867233032,-73.97237 40.66545630568238))";
+        assertEquals(expectedResult, actualResult);
+    }
+
+    @Test
+    public void testInvalidInput() {
+        double radius = 9;
+        String actualResult = null;
+        CircleAreaGenerator generator = new CircleAreaGenerator(radius);
+        String str = "Bad input";
+        GeoPoint.Coords coords = GeoPoint.convert(str);
+        if (coords != null){
+            actualResult = generator.generateArea(coords);
+        }
+        assertNull(actualResult);
+    }
+
+    @Test
+    public void testInvalidFormat() {
+        double radius = 9;
+        String actualResult = null;
+        CircleAreaGenerator generator = new CircleAreaGenerator(radius);
+        String str = "POINT(-73.9723, 40.64749)";
+        GeoPoint.Coords coords = GeoPoint.convert(str);
+        System.out.println(coords);
+        if (coords != null){
+            actualResult = generator.generateArea(coords);
+        }
+        assertNull(actualResult);
+    }
+
+    @Test
+    public void testInvalidRange() {
+        double radius = 8;
+        String actualResult = null;
+        CircleAreaGenerator generator = new CircleAreaGenerator(radius);
+        String str = "POINT(-73.9723 1000)";
+        GeoPoint.Coords coords = GeoPoint.convert(str);
+        System.out.println(coords);
+        if (coords != null){
+            actualResult = generator.generateArea(coords);
+        }
+        assertNotNull(actualResult);
+    }
+
+    @Test
+    public void testNullDistances() {
+        double radius = 0;
+         String actualResult = null;
+        CircleAreaGenerator generator = new CircleAreaGenerator(radius);
+        String str = "POINT(-73.9723 40.64749)";
+        GeoPoint.Coords coords = GeoPoint.convert(str);
+        System.out.println(coords);
+        if (coords != null){
+            actualResult = generator.generateArea(coords);
+        }
+        assertNull(actualResult);
     }
 }

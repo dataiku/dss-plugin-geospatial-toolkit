@@ -11,7 +11,7 @@ import com.dataiku.dip.shaker.types.GeoPoint;
 
 class RectangleAreaGeneratorTest {
     @Test
-    public void testEndPointCreation() {
+    public void testStandardGenerator() {
         double width = 8;
         double height = 5;
         RectangleAreaGenerator rectangularAreaGenerator = new RectangleAreaGenerator(width, height);
