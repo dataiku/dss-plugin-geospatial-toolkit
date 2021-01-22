@@ -1,5 +1,6 @@
 package com.dataiku.dip.plugins.tradearea;
 
+import java.awt.geom.Area;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -26,7 +27,9 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
         private static final long serialVersionUID = -1;
         public String inputColumn;
         public String outputColumn;
-        // Custom parameters declaration of the processor
+        /**
+         * Custom parameters declaration of the processor
+         */
         public UnitMode unitMode;
         public ShapeMode shapeMode;
         public double radius;
@@ -35,7 +38,7 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
 
         @Override
         public void validate() throws IllegalArgumentException {
-            TradeAreaProcessor.newGenerator(unitMode, shapeMode, radius, height, width);
+            TradeAreaProcessor.validate(unitMode, shapeMode, radius, height, width);
         }
     }
 
@@ -58,6 +61,8 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
             public String getLabel() { return "Kilometers";}
         }
     }
+
+
 
     public static final ProcessorMeta<TradeAreaProcessor, Parameter> META = new ProcessorMeta<TradeAreaProcessor, Parameter>() {
 
@@ -177,7 +182,9 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
 
     @VisibleForTesting
     static AreaGenerator newGenerator(UnitMode unitMode, ShapeMode shapeMode, double radius, double height, double width) {
-        logger.info("Instantiated new generator with argument: width="+width+" height="+height);
+        logger.info("Instantiated new generator.");
+        logger.infoV("Got width=", width);
+        logger.infoV("Got height=", height);
         // Conversion factor from miles to km to enforce km as input
         double milesToKm = 1.6093444978925633;
         // Expected input distances in the area generators are in km
@@ -197,5 +204,11 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
                 throw new IllegalArgumentException("Invalid processing mode: " + shapeMode);
             }
     }
+
+    static void validate(UnitMode unitMode, ShapeMode shapeMode, double radius, double height, double width){
+        AreaGenerator areaGenerator = newGenerator(unitMode, shapeMode, radius, height, width);
+    }
+
+
     private static DKULogger logger = DKULogger.getLogger("dku");
 }

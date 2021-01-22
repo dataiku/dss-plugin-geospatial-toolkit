@@ -28,8 +28,9 @@ class RectangleAreaGenerator extends AreaGenerator {
 
     public RectangleAreaGenerator(double width, double height){
         if (width <= 0 || height <= 0){
-            logger.info("Rectangle Area Generator: Received invalid parameters as input."+" width="+width+" height="+height);
-            // Skip variable assignation if bad input
+            logger.info("Rectangle Area Generator: Received invalid parameters as input.");
+            logger.infoV("Got width= {}", width);
+            logger.infoV("Got height= {}", height);
         } else {
             this.width = width;
             this.height = height;
@@ -47,9 +48,9 @@ class RectangleAreaGenerator extends AreaGenerator {
     public String generateArea(GeoPoint.Coords center) {
         if (this.radius<=0 || this.width<=0 || this.height<=0){
             logger.info("Rectangle Area Generator: Detected invalid input parameter. Distance input parameters should be greater than zero.");
-            logger.info("radius="+this.radius);
-            logger.info("width="+this.width);
-            logger.info("height="+this.height);
+            logger.infoV("Got radius= {}", this.radius);
+            logger.infoV("Got width= {}", this.width);
+            logger.infoV("Got height= {}", this.height);
             return null;
         }
 
@@ -100,7 +101,8 @@ class CircleAreaGenerator extends AreaGenerator {
     public String generateArea(GeoPoint.Coords center) {
 
         if (this.radius<=0){
-            logger.info("Circular Area Generator: Detected invalid radius as input. Radius parameter should be greater than zero. Got radius=" + this.radius);
+            logger.info("Circular Area Generator: Detected invalid radius as input. Radius parameter should be greater than zero.");
+            logger.infoV("Got radius= {}", this.radius);
             return null;
         }
 
