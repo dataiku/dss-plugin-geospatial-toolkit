@@ -52,22 +52,25 @@ class RectangleAreaGenerator extends AreaGenerator {
             logger.info("height="+this.height);
             return null;
         }
-        GeoPoint.Coords initCoords = null;
+
         // Declaration of the final result
         StringBuilder str = new StringBuilder();
         str.append("POLYGON((");
         // Computation of the diagonal angle of the rectangle (Must be in degree and Math.atan is radian)
         double[] angles = {90-this.diagonalAngle, 90+this.diagonalAngle, 270-this.diagonalAngle, 270+this.diagonalAngle};
         // Compute the latitude longitude of the four corners and fill the polygon String
-        for (int i = 0; i < angles.length; i++){
-            double angle = angles[i];
-            GeoPoint.Coords tmpCoords;
-            tmpCoords = GeoUtils.computeDestinationPoint(center.latitude, center.longitude, angle, this.radius);
+
+        int i = 0;
+        double angle = angles[i];
+        GeoPoint.Coords initCoords = GeoUtils.computeDestinationPoint(center.latitude, center.longitude, angle, this.radius);
+        str.append(initCoords.longitude).append(" ").append(initCoords.latitude).append(",");
+
+        for (i = 1; i < angles.length; i++){
+            angle = angles[i];
+            GeoPoint.Coords tmpCoords = GeoUtils.computeDestinationPoint(center.latitude, center.longitude, angle, this.radius);
             str.append(tmpCoords.longitude).append(" ").append(tmpCoords.latitude).append(",");
-            if (i==0){
-                initCoords = tmpCoords;
-            }
         }
+
         // Close the polygon by adding initial geopoint
         str.append(initCoords.longitude).append(" ").append(initCoords.latitude).append("))");
         return str.toString();
@@ -81,6 +84,7 @@ class RectangleAreaGenerator extends AreaGenerator {
  */
 class CircleAreaGenerator extends AreaGenerator {
     static final int NB_OF_EDGES = 12;
+    static final double ANGLE_STEP = 360.0/NB_OF_EDGES;
 
     double radius;
 
@@ -94,24 +98,27 @@ class CircleAreaGenerator extends AreaGenerator {
      * @return The circular trade area expressed as a WKT POLYGON (String `POLYGON((long1 lat1,long2 lat2, ...))`)
      */
     public String generateArea(GeoPoint.Coords center) {
+
         if (this.radius<=0){
             logger.info("Circular Area Generator: Detected invalid radius as input. Radius parameter should be greater than zero. Got radius=" + this.radius);
             return null;
         }
-        GeoPoint.Coords initCoords = null;
+
         StringBuilder str = new StringBuilder();
         str.append("POLYGON((");
+
         // Compute the points on circle, angle step is set to 30 degrees as there are 12 points
-        for (int i = 0; i < NB_OF_EDGES; i++){
-            GeoPoint.Coords tmpCoords = GeoUtils.computeDestinationPoint(center.latitude, center.longitude, 30*i, this.radius);
+        int i = 0;
+        GeoPoint.Coords initCoords = GeoUtils.computeDestinationPoint(center.latitude, center.longitude, 0, this.radius);
+        str.append(initCoords.longitude).append(" ").append(initCoords.latitude).append(",");
+
+        for (i = 1; i < NB_OF_EDGES; i++){
+            GeoPoint.Coords tmpCoords = GeoUtils.computeDestinationPoint(center.latitude, center.longitude, ANGLE_STEP*i, this.radius);
             str.append(tmpCoords.longitude).append(" ").append(tmpCoords.latitude).append(",");
-            if (i==0){
-                initCoords = tmpCoords;
-            }
         }
+
         // Close the polygon using the initial point
-        str.append(initCoords.longitude).append(" ").append(initCoords.latitude);
-        str.append("))");
+        str.append(initCoords.longitude).append(" ").append(initCoords.latitude).append("))");
         return str.toString();
     }
 
