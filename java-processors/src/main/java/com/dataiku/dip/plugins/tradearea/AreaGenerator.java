@@ -67,17 +67,14 @@ class RectangleAreaGenerator extends AreaGenerator {
         int i = 0;
         double angle = angles[i];
         GeoPoint.Coords initCoords = GeoUtils.computeDestinationPoint(center.latitude, center.longitude, angle, this.radius);
-        str.append(initCoords.longitude).append(" ").append(initCoords.latitude).append(",");
+        PolygonBuilder polygonBuilder = new PolygonBuilder(initCoords);
 
         for (i = 1; i < angles.length; i++){
             angle = angles[i];
             GeoPoint.Coords tmpCoords = GeoUtils.computeDestinationPoint(center.latitude, center.longitude, angle, this.radius);
-            str.append(tmpCoords.longitude).append(" ").append(tmpCoords.latitude).append(",");
+            polygonBuilder.lineTo(tmpCoords);
         }
-
-        // Close the polygon by adding initial geopoint
-        str.append(initCoords.longitude).append(" ").append(initCoords.latitude).append("))");
-        return str.toString();
+        return polygonBuilder.close();
     }
 }
 
@@ -112,21 +109,16 @@ class CircleAreaGenerator extends AreaGenerator {
             return null;
         }
 
-        StringBuilder str = new StringBuilder();
-        str.append("POLYGON((");
-
         // Compute the points on circle, angle step is set to 30 degrees as there are 12 points
         GeoPoint.Coords initCoords = GeoUtils.computeDestinationPoint(center.latitude, center.longitude, 0, this.radius);
-        str.append(initCoords.longitude).append(" ").append(initCoords.latitude).append(",");
+        PolygonBuilder polygonBuilder = new PolygonBuilder(initCoords);
 
         for (int i = 1; i < NB_OF_EDGES; i++){
             GeoPoint.Coords tmpCoords = GeoUtils.computeDestinationPoint(center.latitude, center.longitude, ANGLE_STEP*i, this.radius);
-            str.append(tmpCoords.longitude).append(" ").append(tmpCoords.latitude).append(",");
+            polygonBuilder.lineTo(tmpCoords);
         }
 
-        // Close the polygon using the initial point
-        str.append(initCoords.longitude).append(" ").append(initCoords.latitude).append("))");
-        return str.toString();
+        return polygonBuilder.close();
     }
 
     private static DKULogger logger = DKULogger.getLogger("dku");
