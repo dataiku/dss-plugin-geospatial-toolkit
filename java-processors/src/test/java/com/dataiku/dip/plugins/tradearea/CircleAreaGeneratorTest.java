@@ -19,13 +19,8 @@ class CircleAreaGeneratorTest {
     @Test
     public void testInvalidInput() {
         double radius = 9;
-        String actualResult = null;
         CircleAreaGenerator generator = new CircleAreaGenerator(radius);
-        String str = "Bad input";
-        GeoPoint.Coords coords = GeoPoint.convert(str);
-        if (coords != null){
-            actualResult = generator.generateArea(coords);
-        }
+        String actualResult = generator.generateArea(null);
         assertNull(actualResult);
     }
 

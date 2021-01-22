@@ -25,13 +25,8 @@ class RectangleAreaGeneratorTest {
     public void testInvalidInput() {
         double width = 8;
         double height = 5;
-        String actualResult = null;
         RectangleAreaGenerator generator = new RectangleAreaGenerator(width, height);
-        String str = "Bad input";
-        GeoPoint.Coords coords = GeoPoint.convert(str);
-        if (coords != null){
-            actualResult = generator.generateArea(coords);
-        }
+        String actualResult = generator.generateArea(null);
         assertNull(actualResult);
     }
 

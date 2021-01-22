@@ -46,6 +46,9 @@ class RectangleAreaGenerator extends AreaGenerator {
      * @return The rectangular trade area expressed as a WKT polygon (string)
      */
     public String generateArea(GeoPoint.Coords center) {
+        if (center == null){
+            return null;
+        }
         if (this.radius<=0 || this.width<=0 || this.height<=0){
             logger.info("Rectangle Area Generator: Detected invalid input parameter. Distance input parameters should be greater than zero.");
             logger.infoV("Got radius= {}", this.radius);
@@ -99,6 +102,9 @@ class CircleAreaGenerator extends AreaGenerator {
      * @return The circular trade area expressed as a WKT POLYGON (String `POLYGON((long1 lat1,long2 lat2, ...))`)
      */
     public String generateArea(GeoPoint.Coords center) {
+        if (center == null){
+            return null;
+        }
 
         if (this.radius<=0){
             logger.info("Circular Area Generator: Detected invalid radius as input. Radius parameter should be greater than zero.");
