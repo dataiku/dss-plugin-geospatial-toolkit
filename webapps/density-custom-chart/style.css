@@ -32,6 +32,7 @@
 }
 
 .user-message-style {
+    z-index: 1500;
     background-color: #28a9dd;
     position: absolute;
     top: 0px;
@@ -48,6 +49,7 @@
 }
 
 .error-message-style {
+    z-index: 1500;
     background-color: #28a9dd;
     position: absolute;
     top: 0px;

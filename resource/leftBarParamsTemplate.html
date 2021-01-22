@@ -30,7 +30,7 @@
 
         <!-- Map BackGround Selector -->
 
-        <div class="mbot20" style="padding-bottom: 5px; margin-bottom: 0; overflow: hidden;">
+        <div class="mbot20" style="padding-bottom: 5px; margin-bottom: 0; overflow: hidden;" ng-show="false">
                 <h4 class="foldable-title" id="qa_charts_map-background-submenu-header" ng-click="config.optionsFolds.mapTiles = !config.optionsFolds.mapTiles">
                         <i class="icon-caret-right" ng-show="!config.optionsFolds.mapTiles" /><i class="icon-caret-down" ng-show="config.optionsFolds.mapTiles" />
                         Map background
@@ -44,6 +44,7 @@
                                                 <div class="palette-picker__list-zone" id="map-background-picker">
                                                         <div class="flex oh" id="palette-picker">
                                                                 <select ng-model="config.chart.def.mapOptions.tilesLayer" id="qa_charts_map-background-select" ng-options="x.id as x.name group by x.category for x in backgrounds" dku-bs-select></select>
+                                                            {{backgrounds}}
                                                         </div>
                                                 </div>
                                         </div>

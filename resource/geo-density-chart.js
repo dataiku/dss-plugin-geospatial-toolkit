@@ -71,11 +71,10 @@ function GeoDensityChart(){
     };
 
     this.addLeafletLayer = function(){
-        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+        L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
             maxZoom: 18,
-            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
-                'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-            id: 'mapbox/light-v10',
+            attribution: 'Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+            id: 'light_all',
             tileSize: 512,
             zoomOffset: -1
         }).addTo(_mapPointer).set;
@@ -96,7 +95,7 @@ function GeoDensityChart(){
 
             updateHTML: function(lat, lng) {
                 let latlng = lat + " " + lng;
-                this._latlng.innerHTML = "LatLng: " + latlng;
+                // this._latlng.innerHTML = "LatLng: " + latlng;
             }
         });
         _position = new Position();
@@ -183,8 +182,7 @@ function GeoDensityChart(){
             .enter()
             .append("circle")
             .attr("cx", function(d) {
-                // TODO: The following line should be moved to other location with access to `d`
-                _tooltip.html("<div>Lon: <strong>" + d.long + "</strong><br>Lat: <strong>"+d.lat+"</strong><hr>"+ d.tooltip + "</div>")
+                _tooltip.html("<div>Lon: <strong>" + d.long + "</strong><br>Lat: <strong>"+d.lat+"</strong><hr>"+ d.tooltip + "</div>");
                 return _mapPointer.latLngToLayerPoint([d.lat, d.long]).x
             })
             .attr("cy", function(d) {
@@ -201,7 +199,7 @@ function GeoDensityChart(){
                     .attr('r', 10)
             })
             .on('mouseout', function() { // handle
-                _tooltip.style("visibility", "hidden")
+                _tooltip.style("visibility", "hidden");
                 d3.select(this).transition()
                     .duration('150')
                     .attr("r", 5)
