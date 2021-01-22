@@ -31,21 +31,6 @@ class RectangleAreaGeneratorTest {
     }
 
     @Test
-    public void testInvalidFormat() {
-        double width = 8;
-        double height = 5;
-        String actualResult = null;
-        RectangleAreaGenerator generator = new RectangleAreaGenerator(width, height);
-        String str = "POINT(-73.9723, 40.64749)";
-        GeoPoint.Coords coords = GeoPoint.convert(str);
-        System.out.println(coords);
-        if (coords != null){
-            actualResult = generator.generateArea(coords);
-        }
-        assertNull(actualResult);
-    }
-
-    @Test
     public void testInvalidRange() {
         double width = 8;
         double height = 5;
@@ -53,10 +38,7 @@ class RectangleAreaGeneratorTest {
         RectangleAreaGenerator generator = new RectangleAreaGenerator(width, height);
         String str = "POINT(-73.9723 1000)";
         GeoPoint.Coords coords = GeoPoint.convert(str);
-        System.out.println(coords);
-        if (coords != null){
-            actualResult = generator.generateArea(coords);
-        }
+        actualResult = generator.generateArea(coords);
         assertNotNull(actualResult);
     }
 
@@ -68,10 +50,7 @@ class RectangleAreaGeneratorTest {
         RectangleAreaGenerator generator = new RectangleAreaGenerator(width, height);
         String str = "POINT(-73.9723 40.64749)";
         GeoPoint.Coords coords = GeoPoint.convert(str);
-        System.out.println(coords);
-        if (coords != null){
-            actualResult = generator.generateArea(coords);
-        }
+        actualResult = generator.generateArea(coords);
         assertNull(actualResult);
     }
 }

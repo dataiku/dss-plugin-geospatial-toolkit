@@ -27,42 +27,28 @@ class CircleAreaGeneratorTest {
     @Test
     public void testInvalidFormat() {
         double radius = 9;
-        String actualResult = null;
-        CircleAreaGenerator generator = new CircleAreaGenerator(radius);
         String str = "POINT(-73.9723, 40.64749)";
         GeoPoint.Coords coords = GeoPoint.convert(str);
-        System.out.println(coords);
-        if (coords != null){
-            actualResult = generator.generateArea(coords);
-        }
-        assertNull(actualResult);
+        assertNull(coords);
     }
 
     @Test
     public void testInvalidRange() {
         double radius = 8;
-        String actualResult = null;
         CircleAreaGenerator generator = new CircleAreaGenerator(radius);
         String str = "POINT(-73.9723 1000)";
         GeoPoint.Coords coords = GeoPoint.convert(str);
-        System.out.println(coords);
-        if (coords != null){
-            actualResult = generator.generateArea(coords);
-        }
+        String actualResult = generator.generateArea(coords);
         assertNotNull(actualResult);
     }
 
     @Test
     public void testNullDistances() {
         double radius = 0;
-         String actualResult = null;
         CircleAreaGenerator generator = new CircleAreaGenerator(radius);
         String str = "POINT(-73.9723 40.64749)";
         GeoPoint.Coords coords = GeoPoint.convert(str);
-        System.out.println(coords);
-        if (coords != null){
-            actualResult = generator.generateArea(coords);
-        }
+        String actualResult = generator.generateArea(coords);
         assertNull(actualResult);
     }
 }
