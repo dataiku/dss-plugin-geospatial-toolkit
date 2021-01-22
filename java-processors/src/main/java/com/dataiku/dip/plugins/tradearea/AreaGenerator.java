@@ -35,7 +35,7 @@ class RectangleAreaGenerator extends AreaGenerator {
             this.height = height;
             // Compute the radius based on half the width and height
             this.radius = Math.sqrt(Math.pow(width/2, 2)+Math.pow(height/2, 2));
-            this.diagonalAngle = Math.atan(this.height/this.width)*180/Math.PI;
+            this.diagonalAngle = Math.atan(this.height/this.width);
         }
     }
 
@@ -57,7 +57,7 @@ class RectangleAreaGenerator extends AreaGenerator {
         StringBuilder str = new StringBuilder();
         str.append("POLYGON((");
         // Computation of the diagonal angle of the rectangle (Must be in degree and Math.atan is radian)
-        double[] angles = {90-this.diagonalAngle, 90+this.diagonalAngle, 270-this.diagonalAngle, 270+this.diagonalAngle};
+        double[] angles = {Math.PI/2-this.diagonalAngle, Math.PI/2+this.diagonalAngle, (3*Math.PI/2)-this.diagonalAngle, (3*Math.PI/2)+this.diagonalAngle};
         // Compute the latitude longitude of the four corners and fill the polygon String
 
         int i = 0;
@@ -84,7 +84,7 @@ class RectangleAreaGenerator extends AreaGenerator {
  */
 class CircleAreaGenerator extends AreaGenerator {
     static final int NB_OF_EDGES = 12;
-    static final double ANGLE_STEP = 360.0/NB_OF_EDGES;
+    static final double ANGLE_STEP = 2*Math.PI/NB_OF_EDGES;
 
     double radius;
 
@@ -108,11 +108,10 @@ class CircleAreaGenerator extends AreaGenerator {
         str.append("POLYGON((");
 
         // Compute the points on circle, angle step is set to 30 degrees as there are 12 points
-        int i = 0;
         GeoPoint.Coords initCoords = GeoUtils.computeDestinationPoint(center.latitude, center.longitude, 0, this.radius);
         str.append(initCoords.longitude).append(" ").append(initCoords.latitude).append(",");
 
-        for (i = 1; i < NB_OF_EDGES; i++){
+        for (int i = 1; i < NB_OF_EDGES; i++){
             GeoPoint.Coords tmpCoords = GeoUtils.computeDestinationPoint(center.latitude, center.longitude, ANGLE_STEP*i, this.radius);
             str.append(tmpCoords.longitude).append(" ").append(tmpCoords.latitude).append(",");
         }

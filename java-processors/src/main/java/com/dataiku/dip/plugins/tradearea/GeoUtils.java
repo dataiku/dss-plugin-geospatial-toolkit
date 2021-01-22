@@ -19,14 +19,13 @@ public class GeoUtils {
      *
      * @param latitude: Latitude angle of the starting point in degrees
      * @param longitude: Longitude angle of the starting point in degrees
-     * @param bearing: Bearing angle in degrees (0 is north, 90 is west ... ), angle can be any real number
+     * @param bearing: Bearing angle in radians (0 is North, Math.PI/2 is West ... )
      * @param distance: Distance in kilometers
      * @return Coordinates of the resulting point
      */
     public static GeoPoint.Coords computeDestinationPoint(double latitude, double longitude, double bearing, double distance){
         latitude *= degreesToRadians;
         longitude *= degreesToRadians;
-        bearing *= degreesToRadians;
         double endLat = Math.asin(
                 Math.sin(latitude)*Math.cos(distance/earthRadius) +
                 Math.cos(latitude)*Math.sin(distance/earthRadius)*Math.cos(bearing)
