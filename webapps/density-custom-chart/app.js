@@ -121,7 +121,7 @@ function updateCoreData(configEvent, chartHandler) {
             if (data.length !== 0){
                 let tempGeopoints = [];
                 for (let i = 0; i < data.length; i++) {
-                    tempGeopoints.push([data[i]['lat'], data[i]['long'], data[i]['detail'], format_tooltip(data[i]['tooltip'])]);
+                    tempGeopoints.push([data[i]['lat'], data[i]['long'], data[i]['detail'], data[i]['tooltip']]);
                 }
                 chartHandler.coreData = tempGeopoints;
                 chartHandler.render();
@@ -192,6 +192,5 @@ window.addEventListener('message', function(event) {
             console.log("Hide warning");
             document.getElementById("warning-view").style.display = "none";
         }
-
     }
 });

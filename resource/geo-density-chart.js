@@ -182,7 +182,8 @@ function GeoDensityChart(){
             .enter()
             .append("circle")
             .attr("cx", function(d) {
-                _tooltip.html("<div>Lon: <strong>" + d.long + "</strong><br>Lat: <strong>"+d.lat+"</strong><hr>"+ d.tooltip + "</div>");
+                _tooltip.html("<div><strong>longitude</strong>: " + d.long + "<br><strong>latitude</strong>: "+d.lat+
+                    formatTooltip(d.tooltip) + "</div>");
                 return _mapPointer.latLngToLayerPoint([d.lat, d.long]).x
             })
             .attr("cy", function(d) {
@@ -246,4 +247,26 @@ function GeoDensityChart(){
             _heatMapLayer.remove();
         }
     }
+}
+
+
+/**
+ * Format the tooltip to be displayed in HTML
+ * tooltip = {"reviews_per_month": 0.92, "room_type": "Private Room"};
+ * @param tooltip
+ * @returns {number}
+ */
+function formatTooltip(tooltip){
+    if (!tooltip){
+        return
+    }
+    var formatedString = "";
+    formatedString += "<div>";
+    for (var key of Object.keys(tooltip)) {
+        formatedString += "<b>"+key+"</b>: ";
+        formatedString += tooltip[key];
+        formatedString += "<br>";
+    }
+    formatedString += "</div>";
+    return formatedString
 }
