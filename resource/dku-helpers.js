@@ -79,7 +79,7 @@ dataiku.webappBackend = (function() {
 dataiku.webappMessages = (function() {
     function displayFatalError(err) {
         $('#error-message').text(err);
-        $('#error-warning-view').style.display = "block";
+        $('#error-warning-view').show();
     }
     return  Object.freeze({displayFatalError})
 })();

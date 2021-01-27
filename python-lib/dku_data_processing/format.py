@@ -24,7 +24,7 @@ def normalize(x):
 def wkt_parser(wkt_point):
     if wkt_point is None:
         return (None, None)
-    result = re.findall("POINT\(\s?(\S+)\s+(\S+)\s?\)", wkt_point)
+    result = re.findall("POINT\(\s?(\S+)\s+(\S+)\s?\)", str(wkt_point))
     if len(result) < 1:
         return (None, None)
     else:
@@ -69,7 +69,7 @@ def fetch_geo_data(dss_dataset: Dataset, geopoint, detail, tooltips, filters):
         for col_ in filters:
             column_to_retrieves.add(col_['column'])
 
-    df = dss_dataset.get_dataframe(limit=1000, columns=column_to_retrieves)
+    df = dss_dataset.get_dataframe(limit=5000, columns=column_to_retrieves)
 
     if (filters is not None) and (filters != []):
         df = filter_dataframe(df, filters)
@@ -101,6 +101,8 @@ def fetch_geo_data(dss_dataset: Dataset, geopoint, detail, tooltips, filters):
 
     df['tooltip_'] = tooltip_df.to_dict(orient='records')
     df = df.rename(columns={"latitude_": "lat", "longitude_": "long", "detail_": "detail", "tooltip_": "tooltip"})
+
+    df = df.dropna(subset=['lat', 'long'])
 
     geodata_object = df.to_dict(orient='records')
 

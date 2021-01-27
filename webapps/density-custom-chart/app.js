@@ -18,6 +18,7 @@ chartHandler.addUpdateEvent();
     Front-end application logic, using predefined structure for the DSS custom chart.
  */
 
+const errorMessage = "No geodata column, please select a valid geodata column";
 
 
 function convertColorBrewerPaletteToGradient(colorPalette) {
@@ -130,11 +131,11 @@ function updateCoreData(configEvent, chartHandler) {
                 document.getElementById("error-message").text = "";
                 document.getElementById("error-warning-view").style.display = "none";
             } else {
-                document.getElementById("error-message").text = "No geodata";
-                document.getElementById("error-warning-view").style.display = "block";
+                console.log("Received no data");
+                dataiku.webappMessages.displayFatalError(errorMessage);
             }
         }).catch(error => {
-            console.error(error);
+            console.error("Caught error:", error);
             dataiku.webappMessages.displayFatalError(error);
             document.getElementById("spinner").style.display = "none";
     });
@@ -187,10 +188,11 @@ window.addEventListener('message', function(event) {
 
         if (!configEvent.geopointColumnName){
             console.log("Display warning");
-            document.getElementById("warning-view").style.display = "block";
+            dataiku.webappMessages.displayFatalError(errorMessage);
         } else {
             console.log("Hide warning");
-            document.getElementById("warning-view").style.display = "none";
+            $("#error-warning-view").hide();
+            //document.getElementById("warning-view").style.display = "none";
         }
     }
 });

@@ -4,7 +4,6 @@ import simplejson as json
 import traceback
 import logging
 import numpy as np
-from geodata import format_geodata
 
 from dku_data_processing.format import fetch_geo_data
 
