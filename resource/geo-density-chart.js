@@ -80,6 +80,31 @@ function GeoDensityChart(){
         }).addTo(_mapPointer).set;
     };
 
+    this.setLeafletMaptile = function(mapTile){
+        // iterate in the layers of the map
+        _mapPointer.eachLayer(function(layer){
+            let url;
+            if (layer.options.id){
+                _mapPointer.removeLayer(layer);
+                switch (mapTile) {
+                    case 'cartodb-positron':
+                        url = 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png';
+                        break;
+                    case 'cartodb-dark':
+                        url = 'http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png';
+                        break;
+                }
+                L.tileLayer(url, {
+                    maxZoom: 18,
+                    attribution: 'Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+                    id: 'light_all',
+                    tileSize: 512,
+                    zoomOffset: -1
+                }).addTo(_mapPointer).set;
+            }
+        });
+    };
+
     this.addMousePosition = function(){
         let Position = L.Control.extend({
             _container: null,

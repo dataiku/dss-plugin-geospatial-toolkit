@@ -10,4 +10,5 @@ app.controller('MyCustomFormController', ['$scope', function($scope) {
     $scope.config.intensity = DEFAULT_INTENSITY;
     $scope.config.radius = DEFAULT_RADIUS;
     $scope.config.color = DEFAULT_COLOR;
+    $scope.config.maptiles = backgrounds;
 }]);

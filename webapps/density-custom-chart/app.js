@@ -152,10 +152,11 @@ window.addEventListener('message', function(event) {
 
         // Receiving event from user
         eventData = JSON.parse(event.data);
+        console.log("EventData", eventData);
         webAppConfig = eventData['webAppConfig'];
         filters = eventData['filters'];
 
-        configEvent.maptile = webAppConfig['maptile'];
+        configEvent.maptile = webAppConfig['chart']['def']['mapOptions']['tilesLayer'];
         configEvent.intensity = webAppConfig['intensity'];
         configEvent.radius = webAppConfig['radius'];
         configEvent.colorPalette = eventData['colorOptions']['colorPalette'];
@@ -171,9 +172,6 @@ window.addEventListener('message', function(event) {
         chartHandler.intensity = configEvent.intensity;
         chartHandler.radius = configEvent.radius;
         chartHandler.gradient = convertPaletteToGradient(colorPalette);
-
-        console.log("WebAppConfig:", webAppConfig);
-        console.log("Specific Geospatial Chart config:", configEvent.getConfigAsJson());
 
         if (configEvent.needCoreDataUpdate){
             console.log("Request of a full backend recompute of the data");
@@ -194,5 +192,7 @@ window.addEventListener('message', function(event) {
             $("#error-warning-view").hide();
             //document.getElementById("warning-view").style.display = "none";
         }
+
+        chartHandler.setLeafletMaptile(configEvent.maptile);
     }
 });
