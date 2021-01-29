@@ -192,10 +192,7 @@ window.addEventListener('message', function(event) {
         } else {
             console.log("Hide warning");
             $("#error-warning-view").hide();
-            // document.getElementById("warning-view").style.display = "none";
         }
-
-        // document.getElementById("spinner").style.display = "none";
 
         chartHandler.setLeafletMaptile(configEvent.maptile);
     }
