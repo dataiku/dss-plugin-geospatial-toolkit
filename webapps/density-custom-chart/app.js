@@ -158,7 +158,13 @@ window.addEventListener('message', function(event) {
         webAppConfig = eventData['webAppConfig'];
         filters = eventData['filters'];
 
-        configEvent.maptile = webAppConfig['chart']['def']['mapOptions']['tilesLayer'];
+        if (!('chart' in webAppConfig)){
+            configEvent.maptile = 'cartodb-positron';
+        } else {
+            configEvent.maptile = webAppConfig['chart']['def']['mapOptions']['tilesLayer'];
+        }
+
+
         configEvent.intensity = webAppConfig['intensity'];
         configEvent.radius = webAppConfig['radius'];
         configEvent.colorPalette = eventData['colorOptions']['colorPalette'];
