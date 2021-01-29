@@ -130,9 +130,11 @@ function updateCoreData(configEvent, chartHandler) {
                 chartHandler.initialised = true;
                 document.getElementById("error-message").text = "";
                 document.getElementById("error-warning-view").style.display = "none";
+                document.getElementById("spinner").style.display = "none";
             } else {
                 console.log("Received no data");
                 dataiku.webappMessages.displayFatalError(errorMessage);
+                document.getElementById("spinner").style.display = "none";
             }
         }).catch(error => {
             console.error("Caught error:", error);
@@ -174,6 +176,7 @@ window.addEventListener('message', function(event) {
         chartHandler.gradient = convertPaletteToGradient(colorPalette);
 
         if (configEvent.needCoreDataUpdate){
+            $("#spinner").show();
             console.log("Request of a full backend recompute of the data");
             updateCoreData(configEvent, chartHandler);
             configEvent.needCoreDataUpdate = false;
@@ -182,7 +185,6 @@ window.addEventListener('message', function(event) {
                 chartHandler.render();
             }
         }
-        document.getElementById("spinner").style.display = "none";
 
         if (!configEvent.geopointColumnName){
             console.log("Display warning");
@@ -190,8 +192,10 @@ window.addEventListener('message', function(event) {
         } else {
             console.log("Hide warning");
             $("#error-warning-view").hide();
-            //document.getElementById("warning-view").style.display = "none";
+            // document.getElementById("warning-view").style.display = "none";
         }
+
+        // document.getElementById("spinner").style.display = "none";
 
         chartHandler.setLeafletMaptile(configEvent.maptile);
     }
