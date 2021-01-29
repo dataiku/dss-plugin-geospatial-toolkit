@@ -83,8 +83,8 @@ function GeoDensityChart(){
     this.setLeafletMaptile = function(mapTile){
         // iterate in the layers of the map
         _mapPointer.eachLayer(function(layer){
-            let url;
             if (layer.options.id){
+                let url;
                 _mapPointer.removeLayer(layer);
                 switch (mapTile) {
                     case 'cartodb-positron':
