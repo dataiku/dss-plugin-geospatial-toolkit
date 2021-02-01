@@ -133,11 +133,13 @@ function updateCoreData(configEvent, chartHandler) {
                 document.getElementById("spinner").style.display = "none";
             } else {
                 console.log("Received no data");
+                $('#error-message').css("background-color", "red");
                 dataiku.webappMessages.displayFatalError(errorMessage);
                 document.getElementById("spinner").style.display = "none";
             }
         }).catch(error => {
             console.error("Caught error:", error);
+            $('#error-message').css("background-color", "red");
             dataiku.webappMessages.displayFatalError(error);
             document.getElementById("spinner").style.display = "none";
     });
@@ -163,7 +165,6 @@ window.addEventListener('message', function(event) {
         } else {
             configEvent.maptile = webAppConfig['chart']['def']['mapOptions']['tilesLayer'];
         }
-
 
         configEvent.intensity = webAppConfig['intensity'];
         configEvent.radius = webAppConfig['radius'];
@@ -194,6 +195,7 @@ window.addEventListener('message', function(event) {
 
         if (!configEvent.geopointColumnName){
             console.log("Display warning");
+            $('#error-message').css("background-color", "#28a9dd");
             dataiku.webappMessages.displayFatalError(errorMessage);
         } else {
             console.log("Hide warning");
