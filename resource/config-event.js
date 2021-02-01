@@ -109,10 +109,13 @@ function ConfigEvent(){
             if (_geopointColumnName !== val){
                 console.log("Detected changes for parameter geopointColumnName, old value:", _geopointColumnName, " - new value:", val);
                 _geopointColumnName = val;
-                _needCoreDataUpdate = true;
                 if (!val){
                     console.log("Detected empty geopointColumnName");
+                    _needCoreDataUpdate = false;
+                } else {
+                    _needCoreDataUpdate = true;
                 }
+
             }
         }
     });

@@ -172,9 +172,9 @@ window.addEventListener('message', function(event) {
 
         configEvent.datasetName = webAppConfig['dataset'];
         configEvent.detailsColumnName = webAppConfig['details_column_name'];
-        configEvent.geopointColumnName = webAppConfig['geopoint_column_name'];
         configEvent.tooltipColumnName = eventData['uaTooltip'];
         configEvent.filters = filters;
+        configEvent.geopointColumnName = webAppConfig['geopoint_column_name'];
 
         let colorPalette = configEvent.colorPalette;
         chartHandler.colorPalette = colorPalette;
