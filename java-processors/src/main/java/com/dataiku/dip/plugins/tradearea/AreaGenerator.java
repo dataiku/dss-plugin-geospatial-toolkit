@@ -75,13 +75,6 @@ class RectangleAreaGenerator extends AreaGenerator {
         if (center == null){
             return null;
         }
-        if (this.radius<=0 || this.width<=0 || this.height<=0){
-            logger.info("Rectangle Area Generator: Detected invalid input parameter. Distance input parameters should be greater than zero.");
-            logger.infoV("Got radius= {}", this.radius);
-            logger.infoV("Got width= {}", this.width);
-            logger.infoV("Got height= {}", this.height);
-            return null;
-        }
 
         // Declaration of the final result
         StringBuilder str = new StringBuilder();
@@ -126,12 +119,6 @@ class CircleAreaGenerator extends AreaGenerator {
      */
     public String generateArea(GeoPoint.Coords center) {
         if (center == null){
-            return null;
-        }
-
-        if (this.radius<=0){
-            logger.info("Circular Area Generator: Detected invalid radius as input. Radius parameter should be greater than zero.");
-            logger.infoV("Got radius= {}", this.radius);
             return null;
         }
 
