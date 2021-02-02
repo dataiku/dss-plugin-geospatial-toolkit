@@ -209,7 +209,7 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
     }
 
     static void validate(UnitMode unitMode, ShapeMode shapeMode, double radius, double height, double width){
-        AreaGenerator areaGenerator = newGenerator(unitMode, shapeMode, radius, height, width);
+        AreaGenerator.checkInputParams(unitMode, shapeMode, radius, height, width);
     }
 
 

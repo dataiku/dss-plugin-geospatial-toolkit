@@ -8,7 +8,33 @@ import com.dataiku.dip.utils.DKULogger;
  */
 abstract class AreaGenerator {
 
+    private static DKULogger logger = DKULogger.getLogger("dku");
+
     public abstract String generateArea(GeoPoint.Coords coords);
+
+    public static void checkInputParams(TradeAreaProcessor.UnitMode unitMode, TradeAreaProcessor.ShapeMode shapeMode,
+                                           double radius, double height, double width){
+
+        switch (shapeMode) {
+        case RECTANGLE:
+            if (width <= 0 || height <= 0) {
+                logger.info("Rectangle Area Generator: Received invalid parameters as input.");
+                logger.infoV("Got width= {}", width);
+                logger.infoV("Got height= {}", height);
+                throw new IllegalArgumentException("Invalid value: width="+width+", height="+ height);
+            }
+            break;
+        case CIRCLE:
+            if (radius <= 0) {
+                logger.info("Circle Area Generator: Received invalid parameters as input.");
+                logger.infoV("Got radius= {}", radius);
+                throw new IllegalArgumentException("Invalid value: radius=" + radius);
+            }
+            break;
+        default:
+            throw new IllegalArgumentException("Invalid processing mode: " + shapeMode);
+        }
+    };
 
 }
 
