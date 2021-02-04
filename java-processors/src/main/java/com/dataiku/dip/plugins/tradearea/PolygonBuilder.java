@@ -5,7 +5,7 @@ import com.dataiku.dip.shaker.types.GeoPoint;
 public class PolygonBuilder {
 
     final StringBuilder wktPolygon;
-    GeoPoint.Coords firstPoint;
+    final GeoPoint.Coords firstPoint;
 
     public PolygonBuilder(GeoPoint.Coords geopoint) {
         wktPolygon = new StringBuilder("POLYGON((");
