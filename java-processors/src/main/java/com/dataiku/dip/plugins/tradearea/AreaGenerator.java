@@ -21,14 +21,21 @@ abstract class AreaGenerator {
                 logger.info("Rectangle Area Generator: Received invalid parameters as input.");
                 logger.infoV("Got width= {}", width);
                 logger.infoV("Got height= {}", height);
-                throw new IllegalArgumentException("Invalid value: width="+width+", height="+ height);
+                throw new IllegalArgumentException(
+                        "Rectangular Trade Area Processor Failed.\n"+
+                        "The height and width of the trade area must be strictly greater than 0.\n"+
+                        "Received height value is equal to "+ height + "\n"+
+                        "and width value is equal to "+ width);
             }
             break;
         case CIRCLE:
             if (radius <= 0) {
                 logger.info("Circle Area Generator: Received invalid parameters as input.");
                 logger.infoV("Got radius= {}", radius);
-                throw new IllegalArgumentException("Invalid value: radius=" + radius);
+                throw new IllegalArgumentException(
+                        "Circular Trade Area Processor Failed.\n"+
+                        "The radius of the trade area must be strictly greater than 0.\n"+
+                        "Received radius value is equal to "+ radius);
             }
             break;
         default:
