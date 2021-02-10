@@ -71,7 +71,7 @@ function GeoDensityChart(){
     };
 
     this.addLeafletLayer = function(){
-        L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
+        L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png', {
             maxZoom: 18,
             attribution: 'Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
             id: 'light_all',
@@ -88,10 +88,10 @@ function GeoDensityChart(){
                 _mapPointer.removeLayer(layer);
                 switch (mapTile) {
                     case 'cartodb-positron':
-                        url = 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png';
+                        url = 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png';
                         break;
                     case 'cartodb-dark':
-                        url = 'http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png';
+                        url = 'http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png';
                         break;
                 }
                 L.tileLayer(url, {
