@@ -28,6 +28,36 @@
 
         <!-- End of Parameter controls: Intensity and Radius -->
 
+
+        <!-- Map BackGround Selector -->
+
+        <div class="mbot20" style="padding-bottom: 5px; margin-bottom: 0; overflow: hidden;">
+                <h2 class="settings-section-title foldable-title" id="qa_charts_map-background-submenu-header" ng-click="config.optionsFolds.mapTiles = !config.optionsFolds.mapTiles">
+                        <i class="icon-caret-right" ng-show="!config.optionsFolds.mapTiles" /><i class="icon-caret-down" ng-show="config.optionsFolds.mapTiles" />
+                        Map background
+                </h2>
+
+                <div ng-show="config.optionsFolds.mapTiles" class="options-zone" ng-controller="MapBackgroundPickerController">
+                        <form class="dkuform-chart-options">
+                                <div class="control-group">
+                                        <label class="control-label" dku-for="#map-background-picker button">Tiles to use</label>
+                                        <div class="controls">
+                                                <div class="palette-picker__list-zone" id="map-background-picker">
+                                                        <div class="flex oh" id="palette-picker">
+                                                                <select ng-model="config.chart.def.mapOptions.tilesLayer"
+                                                                        ng-selected="'cartodb-positron'"
+                                                                        ng-options="x.id as x.name group by x.category for x in backgrounds | filter:{category: '!Mapbox'}" dku-bs-select>
+                                                                </select>
+                                                        </div>
+                                                </div>
+                                        </div>
+                                </div>
+                        </form>
+                </div>
+        </div>
+
+        <!-- End of Map BackGround Selector -->
+
         <!-- Color Scale Selector -->
 
         <div class="mbot20" style="padding-bottom: 5px; margin-bottom: 0; overflow: hidden;">
@@ -66,34 +96,6 @@
 
         <!-- End of Color Scale Selector -->
 
-        <!-- Map BackGround Selector -->
-
-        <div class="mbot20" style="padding-bottom: 5px; margin-bottom: 0; overflow: hidden;">
-                <h2 class="settings-section-title foldable-title" id="qa_charts_map-background-submenu-header" ng-click="config.optionsFolds.mapTiles = !config.optionsFolds.mapTiles">
-                        <i class="icon-caret-right" ng-show="!config.optionsFolds.mapTiles" /><i class="icon-caret-down" ng-show="config.optionsFolds.mapTiles" />
-                        Map background
-                </h2>
-
-                <div ng-show="config.optionsFolds.mapTiles" class="options-zone" ng-controller="MapBackgroundPickerController">
-                        <form class="dkuform-chart-options">
-                                <div class="control-group">
-                                        <label class="control-label" dku-for="#map-background-picker button">Tiles to use</label>
-                                        <div class="controls">
-                                                <div class="palette-picker__list-zone" id="map-background-picker">
-                                                        <div class="flex oh" id="palette-picker">
-                                                                <select ng-model="config.chart.def.mapOptions.tilesLayer"
-                                                                        ng-selected="'cartodb-positron'"
-                                                                        ng-options="x.id as x.name group by x.category for x in backgrounds | filter:{category: '!Mapbox'}" dku-bs-select>
-                                                                </select>
-                                                        </div>
-                                                </div>
-                                        </div>
-                                </div>
-                        </form>
-                </div>
-        </div>
-
-        <!-- End of Map BackGround Selector -->
 
         <!-- Tooltip -->
     <ng-include ng-if="canAnimate" src="'/templates/simple_report/animation-options.html'"></ng-include>
