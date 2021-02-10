@@ -1,7 +1,3 @@
-import dataiku
-import dataikuapi
-import pdb
-
 from dataiku import Dataset
 
 import re
@@ -17,7 +13,12 @@ def normalize(x):
     """
     Will normalize data to have 75% of the values between 0 and 1
     """
-    x_scaled = (x - np.percentile(x, 12.5)) / (np.percentile(x, 87.5) - np.percentile(x, 12.5))
+    perc_left = np.percentile(x, 12.5)
+    perc_right = np.percentile(x, 87.5)
+    if perc_left == perc_right:
+        return np.ones(len(x))
+    else:
+        x_scaled = (x - perc_left) / (perc_right - perc_left)
     return x_scaled
 
 
@@ -29,6 +30,62 @@ def wkt_parser(wkt_point):
         return (None, None)
     else:
         return result[0]
+
+
+def extract_df(df, detail, filters, geopoint, tooltips):
+    """
+
+    Extract and select only necessary data to send to front-end.
+    Handle the filtering, normalizing, parsing and the tooltip.
+
+    :param detail:
+    :param df:
+    :param filters:
+    :param geopoint:
+    :param tooltips:
+    """
+    # Handle filtering
+    if (filters is not None) and (filters != []):
+        df = filter_dataframe(df, filters)
+    if df.empty:
+        return []
+
+    # Handle normalizing of detail column
+    if (detail is None) or (df.dtypes[detail] not in ['int64', 'float64']):
+        df['detail_'] = 1
+    else:
+        df['detail_'] = normalize(df[detail].values)
+    if (detail is not None) and (df.dtypes[detail] not in ['int64', 'float64']):
+        raise ValueError("The detail column should be a int or float type")
+
+    def convert(x):
+        if x is not None:
+            return float(x)
+        else:
+            return None
+
+    # Parse longitude and latitude from WKT geopoint column
+    parsed_lat_long_df = df[geopoint].apply(wkt_parser)
+    df['longitude_'] = parsed_lat_long_df.apply(lambda x: x[0]).apply(lambda x: convert(x))
+    df['latitude_'] = parsed_lat_long_df.apply(lambda x: x[1]).apply(lambda x: convert(x))
+    df = df.drop(geopoint, axis=1)
+
+    # Handle tooltip
+    tooltip_column_to_keep = set()
+    if (tooltips is not None) and (tooltips != []):
+        for col_ in tooltips:
+            tooltip_column_to_keep.add(col_['column'])
+    tooltip_column_to_keep = list(tooltip_column_to_keep)
+    tooltip_df = df[tooltip_column_to_keep]
+
+    df = df[['latitude_', 'longitude_', 'detail_']]
+    df['tooltip_'] = tooltip_df.to_dict(orient='records')
+    df = df.rename(columns={"latitude_": "lat", "longitude_": "long", "detail_": "detail", "tooltip_": "tooltip"})
+    df = df.dropna(subset=['lat', 'long'])
+
+    geodata_object = df.to_dict(orient='records')
+
+    return geodata_object
 
 
 def fetch_geo_data(dss_dataset: Dataset, geopoint, detail, tooltips, filters):
@@ -43,9 +100,7 @@ def fetch_geo_data(dss_dataset: Dataset, geopoint, detail, tooltips, filters):
     """
 
     schema = dss_dataset.read_schema()
-
     column_names = [dss_column['name'] for dss_column in schema]
-
     column_to_retrieves = set()
 
     if geopoint is None:
@@ -71,42 +126,8 @@ def fetch_geo_data(dss_dataset: Dataset, geopoint, detail, tooltips, filters):
 
     df = dss_dataset.get_dataframe(limit=1000000, columns=column_to_retrieves)
 
-    if (filters is not None) and (filters != []):
-        df = filter_dataframe(df, filters)
-
-    if (detail is None) or (df.dtypes[detail] not in ['int64', 'float64']):
-        df['detail_'] = 1
-    else:
-        df['detail_'] = normalize(df[detail].values)
-
-    if (detail is not None) and (df.dtypes[detail] not in ['int64', 'float64']):
-        raise ValueError("The detail column should be a int or float type")
-
-    def convert(x):
-        if x is not None:
-            return float(x)
-        else:
-            return None
-
-    parsed_lat_long_df = df[geopoint].apply(wkt_parser)
-    df['longitude_'] = parsed_lat_long_df.apply(lambda x: x[0]).apply(lambda x: convert(x))
-    df['latitude_'] = parsed_lat_long_df.apply(lambda x: x[1]).apply(lambda x: convert(x))
-    df = df.drop(geopoint, axis=1)
-
-    tooltip_column_to_keep = set()
-    if (tooltips is not None) and (tooltips != []):
-        for col_ in tooltips:
-            tooltip_column_to_keep.add(col_['column'])
-    tooltip_column_to_keep = list(tooltip_column_to_keep)
-
-    tooltip_df = df[tooltip_column_to_keep]
-    df = df[['latitude_', 'longitude_', 'detail_']]
-
-    df['tooltip_'] = tooltip_df.to_dict(orient='records')
-    df = df.rename(columns={"latitude_": "lat", "longitude_": "long", "detail_": "detail", "tooltip_": "tooltip"})
-
-    df = df.dropna(subset=['lat', 'long'])
-
-    geodata_object = df.to_dict(orient='records')
+    geodata_object = extract_df(df, detail, filters, geopoint, tooltips)
 
     return geodata_object
+
+

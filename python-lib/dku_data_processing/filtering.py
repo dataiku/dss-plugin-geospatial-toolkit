@@ -1,12 +1,19 @@
 import pandas as pd
 from functools import reduce
-
+import logging
 
 DKU_NO_VALUE = '___dku_no_value___'
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO, format='%(asctime)s Custom Chart Geospatial Density  | %(levelname)s - %(message)s')
 
 
 def numerical_filter(df, filter_):
     conditions = []
+    if "minValue" not in filter_:
+        filter_["minValue"] = -float('inf')
+    if "maxValue" not in filter_:
+        filter_["maxValue"] = +float('inf')
     if filter_["minValue"]:
         conditions += [df[filter_['column']] >= filter_['minValue']]
     if filter_["maxValue"]:
@@ -101,5 +108,5 @@ def filter_dataframe(df, filters):
         except Exception as e:
             raise Exception("Error with filter on column {} - {}".format(filter_["column"], e))
     if df.empty:
-        raise Exception("Dataframe is empty after filtering")
+        logger.info("Dataframe is empty after filtering")
     return df
