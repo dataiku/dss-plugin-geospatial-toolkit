@@ -207,7 +207,7 @@ function GeoDensityChart(){
             .enter()
             .append("circle")
             .attr("cx", function(d) {
-                _tooltip.html("<div><strong>longitude</strong>: " + d.long + "<br><strong>latitude</strong>: "+d.lat+
+                _tooltip.html("<div>Lon: <strong>" + d.long + "</strong><br>Lat: <strong>"+d.lat+"</strong>" +
                     formatTooltip(d.tooltip) + "</div>");
                 return _mapPointer.latLngToLayerPoint([d.lat, d.long]).x
             })
@@ -217,8 +217,8 @@ function GeoDensityChart(){
             .attr("id", "circleBasicTooltip")
             .on('mouseover', function() { // handle the event user mouse is over the circle data point
                 _tooltip.style("visibility", "visible")
-                    .style("left", (d3.event.pageX + 50) + "px")
-                    .style("top", (d3.event.pageY - 28) + "px");
+                    .style("left", (d3.event.pageX+15) + "px")
+                    .style("top", (d3.event.pageY-25) + "px");
                 d3.select(this).transition()
                     .duration('50')
                     .attr("fill", "red")
@@ -285,13 +285,11 @@ function formatTooltip(tooltip){
     if (!tooltip){
         return
     }
-    var formatedString = "";
-    formatedString += "<div>";
+    var formatedString = "<hr>";
     for (var key of Object.keys(tooltip)) {
-        formatedString += "<b>"+key+"</b>: ";
-        formatedString += tooltip[key];
+        formatedString += key+": ";
+        formatedString += "<b>"+tooltip[key]+"</b>";
         formatedString += "<br>";
     }
-    formatedString += "</div>";
     return formatedString
 }

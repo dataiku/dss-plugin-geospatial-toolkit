@@ -87,7 +87,14 @@ let tooltip = d3.select("#tooltip") // tooltip for the information of the point
     .text("This tooltip is meant to be visible on hover of datapoints")
     .style("z-index", 1000)
     .style("text-align", "left")
-    .style("background-color", "rgba(256, 256, 256, 1)");
+    .style("background-color", "rgba(256, 256, 256, 1)")
+    .style("border-radius", "12px")
+    .style("border-top-left-radius", "12px")
+    .style("border-top-right-radius", "12px")
+    .style("border-bottom-left-radius", "12px")
+    .style("border-bottom-right-radius", "12px")
+    .style("padding", "10px")
+    .style("font-size", "12px");
 
 chartHandler.tooltip = tooltip;
 
