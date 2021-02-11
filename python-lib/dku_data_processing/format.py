@@ -88,7 +88,7 @@ def extract_df(df, detail, filters, geopoint, tooltips):
     return geodata_object
 
 
-def fetch_geo_data(dss_dataset: Dataset, geopoint, detail, tooltips, filters):
+def fetch_geo_data(dss_dataset: Dataset, geopoint, detail, tooltips, filters, limit=10000):
     """
 
     :param dss_dataset:
@@ -96,6 +96,7 @@ def fetch_geo_data(dss_dataset: Dataset, geopoint, detail, tooltips, filters):
     :param details:
     :param tooltip:
     :param filters:
+    :param limit: Sampling limit over the dataset
     :return:
     """
 
@@ -124,7 +125,7 @@ def fetch_geo_data(dss_dataset: Dataset, geopoint, detail, tooltips, filters):
         for col_ in filters:
             column_to_retrieves.add(col_['column'])
 
-    df = dss_dataset.get_dataframe(limit=1000000, columns=column_to_retrieves)
+    df = dss_dataset.get_dataframe(sampling='random', limit=limit, columns=column_to_retrieves)
 
     geodata_object = extract_df(df, detail, filters, geopoint, tooltips)
 

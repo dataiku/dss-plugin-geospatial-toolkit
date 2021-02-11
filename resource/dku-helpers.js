@@ -54,6 +54,8 @@ dataiku.webappBackend = (function() {
             .then(response => {
                 if (response.status == 502) {
                     throw Error("Webapp backend not started");
+                } else if (response.status == 414){
+                    throw Error("Filtering configuration not supported for this chart. Please change the filtering.");
                 } else if (!response.ok) {
                     response.text().then(text => dataiku.webappMessages.displayFatalError(`Backend error:\n${text}.\nCheck backend log for more information.`))
                     throw Error("Response not ok!")
