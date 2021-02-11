@@ -10,7 +10,6 @@ function GeoDensityChart(){
     let _position;
     let _tooltip;
     let _coreData = [];
-    let _tileMapProvider = null;
 
     let _intensity;
     let _radius;
