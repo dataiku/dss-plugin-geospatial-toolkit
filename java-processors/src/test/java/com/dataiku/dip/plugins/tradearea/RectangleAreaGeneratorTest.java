@@ -31,19 +31,6 @@ class RectangleAreaGeneratorTest {
     }
 
     @Test
-    public void testInvalidRange() {
-        double width = 8;
-        double height = 5;
-        String actualResult = null;
-        RectangleAreaGenerator generator = new RectangleAreaGenerator(width, height);
-        String str = "POINT(-73.9723 1000)";
-        GeoPoint.Coords coords = GeoPoint.convert(str);
-        actualResult = generator.generateArea(coords);
-        String expectedResult = "POLYGON((-73.76583216158762 -79.97747836051751,-73.76491219388727 -80.02239383768554,-74.17968780611272 -80.02239383768554,-74.17876783841238 -79.97747836051751,-73.76583216158762 -79.97747836051751))";
-        assertEquals(expectedResult, actualResult);
-    }
-
-    @Test
     public void testNullDistances() {
         double width = 0;
         double height = 0;

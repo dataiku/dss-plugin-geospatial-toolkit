@@ -25,17 +25,6 @@ class CircleAreaGeneratorTest {
     }
 
     @Test
-    public void testInvalidRange() {
-        double radius = 8;
-        CircleAreaGenerator generator = new CircleAreaGenerator(radius);
-        String str = "POINT(-73.9723 1000)";
-        GeoPoint.Coords coords = GeoPoint.convert(str);
-        String actualResult = generator.generateArea(coords);
-        String expectedResult = "POLYGON((-73.9723 -79.92813477727039,-73.76664006395421 -79.93769938616089,-73.61516545170987 -79.96387637453995,-73.55845165679409 -79.99974440014559,-73.61261600754355 -80.03574021950294,-73.76409048877592 -80.06217280773602,-73.9723 -80.07186522272949,-74.18050951122409 -80.06217280773602,-74.33198399245646 -80.03574021950294,-74.3861483432059 -79.99974440014559,-74.32943454829012 -79.96387637453995,-74.1779599360458 -79.93769938616089,-73.9723 -79.92813477727039))";
-        assertEquals(expectedResult, actualResult);
-    }
-
-    @Test
     public void testNullDistances() {
         double radius = 0;
         CircleAreaGenerator generator = new CircleAreaGenerator(radius);
