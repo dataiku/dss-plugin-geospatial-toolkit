@@ -31,8 +31,6 @@ class CircleAreaGeneratorTest {
         String str = "POINT(-73.9723 40.64749)";
         GeoPoint.Coords coords = GeoPoint.convert(str);
         String actualResult = generator.generateArea(coords);
-        // TODO: Assess necessity to fail on null
-        // assertNull(actualResult);
-        assertNotNull(actualResult);
+        assertNull(actualResult);
     }
 }
