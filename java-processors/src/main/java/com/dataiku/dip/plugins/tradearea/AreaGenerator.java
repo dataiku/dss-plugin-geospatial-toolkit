@@ -121,7 +121,7 @@ class CircleAreaGenerator extends AreaGenerator {
             logger.info("Circle Area Generator: Received invalid parameters as input.");
             logger.infoV("Got radius = {}", radius);
         } else {
-            this.radius = radius;
+            this.radius = Math.max(0, radius);
         }
     }
 
