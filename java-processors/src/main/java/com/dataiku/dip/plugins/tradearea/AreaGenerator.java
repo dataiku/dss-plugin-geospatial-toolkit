@@ -86,7 +86,7 @@ class RectangleAreaGenerator extends AreaGenerator {
         if (this.width <= 0 || this.height <= 0){
             return null;
         }
-        if (center == null){
+        if (center == null || diagonalAngle == 0){
             return null;
         }
 
