@@ -149,7 +149,7 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
             return;
         }
 
-        String output = "";
+        String output = null;
         // Actual row to row processing
         // str should be a WKT description of the input geospatial point
         // example: POINT(-73.9723 40.64749) where -73.9723 is a longitude, 40.64749 is a latitude
@@ -162,8 +162,8 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
         if (output != null) {
             row.put(outputColumn, output);
         }
-
         getProcessorOutput().emitRow(row);
+
     }
 
     @Override
