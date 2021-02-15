@@ -39,7 +39,8 @@ class RectangleAreaGeneratorTest {
         String str = "POINT(-73.9723 1000)";
         GeoPoint.Coords coords = GeoPoint.convert(str);
         actualResult = generator.generateArea(coords);
-        assertNotNull(actualResult);
+        String expectedResult = "POLYGON((-73.76583216158762 -79.97747836051751,-73.76491219388727 -80.02239383768554,-74.17968780611272 -80.02239383768554,-74.17876783841238 -79.97747836051751,-73.76583216158762 -79.97747836051751))";
+        assertEquals(expectedResult, actualResult);
     }
 
     @Test
