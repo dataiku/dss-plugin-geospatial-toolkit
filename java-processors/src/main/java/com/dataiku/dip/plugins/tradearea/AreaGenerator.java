@@ -90,9 +90,6 @@ class RectangleAreaGenerator extends AreaGenerator {
             return null;
         }
 
-        // Declaration of the final result
-        StringBuilder str = new StringBuilder();
-        str.append("POLYGON((");
         // Computation of the diagonal angle of the rectangle (Must be in degree and Math.atan is radian)
         double[] angles = {Math.PI/2-this.diagonalAngle, Math.PI/2+this.diagonalAngle, (3*Math.PI/2)-this.diagonalAngle, (3*Math.PI/2)+this.diagonalAngle};
         // Compute the latitude longitude of the four corners and fill the polygon String
