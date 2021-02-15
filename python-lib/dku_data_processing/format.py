@@ -87,7 +87,8 @@ def extract_df(df, detail, filters, geopoint, tooltips):
 
     return geodata_object
 
-
+# TODO: Remove the "integration" test in a side directory
+# TODO: Put limit in a constant
 def fetch_geo_data(dss_dataset: Dataset, geopoint, detail, tooltips, filters, limit=10000):
     """
 
