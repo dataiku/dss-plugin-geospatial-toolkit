@@ -83,10 +83,7 @@ class RectangleAreaGenerator extends AreaGenerator {
      * @return The rectangular trade area expressed as a WKT polygon (string)
      */
     public String generateArea(GeoPoint.Coords center) {
-        if (this.width <= 0 || this.height <= 0){
-            return null;
-        }
-        if (center == null || diagonalAngle == 0){
+        if (this.width <= 0 || this.height <= 0 || center == null || diagonalAngle == 0){
             return null;
         }
 
@@ -129,10 +126,7 @@ class CircleAreaGenerator extends AreaGenerator {
      * @return The circular trade area expressed as a WKT POLYGON (String `POLYGON((long1 lat1,long2 lat2, ...))`)
      */
     public String generateArea(GeoPoint.Coords center) {
-        if (this.radius <= 0){
-            return null;
-        }
-        if (center == null){
+        if (this.radius <= 0 || center == null){
             return null;
         }
 
