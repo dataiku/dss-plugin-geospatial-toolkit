@@ -15,31 +15,35 @@ abstract class AreaGenerator {
     public static void checkInputParams(TradeAreaProcessor.UnitMode unitMode, TradeAreaProcessor.ShapeMode shapeMode,
                                            double radius, double height, double width){
 
+        // Check shapeMode
         switch (shapeMode) {
         case RECTANGLE:
             if (width <= 0 || height <= 0) {
                 logger.info("Rectangle Area Generator: Received invalid parameters as input.");
                 logger.infoV("Got width= {}", width);
                 logger.infoV("Got height= {}", height);
-                throw new IllegalArgumentException(
-                        "Rectangular Trade Area Processor Failed.\n"+
-                        "The height and width of the trade area must be strictly greater than 0.\n"+
-                        "Received height value is equal to "+ height + "\n"+
-                        "and width value is equal to "+ width);
             }
             break;
         case CIRCLE:
             if (radius <= 0) {
                 logger.info("Circle Area Generator: Received invalid parameters as input.");
                 logger.infoV("Got radius= {}", radius);
-                throw new IllegalArgumentException(
-                        "Circular Trade Area Processor Failed.\n"+
-                        "The radius of the trade area must be strictly greater than 0.\n"+
-                        "Received radius value is equal to "+ radius);
             }
             break;
         default:
             throw new IllegalArgumentException("Invalid processing mode: " + shapeMode);
+        }
+
+        // Check unitMode
+        switch (unitMode) {
+        case MILES:
+            logger.info("Detected unit distance = MILES");
+            break;
+        case KILOMETERS:
+            logger.info("Detected unit distance = KILOMETERS");
+            break;
+        default:
+            throw new IllegalArgumentException("Invalid unit distance mode: " + unitMode);
         }
     };
 
@@ -60,13 +64,13 @@ class RectangleAreaGenerator extends AreaGenerator {
     private static DKULogger logger = DKULogger.getLogger("dku");
 
     public RectangleAreaGenerator(double width, double height){
-        if (width <= 0 || height <= 0){
+        this.width = width;
+        this.height = height;
+        if (this.width <= 0 || this.height <= 0){
             logger.info("Rectangle Area Generator: Received invalid parameters as input.");
             logger.infoV("Got width= {}", width);
             logger.infoV("Got height= {}", height);
         } else {
-            this.width = width;
-            this.height = height;
             // Compute the radius based on half the width and height
             this.radius = Math.sqrt(Math.pow(width/2, 2)+Math.pow(height/2, 2));
             this.diagonalAngle = Math.atan(this.height/this.width);
@@ -79,6 +83,9 @@ class RectangleAreaGenerator extends AreaGenerator {
      * @return The rectangular trade area expressed as a WKT polygon (string)
      */
     public String generateArea(GeoPoint.Coords center) {
+        if (this.width <= 0 || this.height <= 0){
+            return null;
+        }
         if (center == null){
             return null;
         }
@@ -125,6 +132,9 @@ class CircleAreaGenerator extends AreaGenerator {
      * @return The circular trade area expressed as a WKT POLYGON (String `POLYGON((long1 lat1,long2 lat2, ...))`)
      */
     public String generateArea(GeoPoint.Coords center) {
+        if (this.radius <= 0){
+            return null;
+        }
         if (center == null){
             return null;
         }
