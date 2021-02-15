@@ -56,8 +56,8 @@ abstract class AreaGenerator {
  */
 class RectangleAreaGenerator extends AreaGenerator {
 
-    double width;
-    double height;
+    final double width;
+    final double height;
     double radius;
     double diagonalAngle;
 
@@ -120,7 +120,7 @@ class CircleAreaGenerator extends AreaGenerator {
     static final int NB_OF_EDGES = 12;
     static final double ANGLE_STEP = 2*Math.PI/NB_OF_EDGES;
 
-    double radius;
+    final double radius;
 
     public CircleAreaGenerator(double radius){
         this.radius = radius;
