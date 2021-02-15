@@ -40,7 +40,7 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
 
         @Override
         public void validate() throws IllegalArgumentException {
-            TradeAreaProcessor.validate(unitMode, shapeMode, radius, height, width);
+            AreaGenerator.checkInputParams(unitMode, shapeMode, radius, height, width);
         }
     }
 
@@ -207,11 +207,6 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
                 throw new IllegalArgumentException("Invalid processing mode: " + shapeMode);
             }
     }
-
-    static void validate(UnitMode unitMode, ShapeMode shapeMode, double radius, double height, double width){
-        AreaGenerator.checkInputParams(unitMode, shapeMode, radius, height, width);
-    }
-
 
     private static DKULogger logger = DKULogger.getLogger("dku");
 }
