@@ -56,21 +56,21 @@ abstract class AreaGenerator {
  */
 class RectangleAreaGenerator extends AreaGenerator {
 
-    final double width;
-    final double height;
-    double radius;
-    double diagonalAngle;
+    double width = 0;
+    double height = 0;
+    double radius = 0;
+    double diagonalAngle = 0;
 
     private static DKULogger logger = DKULogger.getLogger("dku");
 
     public RectangleAreaGenerator(double width, double height){
-        this.width = width;
-        this.height = height;
-        if (this.width <= 0 || this.height <= 0){
+        if (width <= 0 || height <= 0){
             logger.info("Rectangle Area Generator: Received invalid parameters as input.");
-            logger.infoV("Got width= {}", width);
-            logger.infoV("Got height= {}", height);
+            logger.infoV("Got width = {}", width);
+            logger.infoV("Got height = {}", height);
         } else {
+            this.height = height;
+            this.width = width;
             // Compute the radius based on half the width and height
             this.radius = Math.sqrt(Math.pow(width/2, 2)+Math.pow(height/2, 2));
             this.diagonalAngle = Math.atan(this.height/this.width);
@@ -83,7 +83,7 @@ class RectangleAreaGenerator extends AreaGenerator {
      * @return The rectangular trade area expressed as a WKT polygon (string)
      */
     public String generateArea(GeoPoint.Coords center) {
-        if (this.width <= 0 || this.height <= 0 || center == null || diagonalAngle == 0){
+        if (this.width == 0 || this.height == 0 || center == null || this.diagonalAngle == 0){
             return null;
         }
 
@@ -114,10 +114,15 @@ class CircleAreaGenerator extends AreaGenerator {
     static final int NB_OF_EDGES = 12;
     static final double ANGLE_STEP = 2*Math.PI/NB_OF_EDGES;
 
-    final double radius;
+    double radius = 0;
 
     public CircleAreaGenerator(double radius){
-        this.radius = radius;
+        if (radius <= 0){
+            logger.info("Circle Area Generator: Received invalid parameters as input.");
+            logger.infoV("Got radius = {}", radius);
+        } else {
+            this.radius = radius;
+        }
     }
 
     /**
@@ -126,7 +131,7 @@ class CircleAreaGenerator extends AreaGenerator {
      * @return The circular trade area expressed as a WKT POLYGON (String `POLYGON((long1 lat1,long2 lat2, ...))`)
      */
     public String generateArea(GeoPoint.Coords center) {
-        if (this.radius <= 0 || center == null){
+        if (this.radius == 0 || center == null){
             return null;
         }
 
