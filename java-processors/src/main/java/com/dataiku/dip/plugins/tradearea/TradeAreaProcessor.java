@@ -118,8 +118,8 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
             return ProcessorDesc.withGenericForm(this.getName(), actionVerb("Create") + " trade area zone")
                     .withMNEColParam("inputColumn", "Input column")
                     .withColParam("outputColumn", "Output column")
-                    .withParam(ParamDesc.advancedSelect("unitMode", "Distance unit", "", UnitMode.class).withDefaultValue(UnitMode.KILOMETERS))
                     .withParam(ParamDesc.advancedSelect("shapeMode", "Shape", "", ShapeMode.class).withDefaultValue(ShapeMode.CIRCLE))
+                    .withParam(ParamDesc.advancedSelect("unitMode", "Distance unit", "", UnitMode.class).withDefaultValue(UnitMode.KILOMETERS))
                     .withParam(ParamDesc.doubleP("radius", "Radius"))
                     .withParam(ParamDesc.doubleP("width", "Width"))
                     .withParam(ParamDesc.doubleP("height", "Height"));
