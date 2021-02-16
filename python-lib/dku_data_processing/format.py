@@ -69,7 +69,8 @@ def fetch_geo_data(dss_dataset: Dataset, geopoint, detail, tooltips, filters):
         for col_ in filters:
             column_to_retrieves.add(col_['column'])
 
-    df = dss_dataset.get_dataframe(limit=1000, columns=column_to_retrieves)
+    # Sampling should be the same as DSS by default
+    df = dss_dataset.get_dataframe(sampling='head', limit=10000, columns=column_to_retrieves)
 
     if (filters is not None) and (filters != []):
         df = filter_dataframe(df, filters)
