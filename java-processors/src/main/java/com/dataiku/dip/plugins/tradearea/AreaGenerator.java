@@ -111,7 +111,7 @@ class RectangleAreaGenerator extends AreaGenerator {
  * If using miles in the processor, those distances must be converted to miles before.
  */
 class CircleAreaGenerator extends AreaGenerator {
-    static final int NB_OF_EDGES = 12;
+    static final int NB_OF_EDGES = 120;
     static final double ANGLE_STEP = 2*Math.PI/NB_OF_EDGES;
 
     double radius = 0;
