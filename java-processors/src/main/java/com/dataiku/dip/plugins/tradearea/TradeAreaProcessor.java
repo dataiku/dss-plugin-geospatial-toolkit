@@ -99,12 +99,17 @@ public class TradeAreaProcessor extends SingleInputSingleOutputRowProcessor impl
                     "# Output column\n" +
                     "Contains created trade areas in the WKT format\n\n"+
                     "# Trade area creation options\n" +
+                    "Select the shape of trade area from:\n" +
+                    "* Rectangular\n" +
+                    "* Circular\n\n" +
                     "Select the unit of distances from:\n" +
                     "* Kilometers\n" +
                     "* Miles\n\n" +
-                    "Select the shape of trade area from:\n" +
-                    "* Rectangular\n" +
-                    "* Circular\n\n";
+                    "If Rectangle shape is selected:\n" +
+                    "Select the Width and Height of the Rectangle shape to compute.\n\n" +
+                    "If Circle shape is selected:\n" +
+                    "Select the Radius of the Circle shape to compute.\n\n" +
+                    "Each distance is expressed according to the input unit.\n\n";
         }
 
         @Override
