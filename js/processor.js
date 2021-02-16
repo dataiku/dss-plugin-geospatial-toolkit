@@ -59,9 +59,8 @@
     ShakerProcessorsInfo.map["TradeAreaProcessor"] = {
         "description": function(type, params) {
             if (!params["inputColumn"] || params["inputColumn"].length === 0) return null;
-            return "Generating a " + getShapeDescription(params) + " trade area centered on" +
-                " <strong>{0}</strong> ".format(sanitize(params["inputColumn"])) + getDimensionDescription(params) +
-                getUnitDescription(params);
+            return " <strong>{0}</strong> ".format(sanitize("Generate a " + getShapeDescription(params) + " trade area")) + " centered on " +
+                 + sanitize(params["inputColumn"]) + " " + getDimensionDescription(params) + getUnitDescription(params);
         },
         "icon": "icon-globe"
     }
