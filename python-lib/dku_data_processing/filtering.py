@@ -1,6 +1,7 @@
-import pandas as pd
-from functools import reduce
 import logging
+import pandas as pd
+
+from functools import reduce
 
 DKU_NO_VALUE = '___dku_no_value___'
 
@@ -9,15 +10,19 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s Custom Chart Geospat
 
 
 def numerical_filter(df, filter_):
+    """
+    Apply a numerical filter defined by the dict `filter_`
+    :param df: Pandas DataFrame containing core data
+    :param filter_: Dictionary defining the filters and coming from the UI
+    :return:
+    """
     conditions = []
-    if "minValue" not in filter_:
-        filter_["minValue"] = -float('inf')
-    if "maxValue" not in filter_:
-        filter_["maxValue"] = +float('inf')
-    if filter_["minValue"]:
-        conditions += [df[filter_['column']] >= filter_['minValue']]
-    if filter_["maxValue"]:
-        conditions += [df[filter_['column']] <= filter_['maxValue']]
+    minimum_bound = filter_.get("minValue", None)
+    maximum_bound = filter_.get("maxValue", None)
+    if minimum_bound:
+        conditions += [df[filter_['column']] >= minimum_bound]
+    if maximum_bound:
+        conditions += [df[filter_['column']] <= maximum_bound]
     return conditions
 
 
