@@ -216,7 +216,7 @@ function GeoDensityChart(){
             .enter()
             .append("circle")
             .attr("cx", function(d) {
-                _tooltip.html("<div><strong>longitude</strong>: " + d.long + "<br><strong>latitude</strong>: "+d.lat+
+                _tooltip.html("<div>Lon: <strong>" + d.long + "</strong><br>Lat: <strong>"+d.lat+"</strong>" +
                     formatTooltip(d.tooltip) + "</div>");
                 return _mapPointer.latLngToLayerPoint([d.lat, d.long]).x
             })
@@ -226,8 +226,8 @@ function GeoDensityChart(){
             .attr("id", "circleBasicTooltip")
             .on('mouseover', function() { // handle the event user mouse is over the circle data point
                 _tooltip.style("visibility", "visible")
-                    .style("left", (d3.event.pageX + 50) + "px")
-                    .style("top", (d3.event.pageY - 28) + "px");
+                    .style("left", (d3.event.pageX+15) + "px")
+                    .style("top", (d3.event.pageY-25) + "px");
                 d3.select(this).transition()
                     .duration('50')
                     .attr("fill", "red")
@@ -288,19 +288,17 @@ function GeoDensityChart(){
  * Format the tooltip to be displayed in HTML
  * tooltip = {"reviews_per_month": 0.92, "room_type": "Private Room"};
  * @param tooltip
- * @returns {number}
+ * @returns {string}
  */
 function formatTooltip(tooltip){
-    if (!tooltip){
-        return
+    if (tooltip && Object.keys(tooltip).length === 0 && tooltip.constructor === Object) {
+        return ""
     }
-    var formatedString = "";
-    formatedString += "<div>";
+    var formattedString = "<hr>";
     for (var key of Object.keys(tooltip)) {
-        formatedString += "<b>"+key+"</b>: ";
-        formatedString += tooltip[key];
-        formatedString += "<br>";
+        formattedString += key+": ";
+        formattedString += "<b>"+tooltip[key]+"</b>";
+        formattedString += "<br>";
     }
-    formatedString += "</div>";
-    return formatedString
+    return formattedString
 }

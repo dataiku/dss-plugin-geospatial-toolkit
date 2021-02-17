@@ -113,7 +113,7 @@ function displayLocal(svg, closestMarker){
         .on('mouseover', function() { //function to add mouseover event
             tooltip.style("visibility", "visible")
                 .style("left", (d3.event.pageX) + "px")
-                .style("top", (d3.event.pageY - 28) + "px");
+                .style("top", (d3.event.pageY) + "px");
             d3.select(this).transition() //D3 selects the object we have moused over in order to perform operations on it
                 .duration('50') //how long we are transitioning between the two states (works like keyframes)
                 .attr("fill", "blue") //change the fill
