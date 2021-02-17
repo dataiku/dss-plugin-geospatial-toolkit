@@ -1,8 +1,7 @@
-from dataiku import Dataset
-
-import re
 import logging
 import numpy as np
+import re
+
 from dku_data_processing.filtering import filter_dataframe
 
 logger = logging.getLogger(__name__)
@@ -88,7 +87,7 @@ def extract_df(df, detail, filters, geopoint, tooltips):
     return geodata_object
 
 
-def fetch_geo_data(dss_dataset: Dataset, geopoint, detail, tooltips, filters):
+def fetch_geo_data(dss_dataset, geopoint, detail, tooltips, filters):
     """
 
     :param dss_dataset:
