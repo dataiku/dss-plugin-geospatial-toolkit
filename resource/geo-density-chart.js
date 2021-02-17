@@ -282,7 +282,7 @@ function GeoDensityChart(){
  * @returns {string}
  */
 function formatTooltip(tooltip){
-    if (jQuery.isEmptyObject(tooltip)) {
+    if (tooltip && Object.keys(tooltip).length === 0 && tooltip.constructor === Object) {
         return ""
     }
     var formattedString = "<hr>";
