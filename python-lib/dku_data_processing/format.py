@@ -77,7 +77,7 @@ def extract_df(df, detail, filters, geopoint, tooltips):
 
     # Handle tooltip
     tooltip_column_to_keep = set()
-    if (tooltips is not None) and (tooltips != []):
+    if tooltips:
         for col_ in tooltips:
             tooltip_column_to_keep.add(col_['column'])
     tooltip_column_to_keep = list(tooltip_column_to_keep)
