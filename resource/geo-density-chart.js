@@ -86,25 +86,26 @@ function GeoDensityChart(){
             if (layer.options.id){
                 console.log("[MapTile] Received previous maptile id:", layer.options.id);
                 let url;
-                let idTileMap;
+                let newBaseMap;
                 console.log("[MapTile] Received asked maptile id", mapTile);
                 switch (mapTile) {
                     case 'cartodb-positron':
                         url = 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png';
-                        idTileMap = "light_all";
+                        newBaseMap = "light_all";
                         break;
                     case 'cartodb-dark':
                         url = 'http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png';
-                        idTileMap = "dark_all";
+                        newBaseMap = "dark_all";
                         break;
                 }
-                if (layer.options.id !== idTileMap){
-                    console.log("[MapTile] Building new map tilelayer with id", idTileMap);
+                let previousBaseMap = layer.options.id;
+                if (previousBaseMap !== newBaseMap){
+                    console.log("[MapTile] Building new map tilelayer with id", newBaseMap);
                     _mapPointer.removeLayer(layer);
                     L.tileLayer(url, {
                         maxZoom: 18,
                         attribution: 'Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
-                        id: idTileMap,
+                        id: newBaseMap,
                         tileSize: 512,
                         zoomOffset: -1
                     }).addTo(_mapPointer).set;
