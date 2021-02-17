@@ -279,11 +279,11 @@ function GeoDensityChart(){
  * Format the tooltip to be displayed in HTML
  * tooltip = {"reviews_per_month": 0.92, "room_type": "Private Room"};
  * @param tooltip
- * @returns {number}
+ * @returns {string}
  */
 function formatTooltip(tooltip){
-    if (!tooltip){
-        return
+    if (jQuery.isEmptyObject(tooltip)) {
+        return ""
     }
     var formattedString = "<hr>";
     for (var key of Object.keys(tooltip)) {
