@@ -93,7 +93,10 @@ let tooltip = d3.select("#tooltip") // tooltip for the information of the point
     .style("border-top-right-radius", "12px")
     .style("border-bottom-left-radius", "12px")
     .style("border-bottom-right-radius", "12px")
-    .style("padding", "10px")
+    .style("padding-left", "15px")
+    .style("padding-right", "15px")
+    .style("padding-top", "5px")
+    .style("padding-bottom", "5px")
     .style("font-size", "12px");
 
 chartHandler.tooltip = tooltip;
