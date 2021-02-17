@@ -3,6 +3,7 @@ import numpy as np
 import re
 
 from dku_data_processing.filtering import filter_dataframe
+from utils.df_column_naming import get_new_column_name
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format='%(asctime)s Custom Chart Geospatial Density  | %(levelname)s - %(message)s')
@@ -43,19 +44,22 @@ def extract_df(df, detail, filters, geopoint, tooltips):
     :param geopoint:
     :param tooltips:
     """
-    # Handle filtering
-    if (filters is not None) and (filters != []):
+    # Get filtered dataframe
+    if filters:
         df = filter_dataframe(df, filters)
     if df.empty:
+        # Handle case where dataframe is empty after filtering
         return []
 
-    # Handle normalizing of detail column
+    new_detail_column = get_new_column_name(df, "detail")
+
+    # Get normalized detail column
     if (detail is None) or (df.dtypes[detail] not in ['int64', 'float64']):
-        df['detail_'] = 1
+        df[new_detail_column] = 1
     else:
-        df['detail_'] = normalize(df[detail].values)
+        df[new_detail_column] = normalize(df[detail].values)
     if (detail is not None) and (df.dtypes[detail] not in ['int64', 'float64']):
-        raise ValueError("The detail column should be a int or float type")
+        raise ValueError("The detail column should be a int or float type.")
 
     def convert(x):
         if x is not None:
@@ -63,10 +67,13 @@ def extract_df(df, detail, filters, geopoint, tooltips):
         else:
             return None
 
+    new_longitude_column = get_new_column_name(df, "longitude")
+    new_latitude_column = get_new_column_name(df, "latitude")
+
     # Parse longitude and latitude from WKT geopoint column
     parsed_lat_long_df = df[geopoint].apply(wkt_parser)
-    df['longitude_'] = parsed_lat_long_df.apply(lambda x: x[0]).apply(lambda x: convert(x))
-    df['latitude_'] = parsed_lat_long_df.apply(lambda x: x[1]).apply(lambda x: convert(x))
+    df[new_longitude_column] = parsed_lat_long_df.apply(lambda x: x[0]).apply(lambda x: convert(x))
+    df[new_latitude_column] = parsed_lat_long_df.apply(lambda x: x[1]).apply(lambda x: convert(x))
     df = df.drop(geopoint, axis=1)
 
     # Handle tooltip
@@ -77,9 +84,11 @@ def extract_df(df, detail, filters, geopoint, tooltips):
     tooltip_column_to_keep = list(tooltip_column_to_keep)
     tooltip_df = df[tooltip_column_to_keep]
 
-    df = df[['latitude_', 'longitude_', 'detail_']]
-    df['tooltip_'] = tooltip_df.to_dict(orient='records')
-    df = df.rename(columns={"latitude_": "lat", "longitude_": "long", "detail_": "detail", "tooltip_": "tooltip"})
+    df = df[[new_latitude_column, new_longitude_column, new_detail_column]]
+    new_tooltip_column = get_new_column_name(df, 'tooltip')
+    df[new_tooltip_column] = tooltip_df.to_dict(orient='records')
+    df = df.rename(columns={new_latitude_column: "lat", new_longitude_column: "long",
+                            new_detail_column: "detail", new_tooltip_column: "tooltip"})
     df = df.dropna(subset=['lat', 'long'])
 
     geodata_object = df.to_dict(orient='records')
