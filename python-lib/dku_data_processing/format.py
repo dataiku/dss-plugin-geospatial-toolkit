@@ -74,7 +74,6 @@ def extract_df(df, detail, filters, geopoint, tooltips):
     parsed_lat_long_df = df[geopoint].apply(wkt_parser)
     df[new_longitude_column] = parsed_lat_long_df.apply(lambda x: x[0]).apply(lambda x: convert(x))
     df[new_latitude_column] = parsed_lat_long_df.apply(lambda x: x[1]).apply(lambda x: convert(x))
-    df = df.drop(geopoint, axis=1)
 
     # Handle tooltip
     tooltip_column_to_keep = set()
