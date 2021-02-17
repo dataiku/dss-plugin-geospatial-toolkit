@@ -126,7 +126,11 @@ function updateCoreData(configEvent, chartHandler) {
                 }
                 chartHandler.coreData = tempGeopoints;
                 chartHandler.render();
-                chartHandler.centerMap();
+                if (configEvent.needMapCentering) {
+                    console.log("Trying to center map.");
+                    chartHandler.centerMap();
+                    configEvent.needMapCentering = false;
+                }
                 chartHandler.initialised = true;
                 document.getElementById("error-message").text = "";
                 document.getElementById("error-warning-view").style.display = "none";

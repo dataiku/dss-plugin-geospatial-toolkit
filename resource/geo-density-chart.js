@@ -71,7 +71,7 @@ function GeoDensityChart(){
     };
 
     this.addLeafletLayer = function(){
-        L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
+        L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png', {
             maxZoom: 18,
             attribution: 'Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
             id: 'light_all',
@@ -84,23 +84,32 @@ function GeoDensityChart(){
         // iterate in the layers of the map
         _mapPointer.eachLayer(function(layer){
             if (layer.options.id){
+                console.log("[MapTile] Received previous maptile id:", layer.options.id);
                 let url;
-                _mapPointer.removeLayer(layer);
+                let newBaseMap;
+                console.log("[MapTile] Received asked maptile id", mapTile);
                 switch (mapTile) {
                     case 'cartodb-positron':
-                        url = 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png';
+                        url = 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png';
+                        newBaseMap = "light_all";
                         break;
                     case 'cartodb-dark':
-                        url = 'http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png';
+                        url = 'http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png';
+                        newBaseMap = "dark_all";
                         break;
                 }
-                L.tileLayer(url, {
-                    maxZoom: 18,
-                    attribution: 'Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
-                    id: 'light_all',
-                    tileSize: 512,
-                    zoomOffset: -1
-                }).addTo(_mapPointer).set;
+                let previousBaseMap = layer.options.id;
+                if (previousBaseMap !== newBaseMap){
+                    console.log("[MapTile] Building new map tilelayer with id", newBaseMap);
+                    _mapPointer.removeLayer(layer);
+                    L.tileLayer(url, {
+                        maxZoom: 18,
+                        attribution: 'Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+                        id: newBaseMap,
+                        tileSize: 512,
+                        zoomOffset: -1
+                    }).addTo(_mapPointer).set;
+                }
             }
         });
     };

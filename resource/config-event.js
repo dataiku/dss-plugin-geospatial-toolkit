@@ -30,6 +30,16 @@ function ConfigEvent(){
 
     // At start need backend compute since there is no data available
     let _needCoreDataUpdate = false;
+    let _needMapCentering = true;
+
+    Object.defineProperty(this, 'needMapCentering', {
+        get: function(){
+            return _needMapCentering;
+        },
+        set: function(val){
+            _needMapCentering = val;
+        }
+    });
 
     Object.defineProperty(this, 'needCoreDataUpdate', {
         get: function(){
@@ -110,10 +120,13 @@ function ConfigEvent(){
                 console.log("Detected changes for parameter geopointColumnName, old value:", _geopointColumnName, " - new value:", val);
                 _geopointColumnName = val;
                 if (!val){
+                    // New value of the geopointColumnName is empty
                     console.log("Detected empty geopointColumnName");
                     _needCoreDataUpdate = false;
                 } else {
                     _needCoreDataUpdate = true;
+                    _needMapCentering = true;
+                    console.log("Detected new geopoint column input.")
                 }
 
             }
