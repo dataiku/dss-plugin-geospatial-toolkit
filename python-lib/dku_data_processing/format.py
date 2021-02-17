@@ -12,12 +12,12 @@ def normalize(x):
     """
     Will normalize data to have 75% of the values between 0 and 1
     """
-    perc_left = np.percentile(x, 12.5)
-    perc_right = np.percentile(x, 87.5)
-    if perc_left == perc_right:
+    left_percentile = np.percentile(x, 12.5)
+    right_percentile = np.percentile(x, 87.5)
+    if left_percentile == right_percentile:
         return np.ones(len(x))
     else:
-        x_scaled = (x - perc_left) / (perc_right - perc_left)
+        x_scaled = (x - left_percentile) / (right_percentile - left_percentile)
     return x_scaled
 
 
