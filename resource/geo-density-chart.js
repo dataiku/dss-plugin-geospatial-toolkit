@@ -285,11 +285,11 @@ function formatTooltip(tooltip){
     if (!tooltip){
         return
     }
-    var formatedString = "<hr>";
+    var formattedString = "<hr>";
     for (var key of Object.keys(tooltip)) {
-        formatedString += key+": ";
-        formatedString += "<b>"+tooltip[key]+"</b>";
-        formatedString += "<br>";
+        formattedString += key+": ";
+        formattedString += "<b>"+tooltip[key]+"</b>";
+        formattedString += "<br>";
     }
-    return formatedString
+    return formattedString
 }
