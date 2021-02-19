@@ -1,3 +1,9 @@
+"""
+This module handles the call to backend for retrieving data that will
+be displayed in the chart and the processing of this data as a DataFrame.
+
+"""
+
 import logging
 import numpy as np
 import re
@@ -6,12 +12,17 @@ from dku_data_processing.filtering import filter_dataframe
 from utils.df_column_naming import get_new_column_name
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO, format='%(asctime)s Custom Chart Geospatial Density  | %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s Custom Chart Geospatial Density  | %(levelname)s - %(message)s')
 
 
 def normalize(x):
     """
-    Will normalize data to have 75% of the values between 0 and 1
+    Linear scaling of the values to set the percentile 12.5% to 0 and the percentile 87.5% to 1.
+    Doing such lower the impact of outliers on color scale.
+
+    :param x: Array of values to normalize
+    :return: the normalized array of values
     """
     left_percentile = np.percentile(x, 12.5)
     right_percentile = np.percentile(x, 87.5)
@@ -23,26 +34,33 @@ def normalize(x):
 
 
 def wkt_parser(wkt_point):
+    """
+    Parsing function of the Well Known Text point representation
+
+    :param wkt_point: <str>
+        example: `POINT(-73.97237 40.64749)`
+    :return: A couple of values (longitude, latitude)
+    """
     if wkt_point is None:
-        return (None, None)
+        return None, None
     result = re.findall("POINT\(\s?(\S+)\s+(\S+)\s?\)", str(wkt_point))
     if len(result) < 1:
-        return (None, None)
+        return None, None
     else:
         return result[0]
 
 
-def extract_df(df, detail, filters, geopoint, tooltips):
+def prepare_df_to_display(df, detail, filters, geopoint, tooltips):
     """
+    Extract minimum amount of columns and values to send to front-end.
+    Apply filters, compute normalization, parse latitude, longitude and build tooltip.
 
-    Extract and select only necessary data to send to front-end.
-    Handle the filtering, normalizing, parsing and the tooltip.
-
-    :param detail:
-    :param df:
-    :param filters:
-    :param geopoint:
-    :param tooltips:
+    :param df: Input DataFrame
+    :param detail: Optional single column name of the column on which color will be computed
+    :param filters: Optional list of filters to apply to the DataFrame to select values
+    :param geopoint: Name of the column containing GeoPoint WKT objects
+    :param tooltips: List of columns to include in the tooltip value that will be displayed
+    :return: Data to send to front-end
     """
     # Get filtered dataframe
     if filters:
@@ -95,17 +113,18 @@ def extract_df(df, detail, filters, geopoint, tooltips):
     return geodata_object
 
 
-def fetch_geo_data(dss_dataset, geopoint, detail, tooltips, filters):
+def get_geodata_from_dataset(dss_dataset, geopoint, detail, tooltips, filters):
     """
+    Get the selected geospatial data that will be sent to front-end based on
+    necessary columns.
 
-    :param dss_dataset:
+    :param dss_dataset: DSS dataset from which values are extracted
     :param geopoint:
-    :param details:
-    :param tooltip:
+    :param detail:
+    :param tooltips:
     :param filters:
     :return:
     """
-
     schema = dss_dataset.read_schema()
     column_names = [dss_column['name'] for dss_column in schema]
     columns_to_retrieve = set()
@@ -134,8 +153,6 @@ def fetch_geo_data(dss_dataset, geopoint, detail, tooltips, filters):
     # Sampling should be the same as DSS by default
     df = dss_dataset.get_dataframe(sampling='head', limit=10000, columns=columns_to_retrieve)
 
-    geodata_object = extract_df(df, detail, filters, geopoint, tooltips)
+    geodata_object = prepare_df_to_display(df, detail, filters, geopoint, tooltips)
 
     return geodata_object
-
-

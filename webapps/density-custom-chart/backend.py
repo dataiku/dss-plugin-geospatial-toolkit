@@ -5,7 +5,7 @@ import traceback
 import logging
 import numpy as np
 
-from dku_data_processing.format import fetch_geo_data
+from dku_data_processing.format import get_geodata_from_dataset
 
 
 logger = logging.getLogger(__name__)
@@ -35,7 +35,7 @@ def get_geo_data():
         geopoint_column_name = config.get('geopointColumnName', None)
         tooltip_columns_names = config.get('tooltipColumnName', None)
         filters = config.get('filters', None)
-        geodata = fetch_geo_data(dataiku.Dataset(dataset_name), geopoint_column_name, details_column_name, tooltip_columns_names, filters)
+        geodata = get_geodata_from_dataset(dataiku.Dataset(dataset_name), geopoint_column_name, details_column_name, tooltip_columns_names, filters)
         return json.dumps(geodata, ignore_nan=True, default=convert_numpy_int64_to_int)
 
     except Exception as e:

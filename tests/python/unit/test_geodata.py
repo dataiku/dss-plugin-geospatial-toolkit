@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from dku_data_processing.format import wkt_parser, extract_df
+from dku_data_processing.format import wkt_parser, prepare_df_to_display
 
 
 def convert_numpy_int64_to_int(o):
@@ -45,7 +45,7 @@ def test_filtering_lead_to_empty_df():
                 {'column': 'longitude', 'type': 'NUMERICAL', 'treatAsAlphanum': False, 'isA': 'ua', 'adminLevel': 0}]
     detail = 'price'
     geopoint = 'coordinates'
-    geodata = extract_df(df, detail, filters, geopoint, tooltips)
+    geodata = prepare_df_to_display(df, detail, filters, geopoint, tooltips)
     assert len(geodata) == 0
 
 
@@ -77,7 +77,7 @@ def test_filtering_lead_to_non_empty_df():
                 {'column': 'longitude', 'type': 'NUMERICAL', 'treatAsAlphanum': False, 'isA': 'ua', 'adminLevel': 0}]
     detail = 'calculated_host_listings_count'
     geopoint = 'coordinates'
-    geodata = extract_df(df, detail, filters, geopoint, tooltips)
+    geodata = prepare_df_to_display(df, detail, filters, geopoint, tooltips)
     assert len(geodata) == 1
     assert geodata[0]['detail'] == 1
     assert len(geodata[0]['tooltip']) == 2
@@ -109,5 +109,5 @@ def test_badly_formatted_input_geopoint():
                 {'column': 'longitude', 'type': 'NUMERICAL', 'treatAsAlphanum': False, 'isA': 'ua', 'adminLevel': 0}]
     detail = 'calculated_host_listings_count'
     geopoint = 'coordinates'
-    geodata = extract_df(df, detail, filters, geopoint, tooltips)
+    geodata = prepare_df_to_display(df, detail, filters, geopoint, tooltips)
     assert len(geodata) == 2
