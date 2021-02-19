@@ -1,3 +1,10 @@
+"""
+Filtering module used for applying filters on data in the backend.
+
+Handle a variety of different filtering techniques based on the type of the filter.
+
+"""
+
 import logging
 import pandas as pd
 
@@ -11,10 +18,12 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s Custom Chart Geospat
 
 def numerical_filter(df, filter_):
     """
-    Apply a numerical filter defined by the dict `filter_`
+    Compute an boolean condition setting which rows of DataFrame `df` should remain based on
+    the numerical filter defined in the dict `filter_`.
+
     :param df: Pandas DataFrame containing core data
-    :param filter_: Dictionary defining the filters and coming from the UI
-    :return:
+    :param filter_: Dictionary defining the filters
+    :return: conditions: An intermediary object containing stating if the row is kept or not
     """
     conditions = []
     minimum_bound = filter_.get("minValue", None)
@@ -27,6 +36,14 @@ def numerical_filter(df, filter_):
 
 
 def alphanum_filter(df, filter_):
+    """
+    Compute an boolean condition setting which rows of DataFrame `df` should remain based on
+    the alphanum filter defined in the dict `filter_`.
+
+    :param df: Pandas DataFrame containing core data
+    :param filter_: Dictionary defining the filters
+    :return: conditions: An intermediary object containing stating if the row is kept or not
+    """
     conditions = []
     excluded_values = []
     for k, v in filter_['excludedValues'].items():
@@ -44,6 +61,14 @@ def alphanum_filter(df, filter_):
 
 
 def date_filter(df, filter_):
+    """
+    Compute an boolean condition setting which rows of DataFrame `df` should remain based on
+    the date filter defined in the dict `filter_`.
+
+    :param df: Pandas DataFrame containing core data
+    :param filter_: Dictionary defining the filters
+    :return: conditions: An intermediary object containing stating if the row is kept or not
+    """
     if filter_["dateFilterType"] == "RANGE":
         return date_range_filter(df, filter_)
     else:
@@ -51,6 +76,7 @@ def date_filter(df, filter_):
 
 
 def date_range_filter(df, filter_):
+    # TODO: Add tests on this function
     conditions = []
     if filter_["minValue"]:
         conditions += [df[filter_['column']] >= pd.Timestamp(filter_['minValue'], unit='ms')]
@@ -88,7 +114,11 @@ def special_date_filter(df, filter_):
 
 def apply_filter_conditions(df, conditions):
     """
-    return a function to apply filtering conditions on df
+    Filter a DataFrame based on the conditions generated computed from the filters.
+
+    :param df:
+    :param conditions: Conditions computed from filters
+    :return: Filtered DataFrame
     """
     if len(conditions) == 0:
         return df
@@ -100,7 +130,11 @@ def apply_filter_conditions(df, conditions):
 
 def filter_dataframe(df, filters):
     """
-    return the input dataframe df with filters applied to it
+    Filter a DataFrame based on the raw input filters.
+
+    :param df:
+    :param filters:
+    :return: Filtered DataFrame
     """
     for filter_ in filters:
         try:
