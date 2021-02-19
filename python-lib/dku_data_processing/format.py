@@ -16,6 +16,12 @@ logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s Custom Chart Geospatial Density  | %(levelname)s - %(message)s')
 
 
+def convert_numpy_int64_to_int(o):
+    if isinstance(o, np.int64):
+        return int(o)
+    raise TypeError
+
+
 def normalize(x):
     """
     Linear scaling of the values to set the percentile 12.5% to 0 and the percentile 87.5% to 1.

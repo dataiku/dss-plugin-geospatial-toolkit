@@ -1,27 +1,22 @@
 import dataiku
-from flask import request
-import simplejson as json
-import traceback
 import logging
 import numpy as np
+import simplejson as json
+import traceback
 
-from dku_data_processing.format import get_geodata_from_dataset
 
+from dku_data_processing.format import get_geodata_from_dataset, convert_numpy_int64_to_int
+from flask import request
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format='%(asctime)s Custom Chart Geospatial Density  | %(levelname)s - %(message)s')
 
 
-def convert_numpy_int64_to_int(o):
-    if isinstance(o, np.int64):
-        return int(o)
-    raise TypeError
-
-
 @app.route('/get_geo_data')
 def get_geo_data():
     """
-    Get the column of geopoints and send lat/long series to front end for display
+    Retrieve geospatial data based on user input parameters to be displayed in the chart.
+
     :return:
     """
     logger.info("Calling backend - get_geo_data... ")
