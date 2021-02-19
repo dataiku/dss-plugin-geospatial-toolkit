@@ -79,3 +79,22 @@
 .geo-chart-style {
 
 }
+
+.tooltip {
+    position: absolute;
+    visibility: hidden;
+    z-index: 1000;
+    text-align: left;
+    background-color: rgba(256, 256, 256, 1);
+    border-radius: 12px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 12px;
+
+}

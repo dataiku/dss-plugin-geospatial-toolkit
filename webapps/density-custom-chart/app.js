@@ -20,47 +20,26 @@ chartHandler.addUpdateEvent();
 
 const errorMessage = "No geodata column, please select a valid geodata column";
 
+// Declare tooltip div that will be used for tooltip display
+let tooltip = d3.select("#tooltip") // tooltip for the information of the point
+    .append("div")
+    .attr("class", "tooltip");
 
+// Initialise the map object
 chartHandler = new GeoDensityChart();
 chartHandler.initialiseMap();
 chartHandler.addLeafletLayer();
 chartHandler.addMousePosition();
 chartHandler.addScatterPlotLayer();
-
-let tooltip = d3.select("#tooltip") // tooltip for the information of the point
-    .append("div")
-    .attr("class", "tooltip")
-    .style("position", "absolute")
-    .style("visibility", "hidden")
-    .text("This tooltip is meant to be visible on hover of datapoints")
-    .style("z-index", 1000)
-    .style("text-align", "left")
-    .style("background-color", "rgba(256, 256, 256, 1)")
-    .style("border-radius", "12px")
-    .style("border-top-left-radius", "12px")
-    .style("border-top-right-radius", "12px")
-    .style("border-bottom-left-radius", "12px")
-    .style("border-bottom-right-radius", "12px")
-    .style("padding-left", "15px")
-    .style("padding-right", "15px")
-    .style("padding-top", "5px")
-    .style("padding-bottom", "5px")
-    .style("font-size", "12px");
-
 chartHandler.tooltip = tooltip;
-
 chartHandler.addSearchTrigger();
 chartHandler.addUpdateEvent();
 
 // letiables specific to the custom web app in DSS
-let webAppDesc = dataiku.getWebAppDesc()['chart']
+let webAppDesc = dataiku.getWebAppDesc()['chart'];
 let webAppConfig = {};
 let filters = {};
 
-
-function format_tooltip(tooltip){
-    return JSON.stringify(tooltip)
-}
 
 /**
  *
