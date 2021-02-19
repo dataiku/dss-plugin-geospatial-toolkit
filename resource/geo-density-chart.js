@@ -84,23 +84,32 @@ function GeoDensityChart(){
         // iterate in the layers of the map
         _mapPointer.eachLayer(function(layer){
             if (layer.options.id){
+                console.log("[MapTile] Received previous maptile id:", layer.options.id);
                 let url;
-                _mapPointer.removeLayer(layer);
+                let newBaseMap;
+                console.log("[MapTile] Received asked maptile id", mapTile);
                 switch (mapTile) {
                     case 'cartodb-positron':
                         url = 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png';
+                        newBaseMap = "light_all";
                         break;
                     case 'cartodb-dark':
                         url = 'http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png';
+                        newBaseMap = "dark_all";
                         break;
                 }
-                L.tileLayer(url, {
-                    maxZoom: 18,
-                    attribution: 'Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
-                    id: 'light_all',
-                    tileSize: 512,
-                    zoomOffset: -1
-                }).addTo(_mapPointer).set;
+                let previousBaseMap = layer.options.id;
+                if (previousBaseMap !== newBaseMap){
+                    console.log("[MapTile] Building new map tilelayer with id", newBaseMap);
+                    _mapPointer.removeLayer(layer);
+                    L.tileLayer(url, {
+                        maxZoom: 18,
+                        attribution: 'Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+                        id: newBaseMap,
+                        tileSize: 512,
+                        zoomOffset: -1
+                    }).addTo(_mapPointer).set;
+                }
             }
         });
     };
@@ -207,7 +216,7 @@ function GeoDensityChart(){
             .enter()
             .append("circle")
             .attr("cx", function(d) {
-                _tooltip.html("<div><strong>longitude</strong>: " + d.long + "<br><strong>latitude</strong>: "+d.lat+
+                _tooltip.html("<div>Lon: <strong>" + d.long + "</strong><br>Lat: <strong>"+d.lat+"</strong>" +
                     formatTooltip(d.tooltip) + "</div>");
                 return _mapPointer.latLngToLayerPoint([d.lat, d.long]).x
             })
@@ -217,8 +226,8 @@ function GeoDensityChart(){
             .attr("id", "circleBasicTooltip")
             .on('mouseover', function() { // handle the event user mouse is over the circle data point
                 _tooltip.style("visibility", "visible")
-                    .style("left", (d3.event.pageX + 50) + "px")
-                    .style("top", (d3.event.pageY - 28) + "px");
+                    .style("left", (d3.event.pageX+15) + "px")
+                    .style("top", (d3.event.pageY-25) + "px");
                 d3.select(this).transition()
                     .duration('50')
                     .attr("fill", "red")
@@ -279,19 +288,17 @@ function GeoDensityChart(){
  * Format the tooltip to be displayed in HTML
  * tooltip = {"reviews_per_month": 0.92, "room_type": "Private Room"};
  * @param tooltip
- * @returns {number}
+ * @returns {string}
  */
 function formatTooltip(tooltip){
-    if (!tooltip){
-        return
+    if (tooltip && Object.keys(tooltip).length === 0 && tooltip.constructor === Object) {
+        return ""
     }
-    var formatedString = "";
-    formatedString += "<div>";
+    var formattedString = "<hr>";
     for (var key of Object.keys(tooltip)) {
-        formatedString += "<b>"+key+"</b>: ";
-        formatedString += tooltip[key];
-        formatedString += "<br>";
+        formattedString += key+": ";
+        formattedString += "<b>"+tooltip[key]+"</b>";
+        formattedString += "<br>";
     }
-    formatedString += "</div>";
-    return formatedString
+    return formattedString
 }

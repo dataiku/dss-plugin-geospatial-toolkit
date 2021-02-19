@@ -28,6 +28,7 @@
 
         <!-- End of Parameter controls: Intensity and Radius -->
 
+
         <!-- Map BackGround Selector -->
 
         <div class="mbot20" style="padding-bottom: 5px; margin-bottom: 0; overflow: hidden;">
@@ -56,28 +57,6 @@
         </div>
 
         <!-- End of Map BackGround Selector -->
-
-        <!-- Tooltip -->
-    <ng-include ng-if="canAnimate" src="'/templates/simple_report/animation-options.html'"></ng-include>
-    <ng-include ng-if="canFacet" src="'/templates/simple_report/facet-controls.html'"></ng-include>
-
-    <div class="mbot20" dku-foldable open="false" open-on-drag-enter>
-        <h2 class="settings-section-title foldable-title" ng-click="foldableToggle()">
-            <i class="{{foldableOpen ? 'icon-caret-down' : 'icon-caret-right'}}" />
-            Tooltip
-        </h2>
-
-        <div ng-show="foldableOpen">
-            <div class="chartdef-dropzone chartdef-dropzone-vertical" ng-class="{'empty':chart.def.uaTooltip.length==0, 'notempty': chart.def.uaTooltip.length != 0}">
-                <div data-block="dim1-placeholder"  class="empty-placeholder no-icon">
-                    Drop to add tooltip measures
-                </div>
-                <div class="chartdef-dropzone-main qa_charts_tooltip-dropzone" multi-ua-zone-no-opts list="chart.def.uaTooltip" accept-callback="acceptUaTooltip"></div>
-            </div>
-        </div>
-    </div>
-
-        <!-- End of tooltip selector -->
 
         <!-- Color Scale Selector -->
 
@@ -116,5 +95,30 @@
         </div>
 
         <!-- End of Color Scale Selector -->
+
+
+        <!-- Tooltip -->
+    <ng-include ng-if="canAnimate" src="'/templates/simple_report/animation-options.html'"></ng-include>
+    <ng-include ng-if="canFacet" src="'/templates/simple_report/facet-controls.html'"></ng-include>
+
+    <div class="mbot20" dku-foldable open="false" open-on-drag-enter>
+        <h2 class="settings-section-title foldable-title" ng-click="foldableToggle()">
+            <i class="{{foldableOpen ? 'icon-caret-down' : 'icon-caret-right'}}" />
+            Tooltip
+        </h2>
+
+        <div ng-show="foldableOpen">
+            <div class="chartdef-dropzone chartdef-dropzone-vertical" ng-class="{'empty':chart.def.uaTooltip.length==0, 'notempty': chart.def.uaTooltip.length != 0}">
+                <div data-block="dim1-placeholder"  class="empty-placeholder no-icon">
+                    Drop to add tooltip measures
+                </div>
+                <div class="chartdef-dropzone-main qa_charts_tooltip-dropzone" multi-ua-zone-no-opts list="chart.def.uaTooltip" accept-callback="acceptUaTooltip"></div>
+            </div>
+        </div>
+    </div>
+
+        <!-- End of tooltip selector -->
+
+
 
 </form>

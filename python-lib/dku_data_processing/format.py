@@ -108,7 +108,7 @@ def fetch_geo_data(dss_dataset, geopoint, detail, tooltips, filters):
 
     schema = dss_dataset.read_schema()
     column_names = [dss_column['name'] for dss_column in schema]
-    column_to_retrieves = set()
+    columns_to_retrieve = set()
 
     if geopoint is None:
         logger.warning("The column containing the geopoint must be specified.")
@@ -118,20 +118,21 @@ def fetch_geo_data(dss_dataset, geopoint, detail, tooltips, filters):
         logger.warning("The column containing the geopoint must be part of the dataset.")
         return []
 
-    column_to_retrieves.add(geopoint)
+    columns_to_retrieve.add(geopoint)
 
     if (tooltips is not None) and (tooltips != []):
         for col_ in tooltips:
-            column_to_retrieves.add(col_['column'])
+            columns_to_retrieve.add(col_['column'])
 
     if detail is not None:
-        column_to_retrieves.add(detail)
+        columns_to_retrieve.add(detail)
 
     if (filters is not None) and (filters != []):
         for col_ in filters:
-            column_to_retrieves.add(col_['column'])
+            columns_to_retrieve.add(col_['column'])
 
-    df = dss_dataset.get_dataframe(limit=1000000, columns=column_to_retrieves)
+    # Sampling should be the same as DSS by default
+    df = dss_dataset.get_dataframe(sampling='head', limit=10000, columns=columns_to_retrieve)
 
     geodata_object = extract_df(df, detail, filters, geopoint, tooltips)
 

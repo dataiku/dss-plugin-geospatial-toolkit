@@ -1,10 +1,5 @@
 @import '/static/public/styles/1.0.0/dku-styles.css';
 
-#graph-stats {
-    position: absolute;
-    left: 10px;
-}
-
 #spinner {
     display: none;
     position: absolute;
