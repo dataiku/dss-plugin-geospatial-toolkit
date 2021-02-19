@@ -1,7 +1,7 @@
 {
     "meta": {
         "label": "Density map",
-        "description": "Generate a density chart of geospatial data. Takes as input WKT points.",
+        "description": "Generate a density map from geospatial data. Takes as input WKT points.",
         "icon": "icon-globe"
     },
 
