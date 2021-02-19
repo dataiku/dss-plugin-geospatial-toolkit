@@ -1,7 +1,9 @@
 """
 Filtering module used for applying filters on data in the backend.
 
-Handle a variety of different filtering techniques based on the type of the filter.
+Handle a variety of different filtering techniques based on the type of the filter. The main
+function of the module is filter_dataframe(df, filters) that filter the DataFrame based on filters
+received from the front-end.
 
 """
 
@@ -147,5 +149,5 @@ def filter_dataframe(df, filters):
         except Exception as e:
             raise Exception("Error with filter on column {} - {}".format(filter_["column"], e))
     if df.empty:
-        logger.info("Dataframe is empty after filtering")
+        logger.info("DataFrame is empty after filtering")
     return df
