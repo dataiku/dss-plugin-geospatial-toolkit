@@ -78,7 +78,13 @@ def date_filter(df, filter_):
 
 
 def date_range_filter(df, filter_):
-    # TODO: Add tests on this function
+    """
+    Build the intermediate conditions object that represents the filters applied on the DataFrame.
+
+    :param df:
+    :param filter_:
+    :return:
+    """
     conditions = []
     if filter_["minValue"]:
         conditions += [df[filter_['column']] >= pd.Timestamp(filter_['minValue'], unit='ms')]
@@ -88,6 +94,13 @@ def date_range_filter(df, filter_):
 
 
 def special_date_filter(df, filter_):
+    """
+    Handle a specific set of filters for dates expressed using specific fields.
+
+    :param df:
+    :param filter_:
+    :return:
+    """
     conditions = []
     excluded_values = []
     for k, v in filter_['excludedValues'].items():

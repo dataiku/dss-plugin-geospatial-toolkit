@@ -1,21 +1,6 @@
-/*
-Provide a logical layer between leaflet and the Dataiku custom chart environment
-
-Usage example:
-chartHandler = new GeoDensityChart();
-chartHandler.initialiseMap();
-chartHandler.addLeafletLayer();
-chartHandler.addMousePosition();
-chartHandler.addScatterPlotLayer();
-chartHandler.addSearchTrigger();
-chartHandler.addUpdateEvent();
-// Then pass this object to the full update function
- */
-
-
-/*
-    Geospatial Density Plot:
-    Front-end application logic, using predefined structure for the DSS custom chart.
+/**
+ *
+ *
  */
 
 const errorMessage = "No geodata column, please select a valid geodata column";
@@ -35,16 +20,16 @@ chartHandler.tooltip = tooltip;
 chartHandler.addSearchTrigger();
 chartHandler.addUpdateEvent();
 
-// letiables specific to the custom web app in DSS
+// Variables specific to the custom web app in DSS
 let webAppDesc = dataiku.getWebAppDesc()['chart'];
 let webAppConfig = {};
 let filters = {};
 
 
 /**
- *
- * @param configEvent
- * @param chartHandler
+ * Main request to backend when data needs to be updated. (Non-blocking and potentially long)
+ * @param configEvent : The config object used to deduce actions from user parameters
+ * @param chartHandler : The chart handler object used to interact with map and layers in front end
  */
 function updateCoreData(configEvent, chartHandler) {
 

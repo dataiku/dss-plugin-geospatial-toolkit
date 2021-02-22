@@ -1,6 +1,5 @@
 import dataiku
 import logging
-import numpy as np
 import simplejson as json
 import traceback
 

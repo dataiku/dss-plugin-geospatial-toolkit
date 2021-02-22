@@ -1,3 +1,31 @@
+/**
+
+ GeoDensityChart:
+
+ Provide a logical layer between Leaflet and the Dataiku custom chart environment.
+
+ USAGE:
+
+     Initialise the map:
+         chartHandler = new GeoDensityChart();
+         chartHandler.initialiseMap();
+         chartHandler.addLeafletLayer();
+         chartHandler.addMousePosition();
+         chartHandler.addScatterPlotLayer();
+         chartHandler.addSearchTrigger();
+         chartHandler.addUpdateEvent();
+
+     Update parameters:
+         chartHandler.colorPalette = colorPalette;
+         chartHandler.intensity = configEvent.intensity;
+         chartHandler.radius = configEvent.radius;
+         chartHandler.gradient = convertPaletteToGradient(colorPalette);
+
+     Update visualisation:
+        chartHandler.render()
+
+ */
+
 function GeoDensityChart(){
 
     let _initialised = false;
@@ -59,10 +87,16 @@ function GeoDensityChart(){
         get: function(){ return _mapPointer;}
     });
 
+    /**
+     * Part of the initialisation of the chart
+     */
     this.initialiseMap = function(){
         _mapPointer = L.map(_mapId).setView([42, -17], 1);
     };
 
+    /**
+     * Part of the initialisation of the chart
+     */
     this.centerMap = function(){
         if (!_coreData || _coreData.length < 1){
             return
@@ -70,6 +104,9 @@ function GeoDensityChart(){
         _mapPointer.setView([_coreData[0][0], _coreData[0][1]], 10);
     };
 
+    /**
+     * Part of the initialisation of the chart
+     */
     this.addLeafletLayer = function(){
         L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png', {
             maxZoom: 18,
@@ -80,8 +117,13 @@ function GeoDensityChart(){
         }).addTo(_mapPointer).set;
     };
 
+    /**
+     * Update the Leaflet style of the map based on the UI input parameter.
+     * For now, only support two kind of types.
+     * @param mapTile
+     */
     this.setLeafletMaptile = function(mapTile){
-        // iterate in the layers of the map
+        // Iterate in the layers of the map
         _mapPointer.eachLayer(function(layer){
             if (layer.options.id){
                 console.log("[MapTile] Received previous maptile id:", layer.options.id);
@@ -114,6 +156,9 @@ function GeoDensityChart(){
         });
     };
 
+    /**
+     * Add link to the mouse position event to keep track of the mouse
+     */
     this.addMousePosition = function(){
         let Position = L.Control.extend({
             _container: null,
@@ -136,18 +181,30 @@ function GeoDensityChart(){
         _mapPointer.addControl(_position);
     };
 
+    /**
+     * Part of the initialisation of the chart:
+     * Add the scatter plot overlay over the map to display closest point.
+     * The overlay is a svg keeping track of the mouse position
+     */
     this.addScatterPlotLayer = function(){
         L.svg({clickable:true}).addTo(_mapPointer);
         const overlay = d3.select(_mapPointer.getPanes().overlayPane);
         _svgPointer = overlay.select('svg').attr("pointer-events", "auto");
     };
 
+    /**
+     * Part of the initialisation of the chart:
+     * Analyse the mouse event to compute the neighborhood of the cursor.
+     * The neighborhood can either be the closest point or a set of points at
+     * fixed distance from the cursor.
+     */
     this.addSearchTrigger = function(){
         _mapPointer.addEventListener('mousemove', (event) => {
             let lat = Math.round(event.latlng.lat * 100000) / 100000;
             let long = Math.round(event.latlng.lng * 100000) / 100000;
             _position.updateHTML(lat, long);
             console.log('Reading lat long for quadtree search:', lat, long);
+            // Compute the neighborhood based on the pre-built quadtree
             let closestMarker = this.getNeighbors(lat, long, 1);
             if (!closestMarker) {
                 console.warn('Quadtree not able to find closest point');
@@ -163,6 +220,15 @@ function GeoDensityChart(){
         });
     };
 
+    /**
+     * Custom function to search for a set of point in a rectangle around a center coordinate.
+     * @param quadtree
+     * @param xmin
+     * @param ymin
+     * @param xmax
+     * @param ymax
+     * @returns {[]}
+     */
     this.search = function(quadtree, xmin, ymin, xmax, ymax) {
         const results = [];
         quadtree.visit(function(node, x1, y1, x2, y2) {
@@ -180,7 +246,16 @@ function GeoDensityChart(){
         return results;
     };
 
-    this.getNeighbors = function(lat, long, mode=0){
+    /**
+     * Compute the closest point(s) with respect to the type of neighborhood expected
+     * @param lat: Center point latitude
+     * @param long: Center point longitude
+     * @param mode:
+     *      1 - Closest point from cursor (None if no point at all)
+     *      2 - The set of points in the rectangular search window with fixed search radius (None if no points in search window)
+     * @returns {*[]|(*|number|bigint)[]}
+     */
+    this.getNeighbors = function(lat, long, mode=1){
         // If no quadtree defined or quadtree is empty return no neighbors
         if (!_quadtree || _quadtree.size() === 0){
             return [];
@@ -196,17 +271,11 @@ function GeoDensityChart(){
         }
     };
 
+    /**
+     * Display the neighborhood on svg overlay
+     */
     this.displayLocal = function(){
-        /*
-         * Display only the local neighbors of the mouse. Rendering of the full scatter plot is too
-         * resource intensive, therefore use this function to display a scatter plot of one point only.
-         * Can be extended to several points based on quadtree methods.
-         *
-         * Inputs:
-         *      svg: A link to the HTML element containing the D3 scatter plot layer
-         *      closestMarker: The single element we need to display using the scatter plot
-         *          example: [-45.873, 3.894]
-         */
+
         console.log("Call to displayLocal ...");
         d3.selectAll("circle").remove();
         // Define the d3 dynamics around the geospatial data points (rendering and events)
@@ -255,6 +324,9 @@ function GeoDensityChart(){
         })
     };
 
+    /**
+     * Render the heatmap. Take into account pre-stored geospatial data and visual layout parameters.
+     */
     this.render = function(){
         _quadtree = d3.quadtree()
             .extent([[-100, -100], [100, 100]])
@@ -273,6 +345,9 @@ function GeoDensityChart(){
         _initialised = true;
     };
 
+    /**
+     * Clear heatmap layer.
+     */
     this.clear = function(){
         _coreData = [];
         _quadtree = null;

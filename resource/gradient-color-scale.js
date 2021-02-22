@@ -2,11 +2,6 @@
 Reproduce the logic of the color picker selection and color display
  */
 
-/**
- *
- * @param colorPalette
- * @returns {{}}
- */
 function convertColorBrewerPaletteToGradient(colorPalette) {
     let colorScale = d3.scaleQuantize()
         .range(colorbrewer[colorPalette][9])
