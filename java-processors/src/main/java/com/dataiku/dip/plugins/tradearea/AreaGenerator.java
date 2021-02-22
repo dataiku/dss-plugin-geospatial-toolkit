@@ -66,9 +66,9 @@ class RectangleAreaGenerator extends AreaGenerator {
     public RectangleAreaGenerator(double width, double height){
         if (width < 0 || height < 0){
             throw new IllegalArgumentException(
-                            "The height and width of the trade area must be strictly greater than 0.\n"+
+                            "The height and width of the trade area must be greater than 0. "+
                             "(Received height value is equal to "+ height +
-                            "and width value is equal to "+ width+")");
+                            " and width value is equal to "+ width+")");
         }
         else if (width == 0 || height == 0){
             logger.info("Rectangle Area Generator: Received invalid parameters as input.");
@@ -125,7 +125,7 @@ class CircleAreaGenerator extends AreaGenerator {
     public CircleAreaGenerator(double radius){
         if (radius < 0){
             throw new IllegalArgumentException(
-                            "The radius of the trade area must be strictly greater than 0."+
+                            "The radius of the trade area must be greater than 0. "+
                             "(Received radius value is equal to "+ radius+")");
         }
         if (radius == 0){
