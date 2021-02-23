@@ -13,7 +13,7 @@ function convertColorBrewerPaletteToGradient(colorPalette) {
     return gradient
 }
 
-dkuColorPaletteContinuous = {"palettes": [
+const dkuColorPaletteContinuous = {"palettes": [
         {"id": "default", "name": "Default", "colors": ['#9999CC', '#00003c'], "category": "Built-in palettes" },
         {"id": "default_rev","name": "Default (rev)","colors": ['#00003c', '#9999CC'], "category": "Built-in palettes" },
         {"id": "ryg1","name": "Red-green","colors": ['#EA1111', '#EEEE11', '#11CA11'], "category": "Built-in palettes" },
