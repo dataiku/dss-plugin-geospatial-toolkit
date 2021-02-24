@@ -54,7 +54,10 @@ dataiku.webappBackend = (function() {
             .then(response => {
                 if (response.status == 502) {
                     throw Error("Webapp backend not started");
-                } else if (!response.ok) {
+                } else if (response.status == 414) {
+                    throw Error("Exclude filter might be too long, select at least one value");
+                }
+                else if (!response.ok) {
                     response.text().then(text => dataiku.webappMessages.displayFatalError(`Backend error:\n${text}.\nCheck backend log for more information.`))
                     throw Error("Response not ok!")
                 }
