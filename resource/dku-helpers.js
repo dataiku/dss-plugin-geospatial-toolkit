@@ -12,22 +12,6 @@ function checkMandatoryParameters(param, webAppConfig) {
     }
 }
 
-function checkWebAppParameters(webAppConfig, webAppDesc) {
-    if (webAppDesc.topBarParams) webAppDesc.topBarParams.forEach(p => {checkMandatoryParameters(p, webAppConfig)});
-    if (webAppDesc.leftBarParams) webAppDesc.leftBarParams.forEach(p => {checkMandatoryParameters(p, webAppConfig)});
-}
-
-function checkWebAppConfig(webAppConfig) {
-    if (webAppConfig['source'] === webAppConfig['target']) {
-        throw Error("Columns must be different")
-    }
-}
-
-function quadraticScalingFunction(min, max, total, value) {
-    if (max === min) return 0;
-    let scale = 1 / (max - min);
-    return Math.pow(Math.max(0,(value - min)*scale), 2);
-}
 
 function isEqual(object1, object2) {
     return JSON.stringify(object1) === JSON.stringify(object2)
