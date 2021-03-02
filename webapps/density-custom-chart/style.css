@@ -26,23 +26,6 @@
     100% { transform: rotate(360deg); }
 }
 
-.user-message-style {
-    z-index: 1500;
-    background-color: #28a9dd;
-    position: absolute;
-    top: 0px;
-    left: -1px;
-    margin-top: 10px;
-    width: 100%;
-    text-align: center;
-    padding: 10px;
-    font-family: 'SourceSansPro';
-    font-weight: 500;
-    font-size: 14px;
-    color: #ffffff;
-    box-sizing: border-box;
-}
-
 .fatal-error-message-style {
     z-index: 1500;
     background-color: #FF0000;
@@ -53,7 +36,6 @@
     width: 100%;
     text-align: center;
     padding: 10px;
-    font-family: 'SourceSansPro';
     font-weight: 500;
     font-size: 14px;
     color: #ffffff;
@@ -70,7 +52,6 @@
     width: 100%;
     text-align: center;
     padding: 10px;
-    font-family: 'SourceSansPro';
     font-weight: 500;
     font-size: 14px;
     color: #ffffff;
