@@ -1,3 +1,3 @@
 var app = angular.module('geospatial.density', []);
 
-app.controller('MyCustomFormController', ['$scope', function($scope) {}]);
+app.controller('DensityChartCustomController', ['$scope', function($scope) {}]);
