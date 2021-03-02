@@ -26,7 +26,8 @@ let filters = {};
  * @param chartHandler : The chart handler object used to interact with map and layers in front end
  */
 function updateCoreData(configEvent, chartHandler) {
-
+    // Launch spinner
+    $("#spinner").show();
     console.log("Starting query of server to fetch core data ....");
     dataiku.webappBackend.get('get_geo_data', {
         "config": JSON.stringify(configEvent.getConfigAsJson())
@@ -103,7 +104,6 @@ window.addEventListener('message', function(event) {
         chartHandler.gradient = convertPaletteToGradient(colorPalette);
 
         if (configEvent.needCoreDataUpdate){
-            $("#spinner").show();
             console.log("Request of a full backend recompute of the data");
             updateCoreData(configEvent, chartHandler);
             configEvent.needCoreDataUpdate = false;
