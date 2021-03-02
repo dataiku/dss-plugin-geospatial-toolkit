@@ -55,7 +55,7 @@ def alphanum_filter(df, filter_):
         else:
             if v:
                 conditions += [~df[filter_['column']].isnull()]
-    if len(excluded_values) > 0:
+    if excluded_values:
         if filter_['columnType'] == 'NUMERICAL':
             excluded_values = [float(x) for x in excluded_values]
         conditions += [~df[filter_['column']].isin(excluded_values)]
@@ -106,7 +106,7 @@ def special_date_filter(df, filter_):
     for k, v in filter_['excludedValues'].items():
         if v:
             excluded_values += [k]
-    if len(excluded_values) > 0:
+    if excluded_values:
         if filter_["dateFilterType"] == "YEAR":
             conditions += [~df[filter_['column']].dt.year.isin(excluded_values)]
         elif filter_["dateFilterType"] == "QUARTER_OF_YEAR":
