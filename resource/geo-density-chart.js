@@ -369,11 +369,9 @@ function formatTooltip(tooltip){
     if (tooltip && Object.keys(tooltip).length === 0 && tooltip.constructor === Object) {
         return ""
     }
-    var formattedString = "<hr>";
-    for (var key of Object.keys(tooltip)) {
-        formattedString += key+": ";
-        formattedString += "<b>"+tooltip[key]+"</b>";
-        formattedString += "<br>";
+    let formattedString = "<hr>";
+    for (const [key, value]  of Object.entries(tooltip)) {
+        formattedString += `${key}: <b>${value}</b><br>`
     }
     return formattedString
 }
