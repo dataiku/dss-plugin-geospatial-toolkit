@@ -8,11 +8,12 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s Custom Chart Geospat
 
 def get_unique_column_name(df, prefix=""):
     """
-    Generate a column name starting by prefix that is not already existing in the DataFrame.
+    This function generates a name that will be a column in the input dataframe and hence should be checked
+     in order not to generate an overwrite of a column. The generated name will start with the string `prefix`.
 
     :param df: Input DataFrame
     :param prefix: A user selected prefix
-    :return: A valid name to add as a DataFrame column
+    :return: A valid name to add as a DataFrame column avoiding potential overwrite of a column
     """
     name_is_taken = defaultdict(bool)
     columns = list(df.columns)
