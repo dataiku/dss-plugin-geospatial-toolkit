@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format='%(asctime)s Custom Chart Geospatial Density  | %(levelname)s - %(message)s')
 
 
-@app.route('/get_geo_data')
+@app.route('/get_geo_data', methods = ['POST'])
 def get_geo_data():
     """
     Retrieve geospatial data based on user input parameters to be displayed in the chart.

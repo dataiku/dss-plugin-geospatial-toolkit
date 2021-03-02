@@ -45,7 +45,7 @@ dataiku.webappBackend = (function() {
 
     function get(path, args={}, displayErrors=true) {
         return fetch(`${getUrl(path)}?${$.param(args)}`, {
-            method: 'GET',
+            method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
