@@ -8,9 +8,9 @@
         "author": "Dataiku",
         "icon": "icon-globe",
         "licenseInfo": "Apache Software License",
-        "url": "https://www.dataiku.com/product/plugins/your-plugin-id/",
+        "url": "https://www.dataiku.com/product/plugins/geospatial-toolkit/",
         "tags": [
-            "Geospatial"
+            "Geospatial", "Geo", "Vizualisation"
         ],
         "supportLevel": "NOT_SUPPORTED"
     }
