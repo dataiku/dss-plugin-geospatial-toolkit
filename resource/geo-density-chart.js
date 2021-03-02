@@ -91,7 +91,8 @@ function GeoDensityChart(){
      * Part of the initialisation of the chart
      */
     this.initialiseMap = function(){
-        _mapPointer = L.map(_mapId).setView([42, -17], 1);
+        const defaultCoords = [42, -17];
+        _mapPointer = L.map(_mapId).setView(defaultCoords, 1);
     };
 
     /**
