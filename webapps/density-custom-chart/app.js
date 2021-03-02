@@ -5,11 +5,6 @@
 
 const errorMessage = "No geodata column, please select a valid geodata column";
 
-// Declare tooltip div that will be used for tooltip display
-let tooltip = d3.select("#tooltip") // tooltip for the information of the point
-    .append("div")
-    .attr("class", "tooltip");
-
 // Initialise the map object
 chartHandler = new GeoDensityChart();
 chartHandler.initialiseMap();
