@@ -95,10 +95,6 @@
     background:transparent;
 }
 
-.geo-chart-style {
-
-}
-
 .tooltip {
     position: absolute;
     visibility: hidden;
@@ -116,4 +112,15 @@
     padding-bottom: 5px;
     font-size: 12px;
 
+}
+
+
+.empty-background-image-style {
+    padding-top: 50px;
+    width: 40%;
+}
+
+.map-style {
+    width: 100%;
+    height: 100%;
 }

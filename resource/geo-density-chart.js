@@ -36,7 +36,6 @@ function GeoDensityChart(){
     let _closestMarker;
     let _heatMapLayer;
     let _position;
-    let _tooltip;
     let _coreData = [];
 
     let _intensity;
@@ -56,11 +55,6 @@ function GeoDensityChart(){
     Object.defineProperty(this, 'coreData', {
         get: function(){ return _coreData;},
         set: function(val){ _coreData = val;}
-    });
-
-    Object.defineProperty(this, 'tooltip', {
-        get: function(){ return _tooltip;},
-        set: function(val){ _tooltip = val;}
     });
 
     Object.defineProperty(this, 'intensity', {
@@ -370,7 +364,7 @@ function formatTooltip(closestMarker){
     if (!closestMarker?.tooltip || !Object.keys(closestMarker.tooltip).length) {
         return tooltipHTML
     }
-    tooltipHTML += "<hr>"
+    tooltipHTML += "<hr>";
     for (const [key, value]  of Object.entries(closestMarker.tooltip)) {
         tooltipHTML += `${key}: <b>${value}</b><br>`
     }

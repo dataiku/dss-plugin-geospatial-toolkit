@@ -87,7 +87,6 @@ chartHandler.initialiseMap();
 chartHandler.addLeafletLayer();
 chartHandler.addMousePosition();
 chartHandler.addScatterPlotLayer();
-chartHandler.tooltip = tooltip;
 chartHandler.addSearchTrigger();
 chartHandler.addUpdateEvent();
 
