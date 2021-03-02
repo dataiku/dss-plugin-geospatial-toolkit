@@ -5,20 +5,6 @@
 
 const errorMessage = "No geodata column, please select a valid geodata column.";
 
-// Initialise the map object
-chartHandler = new GeoDensityChart();
-chartHandler.initialiseMap();
-chartHandler.addLeafletLayer();
-chartHandler.addMousePosition();
-chartHandler.addScatterPlotLayer();
-chartHandler.tooltip = tooltip;
-chartHandler.addSearchTrigger();
-chartHandler.addUpdateEvent();
-
-// Variables specific to the custom web app in DSS
-let webAppConfig = {};
-let filters = {};
-
 function showErrorMessage(color, error){
     $('#error-message').css("background-color", color);
     dataiku.webappMessages.displayFatalError(error);
@@ -31,6 +17,24 @@ function hideErrorMessage(){
 
 function hideSpinner(){
     $("#spinner").hide();
+}
+
+function setConfigEvent(webAppConfig, configEvent, eventData, filters) {
+    if (!('chart' in webAppConfig)) {
+        configEvent.maptile = 'cartodb-positron';
+    } else {
+        configEvent.maptile = webAppConfig['chart']['def']['mapOptions']['tilesLayer'];
+    }
+
+    configEvent.intensity = webAppConfig['intensity'];
+    configEvent.radius = webAppConfig['radius'];
+    configEvent.colorPalette = eventData['colorOptions']['colorPalette'];
+
+    configEvent.datasetName = webAppConfig['dataset'];
+    configEvent.detailsColumnName = webAppConfig['details_column_name'];
+    configEvent.tooltipColumnName = eventData['uaTooltip'];
+    configEvent.filters = filters;
+    configEvent.geopointColumnName = webAppConfig['geopoint_column_name'];
 }
 
 /**
@@ -73,11 +77,28 @@ function updateCoreData(configEvent, chartHandler) {
         });
 }
 
+// Initialise the map object
+chartHandler = new GeoDensityChart();
+chartHandler.initialiseMap();
+chartHandler.addLeafletLayer();
+chartHandler.addMousePosition();
+chartHandler.addScatterPlotLayer();
+chartHandler.tooltip = tooltip;
+chartHandler.addSearchTrigger();
+chartHandler.addUpdateEvent();
+
+// Variables specific to the custom web app in DSS
+let webAppConfig = {};
+let filters = {};
+
 configEvent = new ConfigEvent();
 
 // Main rendering loop
 let eventData;
 window.parent.postMessage("sendConfig", "*");
+
+
+
 window.addEventListener('message', function(event) {
 
     if (event.data) {
@@ -88,21 +109,7 @@ window.addEventListener('message', function(event) {
         webAppConfig = eventData['webAppConfig'];
         filters = eventData['filters'];
 
-        if (!('chart' in webAppConfig)){
-            configEvent.maptile = 'cartodb-positron';
-        } else {
-            configEvent.maptile = webAppConfig['chart']['def']['mapOptions']['tilesLayer'];
-        }
-
-        configEvent.intensity = webAppConfig['intensity'];
-        configEvent.radius = webAppConfig['radius'];
-        configEvent.colorPalette = eventData['colorOptions']['colorPalette'];
-
-        configEvent.datasetName = webAppConfig['dataset'];
-        configEvent.detailsColumnName = webAppConfig['details_column_name'];
-        configEvent.tooltipColumnName = eventData['uaTooltip'];
-        configEvent.filters = filters;
-        configEvent.geopointColumnName = webAppConfig['geopoint_column_name'];
+        setConfigEvent(webAppConfig, configEvent, eventData, filters);
 
         let colorPalette = configEvent.colorPalette;
         chartHandler.colorPalette = colorPalette;
