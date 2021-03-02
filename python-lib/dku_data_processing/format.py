@@ -96,8 +96,8 @@ def prepare_df_to_display(df, detail, filters, geopoint, tooltips):
 
     # Parse longitude and latitude from WKT geopoint column
     parsed_lat_long_df = df[geopoint].apply(wkt_parser)
-    df[new_longitude_column] = parsed_lat_long_df.apply(lambda x: x[0]).apply(lambda x: convert(x))
-    df[new_latitude_column] = parsed_lat_long_df.apply(lambda x: x[1]).apply(lambda x: convert(x))
+    df[new_longitude_column] = parsed_lat_long_df.apply(lambda x: x[0]).apply(convert)
+    df[new_latitude_column] = parsed_lat_long_df.apply(lambda x: x[1]).apply(convert)
 
     # Handle tooltip
     tooltip_column_to_keep = set()
