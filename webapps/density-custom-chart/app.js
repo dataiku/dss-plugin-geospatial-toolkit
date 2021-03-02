@@ -3,7 +3,7 @@
  *
  */
 
-const errorMessage = "No geodata column, please select a valid geodata column";
+const errorMessage = "No geodata column, please select a valid geodata column.";
 
 // Initialise the map object
 chartHandler = new GeoDensityChart();
@@ -19,6 +19,19 @@ chartHandler.addUpdateEvent();
 let webAppConfig = {};
 let filters = {};
 
+function showErrorMessage(color, error){
+    $('#error-message').css("background-color", color);
+    dataiku.webappMessages.displayFatalError(error);
+}
+
+function hideErrorMessage(){
+    $("#error-message").text = "";
+    $("#error-warning-view").hide();
+}
+
+function hideSpinner(){
+    $("#spinner").hide();
+}
 
 /**
  * Main request to backend when data needs to be updated. (Non-blocking and potentially long)
@@ -46,21 +59,18 @@ function updateCoreData(configEvent, chartHandler) {
                     configEvent.needMapCentering = false;
                 }
                 chartHandler.initialised = true;
-                document.getElementById("error-message").text = "";
-                document.getElementById("error-warning-view").style.display = "none";
-                document.getElementById("spinner").style.display = "none";
+                hideErrorMessage();
+                hideSpinner();
             } else {
                 console.log("Received no data");
-                $('#error-message').css("background-color", "red");
-                dataiku.webappMessages.displayFatalError(errorMessage);
-                document.getElementById("spinner").style.display = "none";
+                showErrorMessage("red", errorMessage);
+                hideSpinner();
             }
         }).catch(error => {
             console.error("Caught error:", error);
-            $('#error-message').css("background-color", "red");
-            dataiku.webappMessages.displayFatalError(error);
-            document.getElementById("spinner").style.display = "none";
-    });
+            showErrorMessage("red", error);
+            hideSpinner();
+        });
 }
 
 configEvent = new ConfigEvent();
@@ -112,8 +122,7 @@ window.addEventListener('message', function(event) {
 
         if (!configEvent.geopointColumnName){
             console.log("Display warning");
-            $('#error-message').css("background-color", "#28a9dd");
-            dataiku.webappMessages.displayFatalError(errorMessage);
+            showErrorMessage("#28a9dd", errorMessage);
         } else {
             console.log("Hide warning");
             $("#error-warning-view").hide();

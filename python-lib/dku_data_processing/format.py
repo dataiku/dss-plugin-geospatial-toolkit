@@ -83,7 +83,7 @@ def prepare_df_to_display(df, detail, filters, geopoint, tooltips):
     else:
         df[new_detail_column] = normalize(df[detail].values)
     if (detail is not None) and (df.dtypes[detail] not in ['int64', 'float64']):
-        raise ValueError("The detail column should be a int or float type.")
+        raise ValueError("The detail column should be a int or float type")
 
     def convert(x):
         if x is not None:

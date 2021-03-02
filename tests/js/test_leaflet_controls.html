@@ -163,22 +163,22 @@ var initial = true;
 var intensity = 0.5;
 
 // Init range and sliders
-var rangeIntensity = document.getElementById("rangeIntensity");
+var rangeIntensity = $("rangeIntensity");
 // Update the current slider value (each time you drag the slider handle)
 rangeIntensity.oninput = function() {
     intensity = this.value / 100;
     console.log("Value of rangeIntensity is set to: ", intensity);
     updateMapVisualisation(heat, gradient, radius, intensity, initial, svg);
     initial = false;
-}
+};
 
-var rangeRadius = document.getElementById("rangeRadius");
+var rangeRadius = $("rangeRadius");
 // Update the current slider value (each time you drag the slider handle)
 rangeRadius.oninput = function() {
     radius = 25;
     updateMapVisualisation(heat, gradient, radius, intensity, initial, svg);
     initial = false;
-}
+};
 
 var geopoints = [];
 for (var i = 0; i < 100000; i++) {
