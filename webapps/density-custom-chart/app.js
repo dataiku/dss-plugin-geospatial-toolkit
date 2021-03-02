@@ -37,10 +37,7 @@ function updateCoreData(configEvent, chartHandler) {
             chartHandler.clear();
             console.log("Received data:", data);
             if (data.length !== 0){
-                let tempGeopoints = [];
-                for (let i = 0; i < data.length; i++) {
-                    tempGeopoints.push([data[i]['lat'], data[i]['long'], data[i]['detail'], data[i]['tooltip']]);
-                }
+                let tempGeopoints = data.map(d => [d.lat, d.long, d.detail, d.tooltip]);
                 chartHandler.coreData = tempGeopoints;
                 chartHandler.render();
                 if (configEvent.needMapCentering) {
