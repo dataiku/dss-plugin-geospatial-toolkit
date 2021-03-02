@@ -9,7 +9,7 @@ import numpy as np
 import re
 
 from dku_data_processing.filtering import filter_dataframe
-from utils.df_column_naming import get_new_column_name
+from utils.df_column_naming import get_unique_column_name
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO,
@@ -75,7 +75,7 @@ def prepare_df_to_display(df, detail, filters, geopoint, tooltips):
         # Handle case where dataframe is empty after filtering
         return []
 
-    new_detail_column = get_new_column_name(df, "detail")
+    new_detail_column = get_unique_column_name(df, "detail")
 
     # Get normalized detail column
     if (detail is None) or (df.dtypes[detail] not in ['int64', 'float64']):
@@ -91,8 +91,8 @@ def prepare_df_to_display(df, detail, filters, geopoint, tooltips):
         else:
             return None
 
-    new_longitude_column = get_new_column_name(df, "longitude")
-    new_latitude_column = get_new_column_name(df, "latitude")
+    new_longitude_column = get_unique_column_name(df, "longitude")
+    new_latitude_column = get_unique_column_name(df, "latitude")
 
     # Parse longitude and latitude from WKT geopoint column
     parsed_lat_long_df = df[geopoint].apply(wkt_parser)
@@ -108,7 +108,7 @@ def prepare_df_to_display(df, detail, filters, geopoint, tooltips):
     tooltip_df = df[tooltip_column_to_keep]
 
     df = df[[new_latitude_column, new_longitude_column, new_detail_column]]
-    new_tooltip_column = get_new_column_name(df, 'tooltip')
+    new_tooltip_column = get_unique_column_name(df, 'tooltip')
     df[new_tooltip_column] = tooltip_df.to_dict(orient='records')
     df = df.rename(columns={new_latitude_column: "lat", new_longitude_column: "long",
                             new_detail_column: "detail", new_tooltip_column: "tooltip"})

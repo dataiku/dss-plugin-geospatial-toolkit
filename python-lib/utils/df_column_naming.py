@@ -6,7 +6,7 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format='%(asctime)s Custom Chart Geospatial Density  | %(levelname)s - %(message)s')
 
 
-def get_new_column_name(df, prefix=""):
+def get_unique_column_name(df, prefix=""):
     """
     Generate a column name starting by prefix that is not already existing in the DataFrame.
 
