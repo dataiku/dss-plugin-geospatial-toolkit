@@ -9,7 +9,7 @@
     width: 150px;
     height: 150px;
     margin: -75px 0 0 -75px;
-    border: 16px solid #f3f3f3;
+    border: 16px solid white;
     border-radius: 50%;
     border-top: 16px solid #3498db;
     -webkit-animation: spin 2s linear infinite;
@@ -28,7 +28,7 @@
 
 .fatal-error-message-style {
     z-index: 1500;
-    background-color: #FF0000;
+    background-color: red;
     position: absolute;
     top: 0px;
     left: -1px;
@@ -38,7 +38,7 @@
     padding: 10px;
     font-weight: 500;
     font-size: 14px;
-    color: #ffffff;
+    color: var(--white);
     box-sizing: border-box;
 }
 
@@ -54,7 +54,7 @@
     padding: 10px;
     font-weight: 500;
     font-size: 14px;
-    color: #ffffff;
+    color: var(--white);
     box-sizing: border-box;
 }
 
