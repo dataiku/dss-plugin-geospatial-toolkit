@@ -280,14 +280,17 @@ function GeoDensityChart(){
         console.log("Call to displayLocal ...");
         d3.selectAll("circle").remove();
         // Define the d3 dynamics around the geospatial data points (rendering and events)
+        var popup = L.popup()
+            .setLatLng(L.latLng(_closestMarker[0].lat, _closestMarker[0].long))
+            .setContent(formatTooltip(_closestMarker[0]));
+        popup.openOn(_mapPointer);
+
         _svgPointer.selectAll("myCircles")
             .attr("pointer-events", "visible")
             .data(_closestMarker)
             .enter()
             .append("circle")
             .attr("cx", function(d) {
-                _tooltip.html("<div>Lon: <strong>" + d.long + "</strong><br>Lat: <strong>"+d.lat+"</strong>" +
-                    formatTooltip(d.tooltip) + "</div>");
                 return _mapPointer.latLngToLayerPoint([d.lat, d.long]).x
             })
             .attr("cy", function(d) {
@@ -295,16 +298,13 @@ function GeoDensityChart(){
             })
             .attr("id", "circleBasicTooltip")
             .on('mouseover', function() { // handle the event user mouse is over the circle data point
-                _tooltip.style("visibility", "visible")
-                    .style("left", (d3.event.pageX+15) + "px")
-                    .style("top", (d3.event.pageY-25) + "px");
+                popup.openOn(_mapPointer);
                 d3.select(this).transition()
                     .duration('50')
                     .attr("fill", "red")
-                    .attr('r', 10)
+                    .attr('r', 10);
             })
             .on('mouseout', function() { // handle
-                _tooltip.style("visibility", "hidden");
                 d3.select(this).transition()
                     .duration('150')
                     .attr("r", 5)
@@ -365,13 +365,14 @@ function GeoDensityChart(){
  * @param tooltip
  * @returns {string}
  */
-function formatTooltip(tooltip){
-    if (tooltip && Object.keys(tooltip).length === 0 && tooltip.constructor === Object) {
-        return ""
+function formatTooltip(closestMarker){
+    let tooltipHTML = `<div>Lon: <strong>${closestMarker.long}</strong><br>Lat: <strong>${closestMarker.lat}</strong>`
+    if (!closestMarker?.tooltip || !Object.keys(closestMarker.tooltip).length) {
+        return tooltipHTML
     }
-    let formattedString = "<hr>";
-    for (const [key, value]  of Object.entries(tooltip)) {
-        formattedString += `${key}: <b>${value}</b><br>`
+    tooltipHTML += "<hr>"
+    for (const [key, value]  of Object.entries(closestMarker.tooltip)) {
+        tooltipHTML += `${key}: <b>${value}</b><br>`
     }
-    return formattedString
+    return tooltipHTML
 }
