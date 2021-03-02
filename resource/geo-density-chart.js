@@ -216,7 +216,7 @@ function GeoDensityChart(){
                 _closestMarker.push({lat: item[0], long: item[1], tooltip: item[3]});
             });
             console.log("_closestMarker:", _closestMarker);
-            this.displayLocal(_tooltip);
+            this.displayLocal();
             console.log("localMarkers=", closestMarker);
         });
     };
