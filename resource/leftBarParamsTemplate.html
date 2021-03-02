@@ -80,7 +80,7 @@
                                         <label class="control-label" dku-for="#map-background-picker button">Tiles to use</label>
                                         <div class="controls">
                                                 <div class="palette-picker__list-zone" id="map-background-picker">
-                                                        <div class="flex oh" id="palette-picker">
+                                                        <div class="flex oh" id="map-picker">
                                                                 <select ng-model="config.chart.def.mapOptions.tilesLayer"
                                                                         ng-selected="'cartodb-positron'"
                                                                         ng-options="x.id as x.name group by x.category for x in backgrounds | filter:{category: '!Mapbox'}" dku-bs-select>
