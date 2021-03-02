@@ -330,7 +330,6 @@ function GeoDensityChart(){
      */
     this.render = function(){
         _quadtree = d3.quadtree()
-            .extent([[-100, -100], [100, 100]])
             .addAll(_coreData);
         if (_initialised){
             console.log("updateMapVisualisation: Remove existing layer");
