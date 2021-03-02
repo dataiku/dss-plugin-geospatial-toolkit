@@ -23,10 +23,6 @@ dataiku.webappBackend = (function() {
         return dataiku.getWebAppBackendUrl(path);
     }
 
-    function dkuDisplayError(error) {
-        console.error("Backend error: ", error);
-    }
-
     function get(path, args={}, displayErrors=true) {
         return fetch(`${getUrl(path)}?${$.param(args)}`, {
             method: 'POST',
