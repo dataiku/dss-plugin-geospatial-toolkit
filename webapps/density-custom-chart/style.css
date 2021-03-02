@@ -43,6 +43,23 @@
     box-sizing: border-box;
 }
 
+.fatal-error-message-style {
+    z-index: 1500;
+    background-color: #FF0000;
+    position: absolute;
+    top: 0px;
+    left: -1px;
+    margin-top: 10px;
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    font-family: 'SourceSansPro';
+    font-weight: 500;
+    font-size: 14px;
+    color: #ffffff;
+    box-sizing: border-box;
+}
+
 .error-message-style {
     z-index: 1500;
     background-color: #28a9dd;

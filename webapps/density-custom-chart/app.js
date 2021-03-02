@@ -5,8 +5,12 @@
 
 const errorMessage = "No geodata column, please select a valid geodata column.";
 
-function showErrorMessage(color, error){
-    $('#error-message').css("background-color", color);
+function showErrorMessage(type, error){
+    if (type === "fatal"){
+        $('#error-message').attr("class", "fatal-error-message-style");
+    } else {
+        $('#error-message').attr("class", "error-message-style");
+    }
     dataiku.webappMessages.displayFatalError(error);
 }
 
@@ -67,12 +71,12 @@ function updateCoreData(configEvent, chartHandler) {
                 hideSpinner();
             } else {
                 console.log("Received no data");
-                showErrorMessage("red", errorMessage);
+                showErrorMessage("fatal", errorMessage);
                 hideSpinner();
             }
         }).catch(error => {
             console.error("Caught error:", error);
-            showErrorMessage("red", error);
+            showErrorMessage("fatal", error);
             hideSpinner();
         });
 }
@@ -129,7 +133,7 @@ window.addEventListener('message', function(event) {
 
         if (!configEvent.geopointColumnName){
             console.log("Display warning");
-            showErrorMessage("#28a9dd", errorMessage);
+            showErrorMessage("warning", errorMessage);
         } else {
             console.log("Hide warning");
             $("#error-warning-view").hide();
