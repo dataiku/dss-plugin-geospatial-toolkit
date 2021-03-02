@@ -157,7 +157,8 @@ def get_geodata_from_dataset(dss_dataset, geopoint, detail, tooltips, filters):
             columns_to_retrieve.add(col_['column'])
 
     # Sampling should be the same as DSS by default
-    df = dss_dataset.get_dataframe(sampling='head', limit=10000, columns=columns_to_retrieve)
+    df = dss_dataset.get_dataframe(sampling='head', limit=10000)
+    df = df[list(columns_to_retrieve)]
 
     geodata_object = prepare_df_to_display(df, detail, filters, geopoint, tooltips)
 
