@@ -21,7 +21,6 @@ chartHandler.addSearchTrigger();
 chartHandler.addUpdateEvent();
 
 // Variables specific to the custom web app in DSS
-let webAppDesc = dataiku.getWebAppDesc()['chart'];
 let webAppConfig = {};
 let filters = {};
 
