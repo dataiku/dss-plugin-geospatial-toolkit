@@ -122,7 +122,7 @@ window.addEventListener('message', function(event) {
             updateCoreData(configEvent, chartHandler);
             configEvent.needCoreDataUpdate = false;
         } else {
-            if (chartHandler.coreData.length !== 0){
+            if (chartHandler.coreData.length){
                 chartHandler.render();
             }
         }
