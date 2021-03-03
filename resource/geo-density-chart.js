@@ -150,10 +150,11 @@ function GeoDensityChart(){
                         break;
                 }
                 let previousBaseMap = layer.options.id;
+                console.log("[MapTile] ", previousBaseMap, newBaseMap);
                 if (previousBaseMap !== newBaseMap){
                     console.log("[MapTile] Building new map tilelayer with id", newBaseMap);
                     _mapPointer.removeLayer(layer);
-                    tileLayerOptions['id'] = newBaseMap;
+                    tileLayerOptions.options['id'] = newBaseMap;
                     L.tileLayer(url, tileLayerOptions.options).addTo(_mapPointer).set;
                 }
             }
@@ -209,7 +210,7 @@ function GeoDensityChart(){
             _position.updateHTML(lat, long);
             console.log('Reading lat long for quadtree search:', lat, long);
             // Compute the neighborhood based on the pre-built quadtree
-            let closestMarker = this.getNeighbors(lat, long, 1);
+            let closestMarker = this.getNeighbors(lat, long);
             if (!closestMarker) {
                 console.warn('Quadtree not able to find closest point');
             }
@@ -225,54 +226,18 @@ function GeoDensityChart(){
     };
 
     /**
-     * Custom function to search for a set of point in a rectangle around a center coordinate.
-     * @param quadtree
-     * @param xmin
-     * @param ymin
-     * @param xmax
-     * @param ymax
-     * @returns {[]}
-     */
-    this.search = function(quadtree, xmin, ymin, xmax, ymax) {
-        const results = [];
-        quadtree.visit(function(node, x1, y1, x2, y2) {
-            if (!node.length) {
-                do {
-                    let d = node.data;
-                    if (d[0] >= xmin && d[0] < xmax && d[1] >= ymin && d[1] < ymax) {
-                        results.push(d);
-                    }
-                } while (node === node.next);
-            }
-            return x1 >= xmax || y1 >= ymax || x2 < xmin || y2 < ymin;
-        });
-        console.log("Results:", results);
-        return results;
-    };
-
-    /**
-     * Compute the closest point(s) with respect to the type of neighborhood expected
+     * Compute the closest point of an input [latitude, longitude] coordinates couple using the quadtree
      * @param lat: Center point latitude
      * @param long: Center point longitude
-     * @param mode:
-     *      1 - Closest point from cursor (None if no point at all)
-     *      2 - The set of points in the rectangular search window with fixed search radius (None if no points in search window)
      * @returns {*[]|(*|number|bigint)[]}
      */
-    this.getNeighbors = function(lat, long, mode=1){
+    this.getNeighbors = function(lat, long){
         // If no quadtree defined or quadtree is empty return no neighbors
         if (!_quadtree || _quadtree.size() === 0){
             return [];
         }
-        if (mode === 1){
-            console.log('Quadtree results', _quadtree.find(lat, long, 10));
-            return [_quadtree.find(lat, long, 10)]
-        } else if (mode === 2){
-            console.log("Searching for the points with getNeighbors ...");
-            let searchRadius = 0.001;
-            return this.search(_quadtree, lat-searchRadius, long-searchRadius,
-                lat+searchRadius, long+searchRadius)
-        }
+        console.log('Quadtree results', _quadtree.find(lat, long, 10));
+        return [_quadtree.find(lat, long, 10)]
     };
 
     /**
