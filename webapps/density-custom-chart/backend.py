@@ -30,6 +30,10 @@ def get_geo_data():
         details_column_name = config.get('detailsColumnName', None)
         geopoint_column_name = config.get('geopointColumnName', None)
         tooltip_columns_names = config.get('tooltipColumnName', None)
+
+        if details_column_name:
+            tooltip_columns_names.append({'column': details_column_name})
+
         filters = config.get('filters', None)
         geodata = get_geodata_from_dataset(dataiku.Dataset(dataset_name), geopoint_column_name, details_column_name, tooltip_columns_names, filters)
         return json.dumps(geodata, ignore_nan=True, default=convert_numpy_int64_to_int)

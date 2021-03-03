@@ -109,7 +109,10 @@ def prepare_df_to_display(df, detail, filters, geopoint, tooltips):
 
     df = df[[new_latitude_column, new_longitude_column, new_detail_column]]
     new_tooltip_column = get_unique_column_name(df, 'tooltip')
-    df[new_tooltip_column] = tooltip_df.to_dict(orient='records')
+
+    records = tooltip_df.to_dict(orient='records')
+    records = [{'detailColumn': detail, 'content': record} for record in records]
+    df[new_tooltip_column] = records
     df = df.rename(columns={new_latitude_column: "lat", new_longitude_column: "long",
                             new_detail_column: "detail", new_tooltip_column: "tooltip"})
     df = df.dropna(subset=['lat', 'long'])

@@ -36,12 +36,14 @@ function GeoDensityChart(){
     let _closestMarker;
     let _heatMapLayer;
     let _position;
+
     let _coreData = [];
 
     let _intensity;
     let _radius;
     let _gradient;
     let _colorPalette;
+
 
     /**
      * Generate a default configuration for the tile layer
@@ -334,13 +336,21 @@ function GeoDensityChart(){
  * @returns {string}
  */
 function formatTooltip(closestMarker){
-    let tooltipHTML = `<div>Lon: <strong>${closestMarker.long}</strong><br>Lat: <strong>${closestMarker.lat}</strong>`
+    let tooltipHTML = `<div>Lon: <strong>${closestMarker.long}</strong><br>Lat: <strong>${closestMarker.lat}</strong>`;
+
     if (!closestMarker?.tooltip || !Object.keys(closestMarker.tooltip).length) {
         return tooltipHTML
     }
+    let detailColumn = closestMarker.tooltip.detailColumn;
+    if (detailColumn) {
+        let value = closestMarker.tooltip.content[detailColumn];
+        tooltipHTML += `<br>${detailColumn}: <b>${value}</b>`
+    }
     tooltipHTML += "<hr>";
-    for (const [key, value]  of Object.entries(closestMarker.tooltip)) {
-        tooltipHTML += `${key}: <b>${value}</b><br>`
+    for (const [key, value]  of Object.entries(closestMarker.tooltip.content)) {
+        if (key !== detailColumn){
+            tooltipHTML += `${key}: <b>${value}</b><br>`
+        }
     }
     return tooltipHTML
 }
