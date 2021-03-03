@@ -21,7 +21,9 @@ def get_geo_data():
     logger.info("Calling backend - get_geo_data... ")
     try:
         # Configuration
-        config = json.loads(request.args.get('config', None))
+        received_request_body = request.get_json()
+        config = received_request_body.get('config', None)
+
         logger.info("Backend received configuration: {}".format(config))
 
         dataset_name = config.get('datasetName', None)

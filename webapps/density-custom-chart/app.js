@@ -4,6 +4,7 @@
  */
 
 const errorMessage = "No geodata column, please select a valid geodata column.";
+const errorMessageNoValues = "Received no geodata, please select a valid geodata column and be sure values are not empty.";
 
 function showErrorMessage(type, error){
     if (type === "fatal"){
@@ -50,8 +51,8 @@ function updateCoreData(configEvent, chartHandler) {
     // Launch spinner
     $("#spinner").show();
     console.log("Starting query of server to fetch core data ....");
-    dataiku.webappBackend.get('get_geo_data', {
-        "config": JSON.stringify(configEvent.getConfigAsJson())
+    dataiku.webappBackend.post('get_geo_data', {
+        "config": configEvent.getConfigAsJson()
     })
         .then(function(data){
             console.log("Finished query of server to fetch core data");
@@ -71,7 +72,7 @@ function updateCoreData(configEvent, chartHandler) {
                 hideSpinner();
             } else {
                 console.log("Received no data");
-                showErrorMessage("fatal", errorMessage);
+                showErrorMessage("fatal", errorMessageNoValues);
                 hideSpinner();
             }
         }).catch(error => {
