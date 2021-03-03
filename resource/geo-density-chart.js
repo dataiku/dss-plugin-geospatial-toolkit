@@ -251,7 +251,6 @@ function GeoDensityChart(){
         var popup = L.popup()
             .setLatLng(L.latLng(_closestMarker[0].lat, _closestMarker[0].long))
             .setContent(formatTooltip(_closestMarker[0]));
-        popup.openOn(_mapPointer);
 
         _svgPointer.selectAll("myCircles")
             .attr("pointer-events", "visible")
@@ -273,6 +272,7 @@ function GeoDensityChart(){
                     .attr('r', 10);
             })
             .on('mouseout', function() { // handle
+                popup.remove();
                 d3.select(this).transition()
                     .duration('150')
                     .attr("r", 5)
