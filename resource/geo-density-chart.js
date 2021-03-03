@@ -43,6 +43,23 @@ function GeoDensityChart(){
     let _gradient;
     let _colorPalette;
 
+    /**
+     * Generate a default configuration for the tile layer
+     * @returns {{options: {zoomOffset: number, maxZoom: number, tileSize: number, attribution: string, id: string}, url: string}}
+     */
+    this.generateDefaultTileLayerConfig = function(){
+        return {
+            url: 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png',
+            options: {
+                maxZoom: 18,
+                attribution: 'Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+                id: 'light_all',
+                tileSize: 512,
+                zoomOffset: -1
+            }
+        }
+    };
+
     Object.defineProperty(this, 'emptyDisplay', {
         get: function(){ return (!_coreData || _coreData.length === 0);}
     });
@@ -103,13 +120,9 @@ function GeoDensityChart(){
      * Part of the initialisation of the chart
      */
     this.addLeafletLayer = function(){
-        L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png', {
-            maxZoom: 18,
-            attribution: 'Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
-            id: 'light_all',
-            tileSize: 512,
-            zoomOffset: -1
-        }).addTo(_mapPointer).set;
+        // Default TileLayer attributes
+        let tileLayerConfig = this.generateDefaultTileLayerConfig();
+        L.tileLayer(tileLayerConfig.url, tileLayerConfig.options).addTo(_mapPointer).set;
     };
 
     /**
@@ -119,6 +132,7 @@ function GeoDensityChart(){
      */
     this.setLeafletMaptile = function(mapTile){
         // Iterate in the layers of the map
+        let tileLayerOptions = this.generateDefaultTileLayerConfig();
         _mapPointer.eachLayer(function(layer){
             if (layer.options.id){
                 console.log("[MapTile] Received previous maptile id:", layer.options.id);
@@ -139,13 +153,8 @@ function GeoDensityChart(){
                 if (previousBaseMap !== newBaseMap){
                     console.log("[MapTile] Building new map tilelayer with id", newBaseMap);
                     _mapPointer.removeLayer(layer);
-                    L.tileLayer(url, {
-                        maxZoom: 18,
-                        attribution: 'Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
-                        id: newBaseMap,
-                        tileSize: 512,
-                        zoomOffset: -1
-                    }).addTo(_mapPointer).set;
+                    tileLayerOptions['id'] = newBaseMap;
+                    L.tileLayer(url, tileLayerOptions.options).addTo(_mapPointer).set;
                 }
             }
         });
