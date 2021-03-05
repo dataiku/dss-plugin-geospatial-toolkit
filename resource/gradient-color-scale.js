@@ -25,25 +25,23 @@ const dkuColorPaletteContinuous = {"palettes": [
 
 
 function findId(data, idToLookFor) {
-    var categoryArray = data.palettes;
-    for (var i = 0; i < categoryArray.length; i++) {
-        if (categoryArray[i].id === idToLookFor) {
-            return(categoryArray[i].colors);
-        }
-    }
+    return data.palettes.find(p => p.id === idToLookFor).colors;
 }
 
 
-function convertBuiltInPaletteToGradient(colorPalette){
-    let sample = findId(dkuColorPaletteContinuous, colorPalette);
-    let myColor = d3.scaleQuantize()
-        .range(sample)
-        .domain([0, 10]);
+function paletteToGradient(colorRange, domain) {
+    let colorScale = d3.scaleQuantize()
+        .range(colorRange)
+        .domain(domain);
     gradient = {};
     for (let i=0; i <= 9; i++) {
-        gradient[i/10] = myColor(i);
+        gradient[i/10] = colorScale(i);
     }
     return gradient
+}
+
+function convertBuiltInPaletteToGradient(colorPalette){
+    return paletteToGradient(findId(dkuColorPaletteContinuous, colorPalette), [0, 10]);
 }
 
 /**
@@ -53,6 +51,5 @@ function convertBuiltInPaletteToGradient(colorPalette){
  */
 function convertPaletteToGradient(colorPalette){
     var isFirstLetterUppercase = /^[A-Z]/.test(colorPalette);
-    if (isFirstLetterUppercase) return convertColorBrewerPaletteToGradient(colorPalette)
-    else return convertBuiltInPaletteToGradient(colorPalette)
+    return (isFirstLetterUppercase ? convertColorBrewerPaletteToGradient : convertBuiltInPaletteToGradient)(colorPalette);
 }
