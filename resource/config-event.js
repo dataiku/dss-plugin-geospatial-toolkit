@@ -113,11 +113,13 @@ function ConfigEvent() {
             return _detailsColumnName;
         },
         set: function (val) {
-            _detailsColumnName = val;
-            if (val) {
+            if (_detailsColumnName !== val) {
+                console.log("Detected changes for parameter detailsColumnName, old value:", _detailsColumnName, " - new value:", val);
+                _detailsColumnName = val;
                 _needCoreDataUpdate = true;
-            } else {
-                console.log("Detected empty detailsColumnName");
+                if (!val) {
+                    console.log("Detected empty detailsColumnName");
+                }
             }
         }
     });
