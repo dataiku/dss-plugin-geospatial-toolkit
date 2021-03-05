@@ -113,13 +113,10 @@ function ConfigEvent() {
             return _detailsColumnName;
         },
         set: function (val) {
-            if (_detailsColumnName !== val) {
-                console.log("Detected changes for parameter detailsColumnName, old value:", _detailsColumnName, " - new value:", val);
-                _detailsColumnName = val;
+            if (!val) {
+                console.log("Detected empty detailsColumnName");
+            } else {
                 _needCoreDataUpdate = true;
-                if (!val) {
-                    console.log("Detected empty detailsColumnName");
-                }
             }
         }
     });
@@ -129,6 +126,7 @@ function ConfigEvent() {
             return _geopointColumnName;
         },
         set: function (val) {
+
             if (_geopointColumnName !== val) {
                 console.log("Detected changes for parameter geopointColumnName, old value:", _geopointColumnName, " - new value:", val);
                 _geopointColumnName = val;
