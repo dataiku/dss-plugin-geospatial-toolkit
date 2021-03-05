@@ -116,30 +116,35 @@ window.addEventListener('message', function(event) {
 
         setConfigEvent(webAppConfig, configEvent, eventData, filters);
 
-        let colorPalette = configEvent.colorPalette;
-        chartHandler.colorPalette = colorPalette;
-        chartHandler.intensity = configEvent.intensity;
-        chartHandler.radius = configEvent.radius;
-        chartHandler.gradient = convertPaletteToGradient(colorPalette);
+        if (configEvent.detectedChanges) {
 
-        if (configEvent.needCoreDataUpdate){
-            console.log("Request of a full backend recompute of the data");
-            updateCoreData(configEvent, chartHandler);
-            configEvent.needCoreDataUpdate = false;
-        } else {
-            if (chartHandler.coreData.length){
-                chartHandler.render();
+            let colorPalette = configEvent.colorPalette;
+            chartHandler.colorPalette = colorPalette;
+            chartHandler.intensity = configEvent.intensity;
+            chartHandler.radius = configEvent.radius;
+            chartHandler.gradient = convertPaletteToGradient(colorPalette);
+
+            if (configEvent.needCoreDataUpdate){
+                console.log("Request of a full backend recompute of the data");
+                updateCoreData(configEvent, chartHandler);
+                configEvent.needCoreDataUpdate = false;
+            } else {
+                if (chartHandler.coreData.length){
+                    chartHandler.render();
+                }
             }
-        }
 
-        if (!configEvent.geopointColumnName){
-            console.log("Display warning");
-            showErrorMessage("warning", errorMessage);
-        } else {
-            console.log("Hide warning");
-            $("#error-warning-view").hide();
-        }
+            if (!configEvent.geopointColumnName){
+                console.log("Display warning");
+                showErrorMessage("warning", errorMessage);
+            } else {
+                console.log("Hide warning");
+                $("#error-warning-view").hide();
+            }
 
-        chartHandler.setLeafletMaptile(configEvent.maptile);
+            chartHandler.setLeafletMaptile(configEvent.maptile);
+        }
+        configEvent.detectedChanges = false;
+        configEvent.needCoreDataUpdate = false;
     }
 });
