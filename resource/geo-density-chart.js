@@ -346,11 +346,19 @@ function formatTooltip(closestMarker){
         let value = closestMarker.tooltip.content[detailColumn];
         tooltipHTML += `<br>${detailColumn}: <b>${value}</b>`
     }
-    tooltipHTML += "<hr>";
+
+    let tooltipHTMLSecondPart = '';
+
     for (const [key, value]  of Object.entries(closestMarker.tooltip.content)) {
         if (key !== detailColumn){
-            tooltipHTML += `${key}: <b>${value}</b><br>`
+            tooltipHTMLSecondPart += `${key}: <b>${value}</b><br>`
         }
     }
+
+    if (tooltipHTMLSecondPart){
+        tooltipHTML += "<hr>";
+        tooltipHTML += tooltipHTMLSecondPart;
+    }
+
     return tooltipHTML
 }
