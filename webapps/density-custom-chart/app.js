@@ -71,7 +71,8 @@ function updateCoreData(configEvent, chartHandler) {
                 hideErrorMessage();
                 hideSpinner();
             } else {
-                console.log("Received no data");
+                console.log("Received no data.");
+                console.log("Display fatal error message.");
                 showErrorMessage("fatal", errorMessageNoValues);
                 hideSpinner();
             }
