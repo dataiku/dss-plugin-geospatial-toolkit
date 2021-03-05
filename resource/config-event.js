@@ -22,9 +22,18 @@ function ConfigEvent() {
     let _tooltipColumnName = [];
 
     // Variables used for state computation
-
+    let _detectedChanges = false;
     let _needCoreDataUpdate = false;
     let _needMapCentering = true;
+
+    Object.defineProperty(this, 'detectedChanges', {
+        get: function () {
+            return _detectedChanges;
+        },
+        set: function (val) {
+            _detectedChanges = val;
+        }
+    });
 
     Object.defineProperty(this, 'needMapCentering', {
         get: function () {
@@ -51,6 +60,7 @@ function ConfigEvent() {
             return _color;
         },
         set: function (val) {
+            if (_color !== val) _detectedChanges = true;
             _color = val;
         }
     });
@@ -60,6 +70,7 @@ function ConfigEvent() {
             return _intensity;
         },
         set: function (val) {
+            if (_intensity !== val) _detectedChanges = true;
             _intensity = val;
         }
     });
@@ -69,6 +80,7 @@ function ConfigEvent() {
             return _colorPalette;
         },
         set: function (val) {
+            if (_colorPalette !== val) _detectedChanges = true;
             _colorPalette = val;
         }
     });
@@ -78,6 +90,7 @@ function ConfigEvent() {
             return _maptile;
         },
         set: function (val) {
+            if (_maptile !== val) _detectedChanges = true;
             _maptile = val;
         }
     });
@@ -87,6 +100,7 @@ function ConfigEvent() {
             return _radius;
         },
         set: function (val) {
+            if (_radius !== val) _detectedChanges = true;
             _radius = val;
         }
     });
@@ -99,6 +113,7 @@ function ConfigEvent() {
         },
         set: function (val) {
             if (_datasetName !== val) {
+                _detectedChanges = true;
                 console.log("Detected changes for parameter datasetName, old value:", _datasetName, " - new value:", val);
                 _datasetName = val;
                 if (!val) {
@@ -114,6 +129,7 @@ function ConfigEvent() {
         },
         set: function (val) {
             if (_detailsColumnName !== val) {
+                _detectedChanges = true;
                 console.log("Detected changes for parameter detailsColumnName, old value:", _detailsColumnName, " - new value:", val);
                 _detailsColumnName = val;
                 _needCoreDataUpdate = true;
@@ -131,6 +147,7 @@ function ConfigEvent() {
         set: function (val) {
 
             if (_geopointColumnName !== val) {
+                _detectedChanges = true;
                 console.log("Detected changes for parameter geopointColumnName, old value:", _geopointColumnName, " - new value:", val);
                 _geopointColumnName = val;
                 if (!val) {
@@ -153,6 +170,7 @@ function ConfigEvent() {
         },
         set: function (val) {
             if (!isEqual(_tooltipColumnName, val)) {
+                _detectedChanges = true;
                 console.log("Detected changes for parameter tooltipColumnName, old value:", _tooltipColumnName, " - new value:", val);
                 _tooltipColumnName = val;
                 _needCoreDataUpdate = true;
@@ -169,6 +187,7 @@ function ConfigEvent() {
         },
         set: function (val) {
             if (!isEqual(_filters, val)) {
+                _detectedChanges = true;
                 console.log("Detected changes for parameter filters, old value:", _filters, " - new value:", val);
                 _filters = val;
                 _needCoreDataUpdate = true;
