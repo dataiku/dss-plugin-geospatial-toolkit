@@ -1,3 +1,6 @@
+# Project specific 
+tests/python/integration/credentials.json
+
 # DSS specific stuff
 dist/
 .wlock
