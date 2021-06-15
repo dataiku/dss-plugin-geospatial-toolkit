@@ -6,7 +6,7 @@ plugin:
 	cat plugin.json|json_pp > /dev/null
 	rm -rf dist
 	mkdir dist
-	zip -r dist/dss-plugin-${PLUGIN_ID}-${PLUGIN_VERSION}.zip plugin.json lib js
+	zip -r dist/dss-plugin-${PLUGIN_ID}-${PLUGIN_VERSION}.zip plugin.json lib js python-lib resource webapps code-env
 
 unit-tests:
 	./gradlew test

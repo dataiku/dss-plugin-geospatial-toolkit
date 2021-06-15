@@ -25,12 +25,20 @@ repositories {
                 "${dkuInstallDir}/dist",
                 'java-lib'
     }
+//    maven {
+//        url "https://dl.bintray.com/senx/maven"
+//    }
+//    maven {
+//        url "https://dl.bintray.com/hbs/maven"
+//    }
     maven {
-        url "https://dl.bintray.com/senx/maven"
+        url "https://jcenter.bintray.com/"
     }
+
     maven {
-        url "https://dl.bintray.com/hbs/maven"
+        url "https://repo1.maven.org/maven2"
     }
+
     mavenCentral()
 }
 
@@ -56,6 +64,7 @@ dependencies {
     implementation 'log4j:log4j:+'
     implementation name: 'guava-27.0-jre'
     implementation configurations.remoteCompileDeps
+
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
     compile group: 'org.apache.commons', name: 'commons-lang', version: '2.6'
     // Inserer les jars de dependances en test runtime
@@ -65,13 +74,14 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
 
+    implementation group: 'io.senx', name: 'geoxplib', version: '1.0.2'
+    implementation 'com.geoxp.oss:oss-client:1.0.1'
+
     runtimeOnlyDeps 'com.fasterxml.util:java-merge-sort:1.0.0'
-    runtimeOnlyDeps 'com.geoxp:geoxplib:1.0.0'
-    runtimeOnlyDeps 'com.geoxp.oss:oss-client:1.0.0'
     runtimeOnlyDeps 'com.github.rwl:jtransforms:2.4.0'
     runtimeOnlyDeps 'com.github.spullara.mustache.java:compiler:0.9.1'
     runtimeOnlyDeps 'io.fastjson:boon:0.14'
-    runtimeOnlyDeps 'io.warp10:sensision:1.0.21'
+    runtimeOnlyDeps 'io.warp10:sensision:1.0.24'
     runtimeOnlyDeps 'net.razorvine:pyrolite:4.10'
     runtimeOnlyDeps 'org.bouncycastle:bcprov-jdk16:1.46'
     runtimeOnlyDeps 'org.processing:core:3.0'
