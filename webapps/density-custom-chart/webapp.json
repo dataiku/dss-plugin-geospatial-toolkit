@@ -1,0 +1,39 @@
+{
+    "meta": {
+        "label": "Density map",
+        "description": "Generate a density map from geospatial data. Takes as input WKT points.",
+        "icon": "icon-globe"
+    },
+
+    "baseType": "STANDARD",
+    "hasBackend": "true",
+
+    "chart" : {
+        "datasetParamName": "dataset",
+        "leftBarLabel": "Chart parameters",
+        "leftBarParams": [],
+        "leftBarTemplate": "leftBarParamsTemplate.html",
+        "leftBarModule": "geospatial.density",
+        "topBar": "STD_FORM",
+        "topBarParams": [
+            {
+                "name": "geopoint_column_name",
+                "type": "DATASET_COLUMN",
+                "datasetParamName": "geopoint_column_name",
+                "label": "Show",
+                "description": "Column containing the geopoint",
+                "mandatory": true
+            },
+            {
+                "name": "details_column_name",
+                "type": "DATASET_COLUMN",
+                "datasetParamName": "details_column_name",
+                "label": "Details",
+                "description": "Column containing the intensity detail",
+                "mandatory": true
+            }
+        ],
+        "canFilter": true,
+        "canFacet": false
+    }
+}
