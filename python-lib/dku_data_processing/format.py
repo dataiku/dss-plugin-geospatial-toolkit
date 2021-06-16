@@ -49,7 +49,7 @@ def wkt_parser(wkt_point):
     """
     if wkt_point is None:
         return None, None
-    result = re.findall("POINT\(\s?(\S+)\s+(\S+)\s?\)", str(wkt_point))
+    result = re.findall("POINT\s?\(\s?(\S+)\s+(\S+)\s?\)", str(wkt_point))
     if len(result) < 1:
         return None, None
     else:
@@ -96,7 +96,7 @@ def prepare_df_to_display(df, detail, filters, geopoint, tooltips):
 
     # Parse longitude and latitude from WKT geopoint column
     parsed_lat_long_df = df[geopoint].apply(wkt_parser)
-    df[new_longitude_column] = parsed_lat_long_df.apply(lambda x: x[0]).apply(convert)
+    df[new_longitude_column] = parsed lat_long_df.apply(lambda x: x[0]).apply(convert)
     df[new_latitude_column] = parsed_lat_long_df.apply(lambda x: x[1]).apply(convert)
 
     # Handle tooltip

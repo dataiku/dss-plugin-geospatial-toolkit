@@ -11,7 +11,14 @@ def convert_numpy_int64_to_int(o):
 
 
 def test_wkt_parser():
+
     wkt_point = "POINT(-45 59)"
+    result = wkt_parser(wkt_point)
+    assert result[0] == '-45'
+    assert result[1] == '59'
+
+    # Test with optional space
+    wkt_point = "POINT (-45 59)"
     result = wkt_parser(wkt_point)
     assert result[0] == '-45'
     assert result[1] == '59'
